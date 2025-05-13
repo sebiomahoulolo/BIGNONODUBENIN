@@ -9,7 +9,7 @@
                 <div class="carousel-inner">
                     @foreach($product->images as $key => $image)
                         <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                            <img src="{{ asset('storage/' . $image) }}" class="d-block w-100" alt="{{ $product->name }}">
+                            <img src="{{ asset('storage/' . $image) }}" class="d-block w-100 main-image" alt="{{ $product->nombre_places }}">
                         </div>
                     @endforeach
                 </div>
@@ -27,8 +27,8 @@
             <div class="row mt-3 thumbnails-container">
                 @foreach($product->images as $key => $image)
                     <div class="col-3">
-                        <div class="thumbnail-item {{ $key === 0 ? 'active' : '' }}" onclick="$('#productCarousel').carousel({{ $key }})">
-                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}">
+                        <div class="thumbnail-item {{ $key === 0 ? 'active' : '' }}" onclick="changeMainImage({{ $key }})">
+                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->nombre_places }}">
                         </div>
                     </div>
                 @endforeach
@@ -118,14 +118,18 @@
 .product-carousel {
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.product-carousel .carousel-item {
+    background-color: #f8f9fa;
 }
 
 .product-carousel .carousel-item img {
     height: 500px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    background-color: #f8f9fa;
 }
 
 /* Styles responsifs */
@@ -224,6 +228,11 @@
         font-size: 0.9rem;
         line-height: 1.4;
     }
+
+    .thumbnail-item {
+        height: 60px;
+        width: 60px;
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -245,8 +254,9 @@
         padding: 0.3em 0.6em;
     }
     
-    .thumbnail-item img {
+    .thumbnail-item {
         height: 50px;
+        width: 50px;
     }
     
     .price-container {
@@ -328,32 +338,33 @@
 
 .thumbnails-container {
     margin-top: 1rem;
+    display: flex;
+    gap: 10px;
 }
 
 .thumbnail-item {
-    border-radius: 8px;
-    overflow: hidden;
     cursor: pointer;
     border: 2px solid transparent;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .thumbnail-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 .thumbnail-item.active {
     border-color: var(--primary-color);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
 .thumbnail-item img {
     width: 100%;
     height: 80px;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.3s ease;
+    background-color: #f8f9fa;
 }
 
 .thumbnail-item:hover img {
@@ -580,17 +591,35 @@
 
 .delivery-option:nth-child(1) { animation-delay: 0.6s; }
 .delivery-option:nth-child(2) { animation-delay: 0.7s; }
+
+.main-image {
+    transition: transform 0.3s ease;
+    background-color: #f8f9fa;
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion des miniatures
     const thumbnails = document.querySelectorAll('.thumbnail-item');
-    thumbnails.forEach(thumb => {
-        thumb.addEventListener('click', function() {
-            thumbnails.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-        });
+    const mainImages = document.querySelectorAll('.main-image');
+    const carousel = document.querySelector('#productCarousel');
+    const bsCarousel = new bootstrap.Carousel(carousel);
+
+    // Fonction pour changer l'image principale
+    window.changeMainImage = function(index) {
+        // Mettre à jour le carousel
+        bsCarousel.to(index);
+        
+        // Mettre à jour les miniatures
+        thumbnails.forEach(t => t.classList.remove('active'));
+        thumbnails[index].classList.add('active');
+    };
+
+    // Mettre à jour la miniature active lors du changement de slide
+    carousel.addEventListener('slide.bs.carousel', function (e) {
+        thumbnails.forEach(t => t.classList.remove('active'));
+        thumbnails[e.to].classList.add('active');
     });
 
     // Gestion du sélecteur de quantité

@@ -112,4 +112,12 @@ Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.
 
 Route::get('/products/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
 
+Route::get('/politique-de-confidentialite', function () {
+    return view('pages.privacy-policy');
+})->name('privacy-policy');
+
+Route::get('/mentions-legales', function () {
+    return view('pages.legal-notice');
+})->name('legal-notice');
+
 // ... autres routes ...

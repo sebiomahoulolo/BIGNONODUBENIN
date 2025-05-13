@@ -1,8 +1,10 @@
+<?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,6 +21,8 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->json('images')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_featured')->default(false);
             $table->timestamps();
         });
     }
@@ -30,4 +34,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('products');
     }
-}; 
+} 

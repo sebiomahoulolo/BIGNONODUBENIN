@@ -35,7 +35,8 @@
         </div>
         <div class="col-md-6 text-md-end">
                     <a href="#" class="text-white text-decoration-none me-3">Conditions d'utilisation</a>
-                    <a href="#" class="text-white text-decoration-none">Politique de confidentialité</a>
+                     <a href="{{ route('legal-notice') }}" class="text-white text-decoration-none">Mentions légales</a>
+                    <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none">Politique de confidentialité</a>
                 </div>
     </div>
 </footer>
