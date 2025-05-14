@@ -50,7 +50,7 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                     <li  class="nav-item"><a class="nav-link" href="">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="">Accueil</a></li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal"
@@ -220,26 +220,35 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class=" table-responsive">
-                <table class="table table-striped ">
-                    <thead>
-                        <tr>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Produit</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Quantité</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Prix</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Montant</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-body">
-                        <tr id="empty-row">
-                            <td colspan="5" style=" font-size: 12px" class="text-center text-muted">
-                                Aucun produit ajouté pour l’instant.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <form id="product-form" action="{ route('produits.valider') }" method="POST">
+                @csrf
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Produit</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Quantité</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Prix</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Montant</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-body">
+                            <tr id="empty-row">
+                                <td colspan="5" style="font-size: 12px" class="text-center text-muted">
+                                    Aucun produit ajouté pour l’instant.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ✅ BOUTON VALIDER -->
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-success">Valider</button>
+                </div>
+            </form>
+
         </div>
     </div>
 
