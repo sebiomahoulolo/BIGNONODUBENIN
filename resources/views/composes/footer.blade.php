@@ -69,7 +69,6 @@
                         </div>
 
 
-
                         {{-- Delai de livraison  --}}
                         <div class="mb-3 col-12 col-lg-4">
                             <label for="delai_livraison" class="col-form-label">Délai de livraison</label>
