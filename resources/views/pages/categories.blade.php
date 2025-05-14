@@ -13,77 +13,43 @@
 <section class="py-5">
     <div class="container">
         <div class="row g-4">
-            <!-- Canapés -->
+            @forelse($categories as $category)
             <div class="col-md-6 col-lg-4">
                 <div class="category-card">
-                    <img src="{{ asset('images/canape1.webp') }}" alt="Canapés">
+                    <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
                     <div class="category-overlay">
-                        <h4>Canapés</h4>
-                        <p>Confort et élégance pour votre salon</p>
-                        <a href="#" class="btn btn-light mt-3">Découvrir</a>
+                        <h4>{{ $category->name }}</h4>
+                        <p>{{ $category->description }}</p>
+                        <a href="{{ route('pages.category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Lits -->
-            <div class="col-md-6 col-lg-4">
-                <div class="category-card">
-                    <img src="{{ asset('images/canape1.webp') }}" alt="Lits">
-                    <div class="category-overlay">
-                        <h4>Lits</h4>
-                        <p>Un sommeil de qualité garanti</p>
-                        <a href="#" class="btn btn-light mt-3">Découvrir</a>
+                <!-- Produits de la catégorie -->
+                @if($category->products->isNotEmpty())
+                <div class="category-products mt-3">
+                    <div class="row g-3">
+                        @foreach($category->products as $product)
+                        <div class="col-4">
+                            <div class="product-thumbnail">
+                                <a href="{{ route('pages.product.detail', $product->id) }}">
+                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.jpg') }}" 
+                                         alt="{{ $product->name }}"
+                                         class="img-fluid">
+                                </a>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
+                @endif
             </div>
-
-            <!-- Tables -->
-            <div class="col-md-6 col-lg-4">
-                <div class="category-card">
-                    <img src="{{ asset('images/canape1.webp') }}" alt="Tables">
-                    <div class="category-overlay">
-                        <h4>Tables</h4>
-                        <p>Style et fonctionnalité</p>
-                        <a href="#" class="btn btn-light mt-3">Découvrir</a>
-                    </div>
+            @empty
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Aucune catégorie disponible pour le moment.
                 </div>
             </div>
-
-            <!-- Chaises -->
-            <div class="col-md-6 col-lg-4">
-                <div class="category-card">
-                    <img src="{{ asset('images/canape1.webp') }}" alt="Chaises">
-                    <div class="category-overlay">
-                        <h4>Chaises</h4>
-                        <p>Design moderne et confortable</p>
-                        <a href="#" class="btn btn-light mt-3">Découvrir</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Armoires -->
-            <div class="col-md-6 col-lg-4">
-                <div class="category-card">
-                    <img src="{{ asset('images/canape1.webp') }}" alt="Armoires">
-                    <div class="category-overlay">
-                        <h4>Armoires</h4>
-                        <p>Rangement élégant et pratique</p>
-                        <a href="#" class="btn btn-light mt-3">Découvrir</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Meubles TV -->
-            <div class="col-md-6 col-lg-4">
-                <div class="category-card">
-                    <img src="{{ asset('images/canape1.webp') }}" alt="Meubles TV">
-                    <div class="category-overlay">
-                        <h4>Meubles TV</h4>
-                        <p>Mettez en valeur votre salon</p>
-                        <a href="#" class="btn btn-light mt-3">Découvrir</a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -132,6 +98,64 @@
         <a href="{{ route('pages.contact') }}" class="btn btn-primary btn-lg">Contactez-nous</a>
     </div>
 </section>
+@endsection
+
+@section('styles')
+<style>
+.category-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 20px;
+    color: white;
+}
+
+.product-thumbnail {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.product-thumbnail img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+</style>
 @endsection
 
 @section('scripts')
