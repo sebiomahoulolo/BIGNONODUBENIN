@@ -61,9 +61,10 @@ class CartController extends Controller
         }
     }
 
+
     public function clear()
     {
         session()->forget('cart');
         return redirect()->back()->with('success', 'Panier vidé avec succès!');
     }
-} 
+}
