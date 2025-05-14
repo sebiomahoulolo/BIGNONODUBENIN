@@ -245,7 +245,7 @@
 
                 <!-- ✅ BOUTON VALIDER -->
                 <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-success">Valider</button>
+                    <button type="submit" class="btn btn-lg btn-success rounded-5">Valider</button>
                 </div>
             </form>
 
