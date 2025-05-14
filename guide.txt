@@ -1,0 +1,6 @@
+Mise en place un fichier helpers dans le dossier app\Helpers.php
+
+## En cas d'erreur, Tapez la commande pour execute => composer dump-autoload
+
+
+

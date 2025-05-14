@@ -37,6 +37,12 @@
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+    <!-- jQuery  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+     <!-- fichier JS externe -->
+    <script src="{{ asset('assets/js/cart.js') }}"></script>
+
     @yield('scripts')
 </body>
-</html> 
+</html>
