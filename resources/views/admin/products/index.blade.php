@@ -49,7 +49,8 @@
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>Nom</th>
+                        <th>Nombre de places</th>
+                        <th>Matière</th>
                         <th>Catégorie</th>
                         <th>Prix</th>
                         <th>Stock</th>
@@ -62,12 +63,13 @@
                         <tr>
                             <td>
                                 @if($product->images)
-                                    <img src="{{ asset('storage/' . $product->images[0]) }}" alt="{{ $product->name }}" class="img-thumbnail" style="max-width: 50px;">
+                                    <img src="{{ asset('storage/' . $product->images[0]) }}" alt="{{ $product->nombre_places }}" class="img-thumbnail" style="max-width: 50px;">
                                 @else
                                     <img src="{{ asset('images/no-image.png') }}" alt="No image" class="img-thumbnail" style="max-width: 50px;">
                                 @endif
                             </td>
-                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->nombre_places }}</td>
+                            <td>{{ $product->matiere }}</td>
                             <td>{{ $product->category->name }}</td>
                             <td>{{ number_format($product->price, 0, ',', ' ') }} FCFA</td>
                             <td>{{ $product->stock }}</td>
@@ -93,7 +95,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">Aucun produit trouvé</td>
+                            <td colspan="8" class="text-center">Aucun produit trouvé</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -127,16 +129,27 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mb-3">
-                                <label for="name" class="form-label">Nom du produit</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                                @error('name')
+                                <label for="nombre_places" class="form-label">Nombre de places</label>
+                                <input type="text" class="form-control @error('nombre_places') is-invalid @enderror" 
+                                    id="nombre_places" name="nombre_places" value="{{ old('nombre_places') }}" required>
+                                @error('nombre_places')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="matiere" class="form-label">Matière utilisée</label>
+                                <input type="text" class="form-control @error('matiere') is-invalid @enderror" 
+                                    id="matiere" name="matiere" value="{{ old('matiere') }}" required>
+                                @error('matiere')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
+                                <textarea class="form-control @error('description') is-invalid @enderror" 
+                                    id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -146,7 +159,8 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="price" class="form-label">Prix (FCFA)</label>
-                                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
+                                        <input type="number" class="form-control @error('price') is-invalid @enderror" 
+                                            id="price" name="price" value="{{ old('price') }}" required>
                                         @error('price')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -155,7 +169,8 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="sale_price" class="form-label">Prix promotionnel (FCFA)</label>
-                                        <input type="number" class="form-control @error('sale_price') is-invalid @enderror" id="sale_price" name="sale_price" value="{{ old('sale_price') }}">
+                                        <input type="number" class="form-control @error('sale_price') is-invalid @enderror" 
+                                            id="sale_price" name="sale_price" value="{{ old('sale_price') }}">
                                         @error('sale_price')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -164,7 +179,8 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="stock" class="form-label">Stock</label>
-                                        <input type="number" class="form-control @error('stock') is-invalid @enderror" id="stock" name="stock" value="{{ old('stock') }}" required>
+                                        <input type="number" class="form-control @error('stock') is-invalid @enderror" 
+                                            id="stock" name="stock" value="{{ old('stock') }}" required>
                                         @error('stock')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -172,43 +188,42 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="sku" class="form-label">SKU</label>
-                                        <input type="text" class="form-control @error('sku') is-invalid @enderror" id="sku" name="sku" value="{{ old('sku') }}" required>
-                                        @error('sku')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="category_id" class="form-label">Catégorie</label>
-                                        <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
-                                            <option value="">Sélectionner une catégorie</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label for="category_id" class="form-label">Catégorie</label>
+                                <select class="form-select @error('category_id') is-invalid @enderror" 
+                                    id="category_id" name="category_id" required>
+                                    <option value="">Sélectionner une catégorie</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" 
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="mb-3">
-                                <label for="images" class="form-label">Images</label>
-                                <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple accept="image/*">
+                                <label for="images" class="form-label">Images (2-8 photos)</label>
+                                <input type="file" class="form-control @error('images') is-invalid @enderror" 
+                                    id="images" name="images[]" multiple accept="image/*" 
+                                    min="2" max="8" required>
                                 @error('images')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div id="image-preview" class="mt-2"></div>
+                                <div class="form-text">
+                                    <ul class="mb-0">
+                                        <li>Minimum 2 photos requises</li>
+                                        <li>Maximum 8 photos autorisées</li>
+                                        <li>Formats acceptés : JPG, PNG, GIF</li>
+                                    </ul>
+                                </div>
+                                <div id="image-preview" class="mt-2 row g-2"></div>
+                                <div id="image-count" class="mt-2 text-muted small"></div>
                             </div>
 
                             <div class="mb-3">
@@ -241,16 +256,49 @@
     // Prévisualisation des images
     document.getElementById('images').addEventListener('change', function(e) {
         const preview = document.getElementById('image-preview');
+        const countDisplay = document.getElementById('image-count');
         preview.innerHTML = '';
         
-        [...e.target.files].forEach(file => {
+        const files = e.target.files;
+        const maxFiles = 8;
+        const minFiles = 2;
+
+        if (files.length < minFiles) {
+            alert(`Veuillez sélectionner au moins ${minFiles} photos.`);
+            this.value = '';
+            preview.innerHTML = '';
+            countDisplay.textContent = '';
+            return;
+        }
+
+        if (files.length > maxFiles) {
+            alert(`Vous ne pouvez pas sélectionner plus de ${maxFiles} photos.`);
+            this.value = '';
+            preview.innerHTML = '';
+            countDisplay.textContent = '';
+            return;
+        }
+
+        countDisplay.textContent = `${files.length} photo(s) sélectionnée(s)`;
+        
+        [...files].forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
+                const col = document.createElement('div');
+                col.className = 'col-4';
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'position-relative';
+                
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.className = 'img-thumbnail m-1';
-                img.style.maxWidth = '100px';
-                preview.appendChild(img);
+                img.className = 'img-thumbnail w-100';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                
+                wrapper.appendChild(img);
+                col.appendChild(wrapper);
+                preview.appendChild(col);
             }
             reader.readAsDataURL(file);
         });
@@ -260,6 +308,7 @@
     document.getElementById('createProductModal').addEventListener('hidden.bs.modal', function () {
         document.querySelector('form').reset();
         document.getElementById('image-preview').innerHTML = '';
+        document.getElementById('image-count').textContent = '';
     });
 </script>
 @endpush

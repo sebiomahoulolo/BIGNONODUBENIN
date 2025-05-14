@@ -17,11 +17,13 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 // Routes publiques
-Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/', [PageController::class, 'index'])->name('pages.home');
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
 Route::get('/products', [PageController::class, 'products'])->name('pages.products');
 Route::get('/categories', [PageController::class, 'categories'])->name('pages.categories');
+Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('pages.category.show');
+Route::get('/product/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
 
 // Routes du panier
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -85,9 +87,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     
     // Commandes
     Route::resource('orders', OrderController::class);
+    Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
     
     // Clients
     Route::resource('customers', CustomerController::class);
+    Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
     
     // Paramètres
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
@@ -110,6 +114,14 @@ Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admi
 Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
 Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
 
-Route::get('/products/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
+Route::get('/politique-de-confidentialite', function () {
+    return view('pages.privacy-policy');
+})->name('privacy-policy');
+
+Route::get('/mentions-legales', function () {
+    return view('pages.legal-notice');
+})->name('legal-notice');
+
+
 
 // ... autres routes ...

@@ -35,7 +35,27 @@ class PageController extends Controller
 
     public function categories()
     {
-        return view('pages.categories');
+        $categories = \App\Models\Category::with(['products' => function($query) {
+            $query->where('is_active', true)
+                  ->take(3); // Limite à 3 produits par catégorie
+        }])
+        ->where('is_active', true)
+        ->get();
+
+        return view('pages.categories', compact('categories'));
+    }
+
+    public function categoryShow($slug)
+    {
+        $category = \App\Models\Category::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        $products = $category->products()
+            ->where('is_active', true)
+            ->paginate(12);
+
+        return view('pages.category-show', compact('category', 'products'));
     }
 
     public function lits()

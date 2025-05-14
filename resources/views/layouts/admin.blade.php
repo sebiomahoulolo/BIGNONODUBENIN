@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin - Bignon du Benin</title>
+    <title>Bignon du Benin</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -61,7 +61,7 @@
                             </a>
                         </li>
                         <li class="nav-item mt-4">
-                            <a class="nav-link text-warning" href="{{ route('home') }}">
+                            <a class="nav-link text-warning" href="">
                                 <i class="fas fa-external-link-alt"></i> Retour au site
                             </a>
                         </li>
