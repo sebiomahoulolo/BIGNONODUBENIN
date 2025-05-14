@@ -248,9 +248,6 @@
                     <button type="submit" class="btn btn-lg btn-success rounded-5">Valider</button>
                 </div>
             </form>
-
         </div>
     </div>
-
-
 </header>
