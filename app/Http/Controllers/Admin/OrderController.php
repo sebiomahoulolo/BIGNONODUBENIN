@@ -217,4 +217,53 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.returns')
             ->with('success', 'Retour traité avec succès.');
     }
+
+    public function export()
+    {
+        $orders = Order::with(['user', 'items.product'])
+            ->latest()
+            ->get();
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="commandes.csv"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() use ($orders) {
+            $file = fopen('php://output', 'w');
+            
+            // En-têtes du CSV
+            fputcsv($file, [
+                'N° Commande',
+                'Client',
+                'Email',
+                'Date',
+                'Total',
+                'Statut',
+                'Paiement',
+                'Notes'
+            ]);
+
+            // Données des commandes
+            foreach ($orders as $order) {
+                fputcsv($file, [
+                    $order->order_number,
+                    $order->user->name,
+                    $order->user->email,
+                    $order->created_at->format('d/m/Y H:i'),
+                    number_format($order->total, 0, ',', ' ') . ' FCFA',
+                    $order->status_label,
+                    $order->payment_status_label,
+                    $order->notes
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 } 

@@ -9,6 +9,6 @@ use App\Models\Product;
 if (! function_exists('getProducts')) {
     function getProducts()
     {
-        return Category::all();
+        return Product::where('is_active', true)->get();
     }
 }

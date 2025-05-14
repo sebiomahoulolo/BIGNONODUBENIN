@@ -45,20 +45,20 @@
                                 <span class="badge bg-primary">{{ $product->category->name }}</span>
                             </div>
                             <div class="price-wrapper mb-3">
-                                @if($product->sale_price)
+                                    @if($product->sale_price)
                                     <span class="original-price me-2">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
                                     <span class="sale-price">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
-                                @else
-                                    <span class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
-                                @endif
-                            </div>
+                                    @else
+                                        <span class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
+                                    @endif
+                                </div>
                             <p class="card-text text-muted mb-3">{{ Str::limit($product->description, 100) }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-eye"></i> Détails
                                 </a>
                                 <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-primary">
-                                    <i class="bi bi-cart-plus"></i>
+                                        <i class="bi bi-cart-plus"></i>
                                 </a>
                             </div>
                         </div>

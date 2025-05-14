@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -18,7 +19,8 @@ class ProductController extends Controller
 
         // Filtres
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
+            $query->where('nombre_places', 'like', '%' . $request->search . '%')
+                  ->orWhere('matiere', 'like', '%' . $request->search . '%')
                   ->orWhere('description', 'like', '%' . $request->search . '%');
         }
 
@@ -39,56 +41,79 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.add-product', compact('categories'));
     }
 
     public function store(Request $request)
     {
         try {
+            Log::info('Début de la création du produit', ['request' => $request->all()]);
+
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'nombre_places' => 'required|string|max:255',
+                'matiere' => 'required|string|max:255',
                 'description' => 'required|string',
                 'price' => 'required|numeric|min:0',
                 'sale_price' => 'nullable|numeric|min:0|lt:price',
                 'stock' => 'required|integer|min:0',
-                'sku' => 'required|string|unique:products,sku',
                 'category_id' => 'required|exists:categories,id',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'is_active' => 'boolean',
-                'is_featured' => 'boolean',
+                'images' => 'required|array|min:2|max:8',
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $product = Product::create([
-                'name' => $validated['name'],
-                'slug' => Str::slug($validated['name']),
-                'description' => $validated['description'],
-                'price' => $validated['price'],
-                'sale_price' => $validated['sale_price'] ?? null,
-                'stock' => $validated['stock'],
-                'sku' => $validated['sku'],
-                'category_id' => $validated['category_id'],
-                'is_active' => $request->boolean('is_active'),
-                'is_featured' => $request->boolean('is_featured'),
-            ]);
+            Log::info('Données validées', ['validated' => $validated]);
 
-            // Gestion des images
-            if ($request->hasFile('images')) {
-                $images = [];
-                foreach ($request->file('images') as $image) {
-                    $path = $image->store('products', 'public');
-                    $images[] = $path;
+            DB::beginTransaction();
+
+            try {
+                // Conversion des valeurs numériques
+                $product = Product::create([
+                    'nombre_places' => $validated['nombre_places'],
+                    'matiere' => $validated['matiere'],
+                    'description' => $validated['description'],
+                    'price' => (float) $validated['price'],
+                    'sale_price' => isset($validated['sale_price']) ? (float) $validated['sale_price'] : null,
+                    'stock' => (int) $validated['stock'],
+                    'category_id' => (int) $validated['category_id'],
+                    'is_active' => true,
+                    'is_featured' => false,
+                ]);
+
+                Log::info('Produit créé', ['product' => $product->toArray()]);
+
+                // Gestion des images
+                if ($request->hasFile('images')) {
+                    $images = [];
+                    foreach ($request->file('images') as $image) {
+                        $path = $image->store('products', 'public');
+                        $images[] = $path;
+                    }
+                    $product->images = $images;
+                    $product->save();
+                    Log::info('Images enregistrées', ['images' => $images]);
                 }
-                $product->images = $images;
-                $product->save();
+
+                DB::commit();
+                Log::info('Transaction terminée avec succès');
+
+                return redirect()
+                    ->route('admin.products.index')
+                    ->with('success', 'Le produit a été créé avec succès.');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Erreur lors de la création du produit dans la transaction', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                throw $e;
             }
 
-            return redirect()
-                ->route('admin.products.index')
-                ->with('success', 'Le produit a été créé avec succès.');
-
         } catch (\Exception $e) {
-            Log::error('Erreur lors de la création du produit: ' . $e->getMessage());
-            Log::error($e->getTraceAsString());
+            Log::error('Erreur lors de la création du produit', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
 
             return redirect()
                 ->back()
@@ -107,26 +132,45 @@ class ProductController extends Controller
     {
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'nombre_places' => 'required|string|max:255',
+                'matiere' => 'required|string|max:255',
                 'description' => 'required|string',
                 'price' => 'required|numeric|min:0',
                 'sale_price' => 'nullable|numeric|min:0|lt:price',
                 'stock' => 'required|integer|min:0',
-                'sku' => 'required|string|unique:products,sku,' . $product->id,
                 'category_id' => 'required|exists:categories,id',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images' => 'nullable|array|max:8',
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'is_active' => 'boolean',
                 'is_featured' => 'boolean',
             ]);
 
+            // Vérifier le nombre total d'images
+            $currentImages = count($product->images);
+            $newImages = $request->hasFile('images') ? count($request->file('images')) : 0;
+            $totalImages = $currentImages + $newImages;
+
+            if ($totalImages > 8) {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Le nombre total d\'images ne peut pas dépasser 8.');
+            }
+
+            if ($currentImages < 2 && $newImages === 0) {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Le produit doit avoir au moins 2 images.');
+            }
+
             $product->update([
-                'name' => $validated['name'],
-                'slug' => Str::slug($validated['name']),
+                'nombre_places' => $validated['nombre_places'],
+                'matiere' => $validated['matiere'],
                 'description' => $validated['description'],
                 'price' => $validated['price'],
                 'sale_price' => $validated['sale_price'] ?? null,
                 'stock' => $validated['stock'],
-                'sku' => $validated['sku'],
                 'category_id' => $validated['category_id'],
                 'is_active' => $request->boolean('is_active'),
                 'is_featured' => $request->boolean('is_featured'),

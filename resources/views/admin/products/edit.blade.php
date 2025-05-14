@@ -20,9 +20,21 @@
                 <!-- Informations principales -->
                 <div class="col-md-8">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nom du produit</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $product->name) }}" required>
-                        @error('name')
+                        <label for="nombre_places" class="form-label">Nombre de places</label>
+                        <input type="text" class="form-control @error('nombre_places') is-invalid @enderror" 
+                            id="nombre_places" name="nombre_places" 
+                            value="{{ old('nombre_places', $product->nombre_places) }}" required>
+                        @error('nombre_places')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="matiere" class="form-label">Matière utilisée</label>
+                        <input type="text" class="form-control @error('matiere') is-invalid @enderror" 
+                            id="matiere" name="matiere" 
+                            value="{{ old('matiere', $product->matiere) }}" required>
+                        @error('matiere')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -76,28 +88,42 @@
 
                     <div class="mb-3">
                         <label class="form-label">Images actuelles</label>
-                        <div class="row" id="current-images">
+                        <div class="row g-2" id="current-images">
                             @foreach($product->images as $image)
                                 <div class="col-4 mb-2">
                                     <div class="position-relative">
-                                        <img src="{{ asset('storage/' . $image) }}" alt="Image produit" class="img-thumbnail">
+                                        <img src="{{ asset('storage/' . $image) }}" alt="Image produit" class="img-thumbnail w-100" style="height: 100px; object-fit: cover;">
                                         <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" 
-                                                onclick="deleteImage('{{ $image }}')">
+                                                onclick="deleteImage('{{ $image }}')" 
+                                                {{ count($product->images) <= 2 ? 'disabled' : '' }}
+                                                title="{{ count($product->images) <= 2 ? 'Minimum 2 photos requises' : 'Supprimer cette image' }}">
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
+                        <div class="text-muted small mt-2">
+                            {{ count($product->images) }} photo(s) actuelle(s) - Minimum 2 photos requises
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="images" class="form-label">Ajouter des images</label>
-                        <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" multiple accept="image/*">
-                        <div class="form-text">Vous pouvez sélectionner plusieurs images</div>
+                        <label for="images" class="form-label">Ajouter des nouvelles images</label>
+                        <input type="file" class="form-control @error('images') is-invalid @enderror" 
+                            id="images" name="images[]" multiple accept="image/*">
                         @error('images')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">
+                            <ul class="mb-0">
+                                <li>Maximum 8 photos au total</li>
+                                <li>Formats acceptés : JPG, PNG, GIF</li>
+                                <li>Vous pouvez ajouter jusqu'à {{ 8 - count($product->images) }} photo(s) supplémentaire(s)</li>
+                            </ul>
+                        </div>
+                        <div id="image-preview" class="mt-2 row g-2"></div>
+                        <div id="image-count" class="mt-2 text-muted small"></div>
                     </div>
 
                     <div class="mb-3">
@@ -132,19 +158,45 @@
     // Prévisualisation des nouvelles images
     document.getElementById('images').addEventListener('change', function(e) {
         const preview = document.getElementById('image-preview');
+        const countDisplay = document.getElementById('image-count');
         preview.innerHTML = '';
         
-        for (const file of e.target.files) {
+        const files = e.target.files;
+        const currentImages = {{ count($product->images) }};
+        const maxFiles = 8;
+        const remainingSlots = maxFiles - currentImages;
+
+        if (files.length > remainingSlots) {
+            alert(`Vous ne pouvez ajouter que ${remainingSlots} photo(s) supplémentaire(s) pour respecter la limite de ${maxFiles} photos.`);
+            this.value = '';
+            preview.innerHTML = '';
+            countDisplay.textContent = '';
+            return;
+        }
+
+        countDisplay.textContent = `${files.length} nouvelle(s) photo(s) sélectionnée(s)`;
+        
+        [...files].forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
+                const col = document.createElement('div');
+                col.className = 'col-4';
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'position-relative';
+                
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.className = 'img-thumbnail m-1';
-                img.style.maxWidth = '100px';
-                preview.appendChild(img);
+                img.className = 'img-thumbnail w-100';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                
+                wrapper.appendChild(img);
+                col.appendChild(wrapper);
+                preview.appendChild(col);
             }
             reader.readAsDataURL(file);
-        }
+        });
     });
 
     // Suppression d'une image
@@ -164,6 +216,25 @@
                     // Supprimer l'élément de l'interface
                     const imageElement = document.querySelector(`img[src="{{ asset('storage/') }}/${imagePath}"]`).parentElement.parentElement;
                     imageElement.remove();
+                    
+                    // Mettre à jour le compteur d'images
+                    const currentImages = document.querySelectorAll('#current-images .col-4').length;
+                    document.querySelector('.text-muted.small.mt-2').textContent = 
+                        `${currentImages} photo(s) actuelle(s) - Minimum 2 photos requises`;
+                    
+                    // Mettre à jour les boutons de suppression
+                    const deleteButtons = document.querySelectorAll('#current-images .btn-danger');
+                    deleteButtons.forEach(button => {
+                        if (currentImages <= 2) {
+                            button.disabled = true;
+                            button.title = 'Minimum 2 photos requises';
+                        }
+                    });
+                    
+                    // Mettre à jour le message des nouvelles images
+                    const remainingSlots = 8 - currentImages;
+                    const formText = document.querySelector('.form-text ul li:last-child');
+                    formText.textContent = `Vous pouvez ajouter jusqu'à ${remainingSlots} photo(s) supplémentaire(s)`;
                 }
             });
         }
