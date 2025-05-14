@@ -30,12 +30,11 @@
             </div>
         </div>
         <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.1);">
-        <div class="text-center">
+        <div class="d-flex flex-column flex-md-row gap-3 justify-content-center text-md-center col-12">
             <p class="mb-0">&copy; 2025 BIGNON DU BENIN. Tous droits réservés par FHC groupe sarl.</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-                    <a href="#" class="text-white text-decoration-none me-3">Conditions d'utilisation</a>
-                    <a href="#" class="text-white text-decoration-none">Politique de confidentialité</a>
+                    {{-- <a href="#" class="text-white text-decoration-none me-3">Conditions d'utilisation</a> --}}
+                     <a href="{{ route('legal-notice') }}" class="text-white text-decoration-none">Mentions légales</a>
+                    <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none">Politique de confidentialité</a>
                 </div>
     </div>
 </footer>
@@ -43,4 +42,4 @@
 <!-- Bouton retour en haut -->
 <a href="#" class="back-to-top">
     <i class="fas fa-arrow-up"></i>
-</a> 
+</a>

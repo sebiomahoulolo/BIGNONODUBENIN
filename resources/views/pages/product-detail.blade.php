@@ -41,9 +41,9 @@
                 <div class="category-badge mb-3">
                   <h1 class="product-title mb-4">  <span class="badge bg-primary">{{ $product->category->name }}</span>
                   </h1> </div>
-                
-              
-                
+
+
+
                 <div class="price-container mb-4">
                     @if($product->sale_price)
                         <span class="original-price">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
@@ -88,7 +88,8 @@
                             </div>
                         </div>
                         <div class="col">
-                            <button type="submit" class="btn btn-primary btn-lg w-100 add-to-cart-btn">
+                            <button type="button" class="btn btn-primary btn-lg w-100 add-to-cart-btn add-to-cart"
+                            data-name="{{ $product->matiere }}" data-price="{{ $product->sale_price }}" data-img="{{ asset('images/canape1.webp') }}">
                                 <i class="bi bi-cart-plus"></i> Ajouter au panier
                             </button>
                         </div>
@@ -133,11 +134,11 @@
     .product-carousel .carousel-item img {
         height: 350px;
     }
-    
+
     .product-title {
         font-size: 1.75rem;
     }
-    
+
     .price-container {
         flex-direction: column;
         align-items: flex-start;
@@ -154,7 +155,7 @@
     .product-carousel .carousel-item img {
         height: 250px;
     }
-    
+
     .product-title {
         font-size: 1.5rem;
         margin-bottom: 1rem;
@@ -164,7 +165,7 @@
         font-size: 0.8rem;
         padding: 0.4em 0.8em;
     }
-    
+
     .specs-grid {
         grid-template-columns: 1fr;
         gap: 0.75rem;
@@ -174,7 +175,7 @@
         padding: 0.75rem;
         font-size: 0.9rem;
     }
-    
+
     .delivery-options {
         flex-direction: column;
         gap: 0.75rem;
@@ -184,7 +185,7 @@
         padding: 0.75rem;
         font-size: 0.9rem;
     }
-    
+
     .quantity-selector {
         width: 100%;
         margin-bottom: 0.75rem;
@@ -200,12 +201,12 @@
         width: 50px;
         font-size: 0.9rem;
     }
-    
+
     .add-to-cart-form .row {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .add-to-cart-form .col {
         width: 100%;
     }
@@ -234,7 +235,7 @@
     .product-carousel .carousel-item img {
         height: 200px;
     }
-    
+
     .product-title {
         font-size: 1.25rem;
         margin-bottom: 0.75rem;
@@ -244,20 +245,25 @@
         font-size: 0.7rem;
         padding: 0.3em 0.6em;
     }
+<<<<<<< Updated upstream
     
     .thumbnail-item img {
+=======
+
+    .thumbnail-item {
+>>>>>>> Stashed changes
         height: 50px;
     }
-    
+
     .price-container {
         padding: 0.5rem;
         margin-bottom: 0.75rem;
     }
-    
+
     .sale-price, .current-price {
         font-size: 1.25rem;
     }
-    
+
     .original-price {
         font-size: 0.9rem;
     }
@@ -586,11 +592,32 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion des miniatures
     const thumbnails = document.querySelectorAll('.thumbnail-item');
+<<<<<<< Updated upstream
     thumbnails.forEach(thumb => {
         thumb.addEventListener('click', function() {
             thumbnails.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
         });
+=======
+    const mainImages = document.querySelectorAll('.main-image');
+    const carousel = document.querySelector('#productCarousel');
+    const bsCarousel = new bootstrap.Carousel(carousel);
+
+    // Fonction pour changer l'image principale
+    window.changeMainImage = function(index) {
+        // Mettre à jour le carousel
+        bsCarousel.to(index);
+
+        // Mettre à jour les miniatures
+        thumbnails.forEach(t => t.classList.remove('active'));
+        thumbnails[index].classList.add('active');
+    };
+
+    // Mettre à jour la miniature active lors du changement de slide
+    carousel.addEventListener('slide.bs.carousel', function (e) {
+        thumbnails.forEach(t => t.classList.remove('active'));
+        thumbnails[e.to].classList.add('active');
+>>>>>>> Stashed changes
     });
 
     // Gestion du sélecteur de quantité
@@ -645,4 +672,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endsection 
+@endsection

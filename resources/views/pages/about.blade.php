@@ -8,8 +8,8 @@
             <p class="lead">Votre partenaire de confiance pour l'aménagement de votre intérieur depuis plus de 50 ans.</p>
             <p>Chez Bignon du Benin, nous nous engageons à fournir des meubles de qualité supérieure qui allient élégance, confort et durabilité. Notre passion pour l'excellence et notre dévouement à la satisfaction client nous ont permis de devenir un leader dans l'industrie du meuble au Bénin.</p>
         </div>
-        <div class="col-md-6">
-            <img src="{{ asset('images/about-us.jpg') }}" alt="Notre showroom" class="img-fluid rounded shadow">
+        <div class="col-md-6 d-flex justify-content-center">
+            <img class="w-75 card" src="{{ asset('images/about-us.avif') }}" alt="Notre showroom" class="img-fluid rounded shadow">
         </div>
     </div>
 
@@ -57,4 +57,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
