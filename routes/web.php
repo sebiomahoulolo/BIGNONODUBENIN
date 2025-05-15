@@ -116,7 +116,7 @@ Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
-Route::get('/admin/demande-devis', [DemandeDevisController::class, 'index'])->name('admin.demande-devis.index');
+Route::get('/admin/demande-devis', [DemandeDevisController::class, 'indeµx'])->name('admin.demande-devis.index');
 Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
 Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
 

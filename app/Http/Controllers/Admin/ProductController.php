@@ -46,7 +46,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // try {
             Log::info('Début de la création du produit', ['request' => $request->all()]);
 
             $validated = $request->validate([
@@ -65,7 +65,7 @@ class ProductController extends Controller
 
             DB::beginTransaction();
 
-            try {
+            // try {
                 // Conversion des valeurs numériques
                 $product = Product::create([
                     'nombre_places' => $validated['nombre_places'],
@@ -100,26 +100,26 @@ class ProductController extends Controller
                     ->route('admin.products.index')
                     ->with('success', 'Le produit a été créé avec succès.');
 
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::error('Erreur lors de la création du produit dans la transaction', [
-                    'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
-                ]);
-                throw $e;
-            }
+            // } catch (\Exception $e) {
+            //     DB::rollBack();
+            //     Log::error('Erreur lors de la création du produit dans la transaction', [
+            //         'error' => $e->getMessage(),
+            //         'trace' => $e->getTraceAsString()
+            //     ]);
+            //     throw $e;
+            // }
 
-        } catch (\Exception $e) {
-            Log::error('Erreur lors de la création du produit', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+        // } catch (\Exception $e) {
+        //     Log::error('Erreur lors de la création du produit', [
+        //         'error' => $e->getMessage(),
+        //         'trace' => $e->getTraceAsString()
+        //     ]);
 
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Une erreur est survenue lors de la création du produit : ' . $e->getMessage());
-        }
+        //     return redirect()
+        //         ->back()
+        //         ->withInput()
+        //         ->with('error', 'Une erreur est survenue lors de la création du produit : ' . $e->getMessage());
+        // }
     }
 
     public function edit(Product $product)
@@ -236,11 +236,11 @@ class ProductController extends Controller
             if (($key = array_search($image, $images)) !== false) {
                 // Supprimer l'image du stockage
                 Storage::disk('public')->delete($image);
-                
+
                 // Supprimer l'image du tableau
                 unset($images[$key]);
                 $images = array_values($images); // Réindexer le tableau
-                
+
                 // Mettre à jour le produit
                 $product->images = $images;
                 $product->save();
