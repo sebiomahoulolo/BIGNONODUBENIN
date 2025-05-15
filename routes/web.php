@@ -16,14 +16,26 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DemandeDevisController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Product;
 // Routes publiques
-Route::get('/', [PageController::class, 'index'])->name('pages.home');
+Route::get('/', function () {
+    $featuredProducts = Product::where('is_featured', true)->get();
+    return view('app', ['featuredProducts' => $featuredProducts]);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+});
+Route::get('/login', function () {
+    return view('auth.login'); // Vue de connexion
+})->name('login');
+
+
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
 Route::get('/products', [PageController::class, 'products'])->name('pages.products');
 Route::get('/categories', [PageController::class, 'categories'])->name('pages.categories');
-Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('pages.category.show');
+Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('category.show');
 Route::get('/product/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
 
 //Route demande de devis
@@ -36,6 +48,7 @@ Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
 // Routes pour les produits
 Route::prefix('products')->name('pages.')->group(function () {
@@ -82,7 +95,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
+    
     // Produits
     Route::resource('products', ProductController::class);
     Route::post('products/{product}/delete-image', [ProductController::class, 'deleteImage'])->name('products.delete-image');
@@ -111,7 +124,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 });
 
-// Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
 Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
@@ -127,5 +140,10 @@ Route::get('/politique-de-confidentialite', function () {
 Route::get('/mentions-legales', function () {
     return view('pages.legal-notice');
 })->name('legal-notice');
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
+// Routes pour le tableau de bord admin
+
+
+// Route principale
 
 // ... autres routes ...

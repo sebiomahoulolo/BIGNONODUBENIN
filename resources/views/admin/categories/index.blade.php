@@ -39,7 +39,6 @@
                     <table class="table table-bordered table-hover">
                         <thead class="bg-light">
                             <tr>
-                                <th><i class="fas fa-image me-1"></i> Image</th>
                                 <th><i class="fas fa-folder me-1"></i> Nom</th>
                                 <th><i class="fas fa-box me-1"></i> Produits</th>
                                 <th><i class="fas fa-toggle-on me-1"></i> Statut</th>
@@ -49,13 +48,7 @@
                         <tbody>
                             @foreach($categories as $category)
                             <tr>
-                                <td class="text-center" style="width: 80px;">
-                                    @if($category->image)
-                                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="img-thumbnail" style="max-width: 50px; max-height: 50px;">
-                                    @else
-                                        <i class="fas fa-image text-muted fa-2x"></i>
-                                    @endif
-                                </td>
+                                
                                 <td>
                                     <strong>{{ $category->name }}</strong>
                                     <div class="small text-muted">ID: {{ $category->id }}</div>

@@ -35,7 +35,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('admin.dashboard'));
             }
 
-            return redirect()->intended(route('home'));
+            return redirect()->intended(route('app'));
         }
 
         return back()->withErrors([
@@ -63,16 +63,14 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        return redirect()->route('app');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-
+        auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect()->route('pages.home');
+        return redirect()->route('app');
     }
 }

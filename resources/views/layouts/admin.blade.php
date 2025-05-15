@@ -55,23 +55,17 @@
                                 <i class="fas fa-users"></i> Clients
                             </a>
                         </li>
+                       
+
                          <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.demande-devis.*') ? 'active' : '' }} text-white" href="{{ route('admin.demande-devis.index') }}">
                                 <i class="fa-solid fa-newspaper"></i> Demandes devis
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }} text-white" href="{{ route('admin.settings.index') }}">
-                                <i class="fas fa-cog"></i> Paramètres
-                            </a>
-                        </li>
-                        <li class="nav-item mt-4">
-                            <a class="nav-link text-warning" href="">
-                                <i class="fas fa-external-link-alt"></i> Retour au site
-                            </a>
-                        </li>
+                      
+                        
                         <li class="nav-item mt-2">
-                            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            <form method="POST" action="" class="d-inline">
                                 @csrf
                                 <button type="submit" class="nav-link text-danger border-0 bg-transparent">
                                     <i class="fas fa-sign-out-alt"></i> Déconnexion

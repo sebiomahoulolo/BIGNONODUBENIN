@@ -16,8 +16,7 @@
         <span class="mobile-menu-close">&times;</span>
     </div>
     <ul class="mobile-menu-nav">
-        <li><a href="#">Accueil</a></li>
-
+    
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
         </li>
@@ -27,6 +26,10 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.about') }}">À propos</a>
         </li>
+         <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal"
+                            data-bs-target="#DemanderDevis">Demandez un Devis</a>
+                    </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
         </li>
@@ -50,11 +53,7 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="">Accueil</a></li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#demanderDevis">Demandez un Devis</a>
-                    </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
                     </li>
@@ -63,6 +62,10 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.about') }}">À propos</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal"
+                            data-bs-target="#DemanderDevis">Demandez un Devis</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
@@ -79,47 +82,14 @@
                         </a>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center">
-                    @auth
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if (Auth::user()->is_admin)
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                            <i class="fas fa-tachometer-alt"></i> Tableau de bord
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                @endif
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt"></i> Déconnexion
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">Connexion</a>
-                        </li>
 
-                    @endauth
                 </div>
             </div>
         </div>
     </nav>
 
     {{-- Modal Demandez un devis  --}}
-    <div class="modal fade" id="DemanderDevis" tabindex="-1" aria-labelledby="DemanderDevis" aria-hidden="true">
+    <!--div class="modal fade" id="DemanderDevis" tabindex="-1" aria-labelledby="DemanderDevis" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-sm-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,7 +179,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div-->
 
     <!-- Modal positionné à droite -->
     <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
@@ -249,4 +219,6 @@
             </form>
         </div>
     </div>
+
+
 </header>

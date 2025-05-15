@@ -24,7 +24,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                         Commandes (Mois)</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">40</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['total_orders'] }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -41,7 +41,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Revenus (Mois)</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">2,500,000 FCFA</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['total_revenue'], 0, ',', ' ') }} FCFA</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -58,7 +58,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                         Clients</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">150</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -75,7 +75,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                         Produits en stock</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['total_products'] }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-box fa-2x text-gray-300"></i>
@@ -134,17 +134,51 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($stats['recent_orders'] as $order)
                                 <tr>
-                                    <td>#12345</td>
-                                    <td>John Doe</td>
-                                    <td>Canapé 3 places</td>
-                                    <td>250,000 FCFA</td>
-                                    <td><span class="badge bg-success">Livré</span></td>
+                                    <td>#{{ $order->id }}</td>
+                                    <td>{{ $order->user->name }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Voir</a>
-                                        <a href="#" class="btn btn-sm btn-info">Modifier</a>
+                                        @if($order->items->count() > 1)
+                                            {{ $order->items->first()->product->name }} 
+                                            <span class="text-muted">(+{{ $order->items->count() - 1 }} autres)</span>
+                                        @else
+                                            {{ $order->items->first()->product->name ?? 'N/A' }}
+                                        @endif
+                                    </td>
+                                    <td>{{ number_format($order->total, 0, ',', ' ') }} FCFA</td>
+                                    <td>
+                                        @php
+                                            $statusClass = [
+                                                'pending' => 'bg-warning',
+                                                'processing' => 'bg-info',
+                                                'shipped' => 'bg-primary',
+                                                'delivered' => 'bg-success',
+                                                'cancelled' => 'bg-danger'
+                                            ][$order->status] ?? 'bg-secondary';
+                                            
+                                            $statusLabels = [
+                                                'pending' => 'En attente',
+                                                'processing' => 'En traitement',
+                                                'shipped' => 'Expédié',
+                                                'delivered' => 'Livré',
+                                                'cancelled' => 'Annulé'
+                                            ];
+                                        @endphp
+                                        <span class="badge {{ $statusClass }}">
+                                            {{ $statusLabels[$order->status] ?? $order->status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-primary">Voir</a>
+                                        <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-sm btn-info">Modifier</a>
                                     </td>
                                 </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucune commande trouvée</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -157,18 +191,48 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Données des graphiques
+    const salesLabels = @json($stats['sales_labels'] ?? []);
+    const salesData = @json($stats['sales_data'] ?? []);
+    const categoryLabels = @json($stats['category_labels'] ?? []);
+    const categoryValues = @json($stats['category_values'] ?? []);
+
     // Graphique des ventes
     const salesCtx = document.getElementById('salesChart').getContext('2d');
     new Chart(salesCtx, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+            labels: salesLabels,
             datasets: [{
                 label: 'Ventes',
-                data: [12, 19, 3, 5, 2, 3],
+                data: salesData,
                 borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+                tension: 0.1,
+                fill: false
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString('fr-FR') + ' FCFA';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.raw.toLocaleString('fr-FR') + ' FCFA';
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -177,17 +241,37 @@
     new Chart(revenueCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Canapés', 'Lits', 'Tables'],
+            labels: categoryLabels,
             datasets: [{
-                data: [300, 50, 100],
+                data: categoryValues,
                 backgroundColor: [
                     'rgb(255, 99, 132)',
                     'rgb(54, 162, 235)',
                     'rgb(255, 205, 86)'
                 ]
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label}: ${value.toLocaleString('fr-FR')} FCFA (${percentage}%)`;
+                        }
+                    }
+                }
+            }
         }
     });
 </script>
 @endpush
-@endsection 
+@endsection

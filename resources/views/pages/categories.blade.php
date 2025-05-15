@@ -9,6 +9,33 @@
         </div>
     </section>
 
+<!-- Catégories principales -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            @forelse($categories as $category)
+            <div class="col-md-6 col-lg-4">
+                <div class="category-card">
+                    <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
+                    <div class="category-overlay">
+                        <h4>{{ $category->name }}</h4>
+                        <p>{{ $category->description }}</p>
+                        <a href="{{ route('category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
+                    </div>
+                </div>
+
+          
+            </div>
+            @empty
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Aucune catégorie disponible pour le moment.
+                </div>
+            </div>
+            @endforelse
+        </div>
+    </div>
+</section>
     <!-- Catégories principales -->
     <section class="py-5 position-relative">
         <div class="container">
@@ -132,6 +159,47 @@
             color: white;
         }
 
+.product-thumbnail {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.product-thumbnail img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-thumbnail:hover .product-overlay {
+    opacity: 1;
+}
+
+.product-thumbnail:hover img {
+    transform: scale(1.1);
+}
         .product-thumbnail {
             border-radius: 4px;
             overflow: hidden;

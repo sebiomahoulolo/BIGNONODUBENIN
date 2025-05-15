@@ -85,7 +85,7 @@
                 @forelse (getCategory() as $category)
                     <div class="col-md-4">
                         <div class="category-card">
-                            <a href="{{ route('pages.category.show', ['slug' => $category->slug]) }}">
+                            <a href="">
                                 <img src="{{ asset('images/canape1.webp') }}" alt="{{ $category->name }}">
                                 <div class="category-overlay">
                                     <h4>{{ $category->name }}</h4>

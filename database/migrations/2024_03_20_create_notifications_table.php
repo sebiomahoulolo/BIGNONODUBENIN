@@ -8,9 +8,11 @@ return new class extends Migration
 {
     public function up()
     {
+
+    if (!Schema::hasTable('notifications')) {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
             $table->string('type');
             $table->string('title');
             $table->text('message');
@@ -18,6 +20,9 @@ return new class extends Migration
             $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
+    
+}
+
     }
 
     public function down()
