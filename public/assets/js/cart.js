@@ -129,3 +129,12 @@ $(document).on('input', 'input[name="produits[][quantite]"]', function () {
     $row.find('input[name="produits[][montant]"]').last().val(montant);
 });
 
+
+//PArtager la fiche produit
+$(document).ready(function () {
+    $('.add-to-cart-btn').on('click', function () {
+        const $container = $(this).closest('.col');
+        const $shareDiv = $container.find('.share-options');
+        $shareDiv.toggleClass('d-none');
+    });
+});

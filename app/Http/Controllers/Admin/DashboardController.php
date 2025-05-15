@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    
     public function index()
     {
         // Statistiques pour les cartes
@@ -29,9 +30,7 @@ class DashboardController extends Controller
             ->whereYear('created_at', $currentYear)
             ->sum('total');
             
-        // Récupération du nombre de clients
-        $totalCustomers = User::where('role', 'customer')->count();
-        
+      
         // Récupération du nombre de produits en stock
         $productsInStock = Product::where('is_active', true)->sum('stock');
         
@@ -78,7 +77,7 @@ class DashboardController extends Controller
         $stats = [
             'total_orders' => $monthlyOrders,
             'total_revenue' => $monthlyRevenue,
-            'total_customers' => $totalCustomers,
+           
             'total_products' => $productsInStock,
             'recent_orders' => $latestOrders,
             'monthly_sales' => Order::select(
@@ -111,25 +110,14 @@ class DashboardController extends Controller
 
     public function getSalesData(Request $request)
     {
-        $period = $request->get('period', 'month');
-        $query = Order::select(
-            DB::raw('DATE_FORMAT(created_at, "%Y-%m") as period'),
-            DB::raw('SUM(total) as total')
-        );
-
-        if ($period === 'year') {
-            $query->whereYear('created_at', Carbon::now()->year)
-                ->groupBy(DB::raw('YEAR(created_at)'));
-        } else {
-            $query->whereYear('created_at', Carbon::now()->year)
-                ->groupBy(DB::raw('MONTH(created_at)'));
-        }
-
-        $data = $query->get();
-
-        return response()->json([
-            'labels' => $data->pluck('period'),
-            'values' => $data->pluck('total')
-        ]);
+        return DB::table('order_items')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('categories.name', DB::raw('SUM(order_items.total) as total'))
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('total')
+            ->get();
     }
-}
+
+    
+} 

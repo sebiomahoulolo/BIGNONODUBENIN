@@ -57,6 +57,13 @@
                         </li>
                        
 
+                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.demande-devis.*') ? 'active' : '' }} text-white" href="{{ route('admin.demande-devis.index') }}">
+                                <i class="fa-solid fa-newspaper"></i> Demandes devis
+                            </a>
+                        </li>
+                      
+                        
                         <li class="nav-item mt-2">
                             <form method="POST" action="" class="d-inline">
                                 @csrf
@@ -83,4 +90,4 @@
 
     @stack('scripts')
 </body>
-</html> 
+</html>

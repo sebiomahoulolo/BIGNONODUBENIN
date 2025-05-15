@@ -37,7 +37,7 @@
 </div>
 
 {{-- HEADER  --}}
-<header class="bg-light">
+<header class="bg-light position-fixed top-0 w-100" style="z-index: 9999;">
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-3" href="#">
@@ -82,44 +82,14 @@
                         </a>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center">
-                    @auth
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Auth::user()->name }}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if (Auth::user()->is_admin)
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                            <i class="fas fa-tachometer-alt"></i> Tableau de bord
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                @endif
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt"></i> Déconnexion
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
 
-                    @endauth
                 </div>
             </div>
         </div>
     </nav>
 
     {{-- Modal Demandez un devis  --}}
-    <div class="modal fade" id="DemanderDevis" tabindex="-1" aria-labelledby="DemanderDevis" aria-hidden="true">
+    <!--div class="modal fade" id="DemanderDevis" tabindex="-1" aria-labelledby="DemanderDevis" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-sm-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,7 +179,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div-->
 
     <!-- Modal positionné à droite -->
     <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
@@ -219,26 +189,34 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class=" table-responsive">
-                <table class="table table-striped ">
-                    <thead>
-                        <tr>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Produit</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Quantité</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Prix</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px">Montant</th>
-                            <th class=" bg-secondary-subtle" style=" font-size: 12px"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-body">
-                        <tr id="empty-row">
-                            <td colspan="5" style=" font-size: 12px" class="text-center text-muted">
-                                Aucun produit ajouté pour l’instant.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <form id="product-form" action="{ route('produits.valider') }" method="POST">
+                @csrf
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Produit</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Quantité</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Prix</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px">Montant</th>
+                                <th class="bg-secondary-subtle" style="font-size: 12px"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-body">
+                            <tr id="empty-row">
+                                <td colspan="5" style="font-size: 12px" class="text-center text-muted">
+                                    Aucun produit ajouté pour l’instant.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ✅ BOUTON VALIDER -->
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-lg btn-success rounded-5">Valider</button>
+                </div>
+            </form>
         </div>
     </div>
 

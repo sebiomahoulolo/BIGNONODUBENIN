@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\DemandeDevisController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 // Routes publiques
@@ -36,6 +37,10 @@ Route::get('/products', [PageController::class, 'products'])->name('pages.produc
 Route::get('/categories', [PageController::class, 'categories'])->name('pages.categories');
 Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('category.show');
 Route::get('/product/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
+
+//Route demande de devis
+Route::post('store-demande-devis', [DemandeDevisController::class, 'storeDemandeDevis'])->name('store.demande-devis');
+Route::get('liste-demande-devis', [DemandeDevisController::class, 'listeDemandeDevis'])->name('liste.demande-devis');
 
 // Routes du panier
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -90,28 +95,26 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/sales-data', [DashboardController::class, 'getSalesData'])->name('dashboard.sales-data');
     
     // Produits
     Route::resource('products', ProductController::class);
     Route::post('products/{product}/delete-image', [ProductController::class, 'deleteImage'])->name('products.delete-image');
-    
+
     // Catégories
     Route::resource('categories', CategoryController::class);
-    
+
     // Commandes
     Route::resource('orders', OrderController::class);
     Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
-    
+
     // Clients
     Route::resource('customers', CustomerController::class);
     Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
-    
+
     // Paramètres
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
-    
+
     // Notifications
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::get('/', [NotificationController::class, 'index'])->name('index');
@@ -121,11 +124,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 });
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
 Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+Route::get('/admin/demande-devis', [DemandeDevisController::class, 'index'])->name('admin.demande-devis.index');
 Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
 Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
 
@@ -136,7 +140,7 @@ Route::get('/politique-de-confidentialite', function () {
 Route::get('/mentions-legales', function () {
     return view('pages.legal-notice');
 })->name('legal-notice');
-
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
 // Routes pour le tableau de bord admin
 
 

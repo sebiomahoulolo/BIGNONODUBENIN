@@ -61,6 +61,7 @@ class CartController extends Controller
         }
     }
 
+
     public function clear()
     {
         session()->forget('cart');
@@ -83,3 +84,4 @@ class CartController extends Controller
         return view('cart.checkout', compact('cart', 'total'));
     }
 } 
+}

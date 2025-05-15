@@ -1,431 +1,808 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-
-
-    <div class="row">
-        <!-- Images du produit -->
-        <div class="col-md-6">
-            <div class="product-images">
-                @if($product->images && count($product->images) > 0)
-                    <div class="main-image mb-3">
-                        <img src="{{ asset('storage/' . $product->images[0]) }}" 
-                             class="img-fluid rounded" 
-                             alt="{{ $product->nombre_places }}"
-                             id="main-product-image">
-                        <div class="image-overlay">
-                            <button class="btn btn-light btn-sm" onclick="zoomImage()">
-                                <i class="bi bi-zoom-in"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="thumbnail-images row g-2">
-                        @foreach($product->images as $image)
-                            <div class="col-3">
-                                <img src="{{ asset('storage/' . $image) }}" 
-                                     class="img-fluid rounded thumbnail" 
-                                     alt="{{ $product->nombre_places }}"
-                                     onclick="changeMainImage(this.src)">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Carrousel d'images -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div id="productCarousel" class="carousel slide product-carousel" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach ($product->images as $key => $image)
+                            <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $image) }}" class="d-block w-100 main-image"
+                                    alt="{{ $product->nombre_places }}">
                             </div>
                         @endforeach
                     </div>
-                @else
-                    <img src="{{ asset('images/no-image.jpg') }}" 
-                         class="img-fluid rounded" 
-                         alt="{{ $product->nombre_places }}">
-                @endif
-            </div>
-        </div>
-
-        <!-- Informations du produit -->
-        <div class="col-md-6">
-            <div class="product-header mb-4">
-                
-                <div class="product-meta">
-                    <span class="badge bg-primary">{{ $product->category->name }}</span>
-                    @if($product->stock > 0)
-                        <span class="badge bg-success">En stock</span>
-                    @else
-                        <span class="badge bg-danger">Rupture de stock</span>
-                    @endif
-                </div>
-            </div>
-
-            <div class="product-description mb-4">
-                <p class="text-muted">{{ $product->description }}</p>
-            </div>
-            
-            <div class="product-price mb-4">
-                <h2 class="text-primary mb-0" >{{ number_format($product->price, 0, ',', ' ') }} FCFA</h2>
-                @if($product->sale_price)
-                    <span class="text-decoration-line-through text-muted" style="color: #198754 ">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
-                    <span class="badge bg-danger ms-2" >-{{ round((($product->price - $product->sale_price) / $product->price) * 100) }}%</span>
-                @endif
-            </div>
-
-            <div class="product-details mb-4">
-                <h4>Caractéristiques</h4>
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="detail-item">
-                            <i class="bi bi-box"></i>
-                            <span><strong>Stock:</strong> {{ $product->stock }} unités</span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="detail-item">
-                            <i class="bi bi-rulers"></i>
-                            <span><strong>Nombres de place:</strong> {{ $product->nombre_places }}</span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="detail-item">
-                            <i class="bi bi-palette"></i>
-                            <span><strong>Matériau:</strong> {{ $product->matiere }}</span>
-                        </div>
-                    </div>
-                    <!--div class="col-6">
-                        <div class="detail-item">
-                            <i class="bi bi-tag"></i>
-                            <span><strong>Référence:</strong> {{ $product->reference }}</span>
-                        </div>
-                    </div-->
-                </div>
-            </div>
-
-            <div class="add-to-cart mb-4">
-                <!--div class="quantity-selector mb-3">
-                    <label for="quantity" class="form-label">Quantité</label>
-                    <div class="input-group" style="max-width: 150px;">
-                        <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity()">-</button>
-                        <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="{{ $product->stock }}">
-                        <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity()">+</button>
-                    </div>
-                </div-->
-                <div class="d-grid gap-2">
-                    <button class="btn btn-primary btn-lg" onclick="addToCart({
-                        id: {{ $product->id }},
-                        name: '{{ $product->nombre_places }}',
-                        price: {{ $product->price }},
-                        image: '{{ $product->images ? asset('storage/' . $product->images[0]) : asset('images/no-image.jpg') }}',
-                        quantity: document.getElementById('quantity').value
-                    })">
-                        <i class="bi bi-cart-plus"></i> Ajouter au panier
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Précédent</span>
                     </button>
-                    <button class="btn btn-outline-primary" onclick="addToWishlist({{ $product->id }})">
-                        <i class="bi bi-heart"></i> Ajouter aux favoris
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Suivant</span>
                     </button>
                 </div>
-            </div>
 
-            <div class="product-features">
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="feature-item text-center p-3 border rounded">
-                            <i class="bi bi-truck fs-4"></i>
-                            <p class="mb-0 mt-2">Livraison gratuite</p>
+                <!-- Miniatures -->
+                <div class="row mt-3 thumbnails-container">
+                    @foreach ($product->images as $key => $image)
+                        <div class="col-3">
+                            <div class="thumbnail-item {{ $key === 0 ? 'active' : '' }}"
+                                onclick="changeMainImage({{ $key }})">
+                                <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->nombre_places }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="feature-item text-center p-3 border rounded">
-                            <i class="bi bi-shield-check fs-4"></i>
-                            <p class="mb-0 mt-2">Garantie 1 an</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Produits similaires -->
-    <div class="related-products mt-5">
-        <h3 class="mb-4">Produits similaires</h3>
-<div class="row g-4">
-                @foreach($relatedProducts as $product)
-                <div class="col-md-3">
-                    <div class="card h-100 border-0 shadow-sm product-card">
-                        <div class="product-image-container">
-                            @if($product->images && count($product->images) > 0)
-                                <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top" alt="{{ $product->name }}">
-                            @else
-                                <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top" alt="{{ $product->name }}">
-                            @endif
-                            <div class="product-overlay">
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-light btn-sm">
-                                    <i class="bi bi-eye"></i> Voir plus
-                                </a>
+            <!-- Informations du produit -->
+            <div class="col-lg-6 col-md-12">
+                <div class="product-details">
+                    <div class="category-badge mb-3">
+                        <h1 class="product-title mb-4"> <span class="badge bg-primary">{{ $product->category->name }}</span>
+                        </h1>
+                    </div>
+
+
+
+                    <div class="price-container mb-4">
+                        @if ($product->sale_price)
+                            <span class="original-price">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
+                            <span class="sale-price">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
+                            <span class="discount-badge">-{{ $product->discount_percentage }}%</span>
+                        @else
+                            <span class="current-price">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
+                        @endif
+                    </div>
+
+                    <div class="description-container mb-4">
+                        <h5 class="section-title">Description</h5>
+                        <p class="product-description">{{ $product->description }}</p>
+                    </div>
+
+                    <div class="specifications-container mb-4">
+                        <h5 class="section-title">Caractéristiques</h5>
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <i class="bi bi-people"></i>
+                                <span>Nombre de places: {{ $product->nombre_places }}</span>
+                            </div>
+                            <div class="spec-item">
+                                <i class="bi bi-box"></i>
+                                <span>Matière: {{ $product->matiere }}</span>
+                            </div>
+                            <div class="spec-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Stock: {{ $product->stock }} unités</span>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="badge bg-primary">{{ $product->category->name }}</span>
-                            </div>
-                            <div class="price-wrapper mb-3">
-                                    @if($product->sale_price)
-                                   
-                                    <span class="sale-price"style="color:#198754 ">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
-                                    @else
-                                        <span class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
-                                    @endif
+                    </div>
+
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form mb-4">
+                        @csrf
+                        <div class="row align-items-center">
+                            {{-- <div class="col-auto">
+                                <div class="quantity-selector">
+                                    <button type="button" class="quantity-btn minus">-</button>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" value="1"
+                                        min="1" max="{{ $product->stock }}">
+                                    <button type="button" class="quantity-btn plus">+</button>
                                 </div>
-                            <p class="card-text text-muted mb-3">{{ Str::limit($product->description, 100) }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-eye"></i> Détails
-                                </a>
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-primary">
-                                        <i class="bi bi-cart-plus"></i>
-                                </a>
+                            </div> --}}
+                            <div class="col">
+                                @php
+                                    $currentUrl = urlencode(Request::fullUrl());
+                                    $shareText = urlencode('Je veux partager ce produit : ');
+                                @endphp
+
+                                <div class="col position-relative">
+
+                                     <!-- Mini-modal de partage -->
+                                    <div class="share-options d-none start-0 mb-2 p-2 bg-white border rounded-4 shadow z-5"
+                                        style="min-width: 250px;">
+                                        <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                            <!-- WhatsApp -->
+                                            <a href="https://wa.me/?text={{ $shareText }}{{ $currentUrl }}"
+                                                target="_blank" class="">
+                                                <i class="fa-brands fa-whatsapp fs-4 text-success"></i>
+                                            </a>
+
+                                            <!-- Facebook -->
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $currentUrl }}"
+                                                target="_blank" class="">
+                                                <i class="fa-brands fa-facebook fs-4"></i>
+                                            </a>
+
+                                            <!-- LinkedIn -->
+                                            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $currentUrl }}"
+                                                target="_blank" class="">
+                                                <i class="fa-brands fa-linkedin fs-4 text-info"></i>
+
+
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bouton Partager -->
+                                    <button type="button" class="btn btn-primary btn-lg w-100 add-to-cart-btn"
+                                        onclick="toggleShareOptions(this)">
+                                        <i class="bi bi-cart-plus"></i> Partager
+                                    </button>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="col">
+                                <button type="button" class="btn btn-primary btn-lg w-100 add-to-cart-btn add-to-cart"
+                                    data-name="{{ $product->matiere }}" data-price="{{ $product->sale_price }}"
+                                    data-img="{{ asset('images/canape1.webp') }}">
+                                    <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="delivery-info">
+                        <h5 class="section-title">Livraison</h5>
+                        <div class="delivery-options">
+                            <div class="delivery-option">
+                                <i class="bi bi-truck"></i>
+                                <span>Livraison gratuite à partir de 100 000 FCFA</span>
+                            </div>
+                            <div class="delivery-option">
+                                <i class="bi bi-clock"></i>
+                                <span>Livraison en 2-3 jours ouvrés</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                @endforeach
-    </div>
-    </div>
-</div>
-
-@push('styles')
-<style>
-.product-images {
-    position: relative;
-}
-
-.main-image {
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-}
-
-.main-image img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-}
-
-.image-overlay {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.main-image:hover .image-overlay {
-    opacity: 1;
-}
-
-.thumbnail {
-    cursor: pointer;
-    height: 80px;
-    object-fit: cover;
-    border: 1px solid #dee2e6;
-    transition: all 0.3s ease;
-}
- .original-price {
-        font-size: 0.85rem;
-        color: #dc3545 !important;
-        text-decoration: line-through;
-        text-decoration-color: #dc3545;
-    }
-
-    .sale-price {
-        font-size: 1.1rem;
-        color: #198754 !important;
-        font-weight: 700;
-        text-shadow: 1px 1px 2px rgba(25, 135, 84, 0.1);
-    }
-
-.thumbnail:hover {
-    border-color: #0d6efd;
-    transform: scale(1.05);
-}
-
-.feature-item {
-    transition: all 0.3s ease;
-}
-
-.feature-item:hover {
-    background-color: #f8f9fa;
-    transform: translateY(-2px);
-}
-
-.quantity-selector .input-group {
-    width: auto;
-}
-
-.quantity-selector input[type="number"] {
-    text-align: center;
-    -moz-appearance: textfield;
-}
-
-.quantity-selector input[type="number"]::-webkit-outer-spin-button,
-.quantity-selector input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.detail-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.detail-item:hover {
-    background: #e9ecef;
-    transform: translateX(5px);
-}
-
-.detail-item i {
-    color: #0d6efd;
-    font-size: 1.2rem;
-}
-
-.product-meta {
-    display: flex;
-    gap: 10px;
-}
-
-.breadcrumb {
-    background: #f8f9fa;
-    padding: 10px 15px;
-    border-radius: 8px;
-}
-
-.card {
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.card-img-top {
-    height: 200px;
-    object-fit: cover;
-}
-</style>
-@endpush
-
-@push('scripts')
-<script>
-function changeMainImage(src) {
-    document.getElementById('main-product-image').src = src;
-}
-
-function incrementQuantity() {
-    const input = document.getElementById('quantity');
-    const max = parseInt(input.getAttribute('max'));
-    const currentValue = parseInt(input.value);
-    if (currentValue < max) {
-        input.value = currentValue + 1;
-    }
-}
-
-function decrementQuantity() {
-    const input = document.getElementById('quantity');
-    const currentValue = parseInt(input.value);
-    if (currentValue > 1) {
-        input.value = currentValue - 1;
-    }
-}
-
-function addToCart(product) {
-    // Récupérer le panier actuel
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    // Vérifier si le produit existe déjà dans le panier
-    const existingProductIndex = cart.findIndex(item => item.id === product.id);
-    
-    if (existingProductIndex > -1) {
-        // Mettre à jour la quantité si le produit existe déjà
-        cart[existingProductIndex].quantity += parseInt(product.quantity);
-    } else {
-        // Ajouter le nouveau produit
-        cart.push(product);
-    }
-    
-    // Sauvegarder le panier mis à jour
-    localStorage.setItem('cart', JSON.stringify(cart));
-    
-    // Afficher une notification
-    showNotification('Produit ajouté au panier !', 'success');
-    
-    // Mettre à jour le compteur du panier
-    updateCartCount();
-}
-
-function addToWishlist(productId) {
-    // Récupérer la liste des favoris
-    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    
-    // Vérifier si le produit est déjà dans les favoris
-    if (!wishlist.includes(productId)) {
-        wishlist.push(productId);
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        showNotification('Produit ajouté aux favoris !', 'success');
-    } else {
-        showNotification('Ce produit est déjà dans vos favoris', 'info');
-    }
-}
-
-function showNotification(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `toast align-items-center text-white bg-${type} border-0 position-fixed bottom-0 end-0 m-3`;
-    toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'assertive');
-    toast.setAttribute('aria-atomic', 'true');
-    
-    toast.innerHTML = `
-        <div class="d-flex">
-            <div class="toast-body">
-                ${message}
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    `;
-    
-    document.body.appendChild(toast);
-    const bsToast = new bootstrap.Toast(toast);
-    bsToast.show();
-    
-    toast.addEventListener('hidden.bs.toast', () => {
-        toast.remove();
-    });
-}
-
-function zoomImage() {
-    const mainImage = document.getElementById('main-product-image');
-    const modal = document.createElement('div');
-    modal.className = 'modal fade';
-    modal.id = 'imageModal';
-    
-    modal.innerHTML = `
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body p-0">
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
-                    <img src="${mainImage.src}" class="img-fluid" alt="Image agrandie">
-                </div>
             </div>
         </div>
-    `;
-    
-    document.body.appendChild(modal);
-    const bsModal = new bootstrap.Modal(modal);
-    bsModal.show();
-    
-    modal.addEventListener('hidden.bs.modal', () => {
-        modal.remove();
-    });
-}
-</script>
-@endpush
+    </div>
+
+    <style>
+        /* Styles de base */
+        .product-carousel {
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+        .product-carousel .carousel-item {
+            background-color: #f8f9fa;
+        }
+
+        .product-carousel .carousel-item img {
+            height: 500px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        /* Styles responsifs */
+        @media (max-width: 991.98px) {
+            .product-carousel .carousel-item img {
+                height: 350px;
+            }
+
+            .product-title {
+                font-size: 1.75rem;
+            }
+
+            .price-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+                padding: 0.75rem;
+            }
+
+            .product-details {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .product-carousel .carousel-item img {
+                height: 250px;
+            }
+
+            .product-title {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .product-title .badge {
+                font-size: 0.8rem;
+                padding: 0.4em 0.8em;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .spec-item {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .delivery-options {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .delivery-option {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .quantity-selector {
+                width: 100%;
+                margin-bottom: 0.75rem;
+            }
+
+            .quantity-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .quantity-selector input {
+                width: 50px;
+                font-size: 0.9rem;
+            }
+
+            .add-to-cart-form .row {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .add-to-cart-form .col {
+                width: 100%;
+            }
+
+            .add-to-cart-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .product-description {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .thumbnail-item {
+                height: 60px;
+                width: 60px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .product-carousel .carousel-item img {
+                height: 200px;
+            }
+
+            .product-title {
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .product-title .badge {
+                font-size: 0.7rem;
+                padding: 0.3em 0.6em;
+            }
+
+
+
+            .price-container {
+                padding: 0.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .sale-price,
+            .current-price {
+                font-size: 1.25rem;
+            }
+
+            .original-price {
+                font-size: 0.9rem;
+            }
+
+            .discount-badge {
+                font-size: 0.8rem;
+                padding: 0.3em 0.6em;
+            }
+
+            .product-details {
+                padding: 1rem;
+            }
+
+            .spec-item {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .spec-item i {
+                font-size: 1rem;
+            }
+
+            .delivery-option {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .delivery-option i {
+                font-size: 1.2rem;
+            }
+
+            .quantity-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+
+            .quantity-selector input {
+                width: 40px;
+                font-size: 0.85rem;
+            }
+
+            .add-to-cart-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.85rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .product-description {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+        }
+
+        /* Styles communs */
+        .product-carousel:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .product-carousel:hover .carousel-item img {
+            transform: scale(1.05);
+        }
+
+        .thumbnails-container {
+            margin-top: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .thumbnail-item {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .thumbnail-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .thumbnail-item.active {
+            border-color: var(--primary-color);
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .thumbnail-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .product-details {
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-details:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #dc3545;
+            font-size: 1.2rem;
+        }
+
+        .sale-price {
+            color: #198754;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .current-price {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .discount-badge {
+            background: #198754;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(25, 135, 84, 0.2);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .spec-item:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f8f9fa;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #e9ecef;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .quantity-selector input {
+            width: 60px;
+            border: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .add-to-cart-btn {
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .delivery-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .delivery-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .delivery-option:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .delivery-option i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .product-details>* {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .spec-item,
+        .delivery-option {
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .product-details>*:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .product-details>*:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .product-details>*:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .product-details>*:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .product-details>*:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .product-details>*:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .spec-item:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .spec-item:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .spec-item:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        .delivery-option:nth-child(1) {
+            animation-delay: 0.6s;
+        }
+
+        .delivery-option:nth-child(2) {
+            animation-delay: 0.7s;
+        }
+
+        .main-image {
+            transition: transform 0.3s ease;
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+                    // Gestion des miniatures
+                    const thumbnails = document.querySelectorAll('.thumbnail-item'); <<
+                    <<
+                    <<
+                    <
+                    HEAD
+                        <<
+                        <<
+                        <<
+                        <
+                        Updated upstream
+                    thumbnails.forEach(thumb => {
+                        thumb.addEventListener('click', function() {
+                            thumbnails.forEach(t => t.classList.remove('active'));
+                            this.classList.add('active');
+                        }); ===
+                        ===
+                        = ===
+                        ===
+                        = >>>
+                        >>>
+                        >
+                        4 d18588fce04aef23792227ce91fa87d3cfe4515
+                        const mainImages = document.querySelectorAll('.main-image');
+                        const carousel = document.querySelector('#productCarousel');
+                        const bsCarousel = new bootstrap.Carousel(carousel);
+
+                        // Fonction pour changer l'image principale
+                        window.changeMainImage = function(index) {
+                            // Mettre à jour le carousel
+                            bsCarousel.to(index); <<
+                            <<
+                            <<
+                            <
+                            HEAD
+
+                                ===
+                                ===
+                                =
+
+                                >>>
+                                >>>
+                                >
+                                4 d18588fce04aef23792227ce91fa87d3cfe4515
+                            // Mettre à jour les miniatures
+                            thumbnails.forEach(t => t.classList.remove('active'));
+                            thumbnails[index].classList.add('active');
+                        };
+
+                        // Mettre à jour la miniature active lors du changement de slide
+                        carousel.addEventListener('slide.bs.carousel', function(e) {
+                            thumbnails.forEach(t => t.classList.remove('active'));
+                            thumbnails[e.to].classList.add('active'); <<
+                            <<
+                            <<
+                            <
+                            HEAD
+                                >>>
+                                >>>
+                                >
+                                Stashed changes ===
+                                ===
+                                = >>>
+                                >>>
+                                >
+                                4 d18588fce04aef23792227ce91fa87d3cfe4515
+                        });
+
+                        // Gestion du sélecteur de quantité
+                        const minusBtn = document.querySelector('.minus');
+                        const plusBtn = document.querySelector('.plus');
+                        const quantityInput = document.querySelector('#quantity');
+
+                        minusBtn.addEventListener('click', () => {
+                            let value = parseInt(quantityInput.value);
+                            if (value > 1) {
+                                quantityInput.value = value - 1;
+                                minusBtn.style.transform = 'scale(0.95)';
+                                setTimeout(() => minusBtn.style.transform = 'scale(1)', 100);
+                            }
+                        });
+
+                        plusBtn.addEventListener('click', () => {
+                            let value = parseInt(quantityInput.value);
+                            let max = parseInt(quantityInput.getAttribute('max'));
+                            if (value < max) {
+                                quantityInput.value = value + 1;
+                                plusBtn.style.transform = 'scale(0.95)';
+                                setTimeout(() => plusBtn.style.transform = 'scale(1)', 100);
+                            }
+                        });
+
+                        // Animation au scroll avec effet de parallaxe
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('visible');
+                                    if (entry.target.classList.contains('product-carousel')) {
+                                        entry.target.style.transform = 'translateY(0)';
+                                    }
+                                }
+                            });
+                        }, {
+                            threshold: 0.1
+                        });
+
+                        document.querySelectorAll('.spec-item, .delivery-option, .product-carousel').forEach((
+                            el) => {
+                            observer.observe(el);
+                        });
+
+                        // Effet de parallaxe sur le carousel
+                        window.addEventListener('scroll', () => {
+                            const carousel = document.querySelector('.product-carousel');
+                            const scrolled = window.pageYOffset;
+                            if (carousel) {
+                                carousel.style.transform = `translateY(${scrolled * 0.1}px)`;
+                            }
+                        });
+                    });
+    </script>
 @endsection

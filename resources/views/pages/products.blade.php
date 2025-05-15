@@ -347,4 +347,8 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </section>
+<<<<<<< HEAD
 @endsection
+=======NaN
+@endsection
+>>>>>>> 61f53dc15168e0d7702783da156d5860167af2b1
