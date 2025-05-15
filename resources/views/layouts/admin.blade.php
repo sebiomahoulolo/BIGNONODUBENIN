@@ -55,6 +55,11 @@
                                 <i class="fas fa-users"></i> Clients
                             </a>
                         </li>
+                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.demande-devis.*') ? 'active' : '' }} text-white" href="{{ route('admin.demande-devis.index') }}">
+                                <i class="fa-solid fa-newspaper"></i> Demandes devis
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }} text-white" href="{{ route('admin.settings.index') }}">
                                 <i class="fas fa-cog"></i> Paramètres
@@ -91,4 +96,4 @@
 
     @stack('scripts')
 </body>
-</html> 
+</html>

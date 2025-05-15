@@ -100,40 +100,40 @@
                                 @endphp
 
                                 <div class="col position-relative">
+
+                                     <!-- Mini-modal de partage -->
+                                    <div class="share-options d-none start-0 mb-2 p-2 bg-white border rounded-4 shadow z-5"
+                                        style="min-width: 250px;">
+                                        <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                            <!-- WhatsApp -->
+                                            <a href="https://wa.me/?text={{ $shareText }}{{ $currentUrl }}"
+                                                target="_blank" class="">
+                                                <i class="fa-brands fa-whatsapp fs-4 text-success"></i>
+                                            </a>
+
+                                            <!-- Facebook -->
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $currentUrl }}"
+                                                target="_blank" class="">
+                                                <i class="fa-brands fa-facebook fs-4"></i>
+                                            </a>
+
+                                            <!-- LinkedIn -->
+                                            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $currentUrl }}"
+                                                target="_blank" class="">
+                                                <i class="fa-brands fa-linkedin fs-4 text-info"></i>
+
+
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     <!-- Bouton Partager -->
                                     <button type="button" class="btn btn-primary btn-lg w-100 add-to-cart-btn"
                                         onclick="toggleShareOptions(this)">
                                         <i class="bi bi-cart-plus"></i> Partager
                                     </button>
 
-                                    <!-- Mini-modal de partage -->
-                                    <div class="share-options d-none position-absolute start-0 mt-2 p-2 bg-white border rounded shadow z-3"
-                                        style="min-width: 250px;">
-                                        <div class="d-flex flex-wrap gap-2 justify-content-center">
-                                            <!-- WhatsApp -->
-                                            <a href="https://wa.me/?text={{ $shareText }}{{ $currentUrl }}"
-                                                target="_blank" class="btn btn-success btn-sm">
-                                                <i class="bi bi-whatsapp"></i>
-                                            </a>
 
-                                            <!-- Facebook -->
-                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $currentUrl }}"
-                                                target="_blank" class="btn btn-primary btn-sm">
-                                                <i class="bi bi-facebook"></i>
-                                            </a>
-
-                                            <!-- LinkedIn -->
-                                            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $currentUrl }}"
-                                                target="_blank" class="btn btn-info btn-sm">
-                                                <i class="bi bi-linkedin"></i>
-                                            </a>
-
-                                            <!-- TikTok -->
-                                            <a href="https://www.tiktok.com/" target="_blank" class="btn btn-dark btn-sm">
-                                                <i class="bi bi-tiktok"></i>
-                                            </a>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 

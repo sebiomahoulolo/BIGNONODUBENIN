@@ -34,7 +34,7 @@
 </div>
 
 {{-- HEADER  --}}
-<header class="bg-light">
+<header class="bg-light position-fixed top-0 w-100" style="z-index: 9999;">
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-3" href="#">
@@ -53,8 +53,7 @@
                     <li class="nav-item"><a class="nav-link" href="">Accueil</a></li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal"
-                            data-bs-target="#DemanderDevis">Demandez un Devis</a>
+                        <a class="nav-link" href="#demanderDevis">Demandez un Devis</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
