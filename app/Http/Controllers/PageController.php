@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class PageController extends Controller
 {
@@ -15,7 +16,11 @@ class PageController extends Controller
             ->take(8)
             ->get();
             
-        return view('app', compact('featuredProducts'));
+        $categories = Category::withCount('products')
+            ->where('is_active', true)
+            ->get();
+            
+        return view('app', compact('featuredProducts', 'categories'));
     }
 
     public function about()
@@ -30,7 +35,16 @@ class PageController extends Controller
 
     public function products()
     {
-        return view('pages.products');
+        $categories = Category::with(['products' => function($query) {
+            $query->where('is_active', true)
+                  ->orderBy('created_at', 'desc')
+                  ->take(4);
+        }])
+        ->where('is_active', true)
+        ->orderBy('name')
+        ->get();
+
+        return view('pages.products', compact('categories'));
     }
 
     public function categories()
@@ -141,6 +155,15 @@ class PageController extends Controller
     public function productDetail($id)
     {
         $product = Product::with('category')->findOrFail($id);
-        return view('pages.product-detail', compact('product'));
+        
+        // Récupérer les produits similaires (même catégorie)
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)
+            ->with('category')
+            ->take(4)
+            ->get();
+            
+        return view('pages.product-detail', compact('product', 'relatedProducts'));
     }
 } 

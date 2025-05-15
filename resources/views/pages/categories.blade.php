@@ -20,28 +20,11 @@
                     <div class="category-overlay">
                         <h4>{{ $category->name }}</h4>
                         <p>{{ $category->description }}</p>
-                        <a href="{{ route('pages.category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
+                        <a href="{{ route('category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
                     </div>
                 </div>
 
-                <!-- Produits de la catégorie -->
-                @if($category->products->isNotEmpty())
-                <div class="category-products mt-3">
-                    <div class="row g-3">
-                        @foreach($category->products as $product)
-                        <div class="col-4">
-                            <div class="product-thumbnail">
-                                <a href="{{ route('pages.product.detail', $product->id) }}">
-                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.jpg') }}" 
-                                         alt="{{ $product->name }}"
-                                         class="img-fluid">
-                                </a>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
+          
             </div>
             @empty
             <div class="col-12">
@@ -134,12 +117,42 @@
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: relative;
 }
 
 .product-thumbnail img {
     width: 100%;
     height: 80px;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-thumbnail:hover .product-overlay {
+    opacity: 1;
+}
+
+.product-thumbnail:hover img {
+    transform: scale(1.1);
 }
 
 .feature-card {

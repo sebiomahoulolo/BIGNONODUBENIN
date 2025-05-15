@@ -66,4 +66,20 @@ class CartController extends Controller
         session()->forget('cart');
         return redirect()->back()->with('success', 'Panier vidé avec succès!');
     }
+
+    public function checkout()
+    {
+        $cart = session()->get('cart', []);
+        $total = 0;
+
+        foreach($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+
+        if (empty($cart)) {
+            return redirect()->route('cart.index')->with('error', 'Votre panier est vide.');
+        }
+
+        return view('cart.checkout', compact('cart', 'total'));
+    }
 } 

@@ -18,37 +18,35 @@
     <div class="container">
         <div class="row g-3">
             <div class="col-md-3">
-                <select class="form-select">
-                    <option selected>Toutes les catégories</option>
-                    <option>Lits</option>
-                    <option>Canapés</option>
-                    <option>Tables</option>
-                    <option>Chaises</option>
-                    <option>Armoires</option>
+                <select class="form-select" id="category-filter">
+                    <option value="">Toutes les catégories</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-md-3">
-                <select class="form-select">
-                    <option selected>Prix</option>
-                    <option>0 - 100,000 FCFA</option>
-                    <option>100,000 - 200,000 FCFA</option>
-                    <option>200,000 - 300,000 FCFA</option>
-                    <option>300,000+ FCFA</option>
+                <select class="form-select" id="price-filter">
+                    <option value="">Prix</option>
+                    <option value="0-100000">0 - 100,000 FCFA</option>
+                    <option value="100000-200000">100,000 - 200,000 FCFA</option>
+                    <option value="200000-300000">200,000 - 300,000 FCFA</option>
+                    <option value="300000+">300,000+ FCFA</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <select class="form-select">
-                    <option selected>Trier par</option>
-                    <option>Prix croissant</option>
-                    <option>Prix décroissant</option>
-                    <option>Plus récents</option>
-                    <option>Plus populaires</option>
+                <select class="form-select" id="sort-filter">
+                    <option value="">Trier par</option>
+                    <option value="price-asc">Prix croissant</option>
+                    <option value="price-desc">Prix décroissant</option>
+                    <option value="newest">Plus récents</option>
+                    <option value="popular">Plus populaires</option>
                 </select>
             </div>
             <div class="col-md-3">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Rechercher...">
-                    <button class="btn btn-primary">
+                    <input type="text" class="form-control" id="search-input" placeholder="Rechercher...">
+                    <button class="btn btn-primary" id="search-button">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
@@ -60,124 +58,275 @@
 <!-- Products Grid -->
 <section class="py-5">
     <div class="container">
-        <div class="row g-4">
-            <!-- Product Card -->
-            <div class="col-md-4 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="position-relative">
-                        <img src="/images/products/lit-1.jpg" class="card-img-top" alt="Lit">
-                        <div class="position-absolute top-0 end-0 p-2">
-                            <button class="btn btn-light btn-sm rounded-circle">
-                                <i class="bi bi-heart"></i>
-                            </button>
+        @foreach($categories as $category)
+            <div class="category-section mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h3 mb-0">{{ $category->name }}</h2>
+                    <a href="{{ route('category.show', $category->slug) }}" class="btn btn-outline-primary">
+                        Voir tous <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+                <div class="row g-4" id="products-container">
+                    @forelse($category->products as $product)
+                        <div class="col-md-3 product-card" data-category="{{ $category->id }}" data-price="{{ $product->price }}">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="product-image-container">
+                                    @if($product->images && count($product->images) > 0)
+                                        <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top" alt="{{ $product->nombre_places }}">
+                                    @else
+                                        <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top" alt="{{ $product->nombre_places }}">
+                                    @endif
+                                    <div class="product-overlay">
+                                        <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-light btn-sm">
+                                            <i class="bi bi-eye"></i> Voir plus
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="badge bg-primary">{{ $category->name }}</span>
+                                    </div>
+                                    <div class="price-wrapper mb-3">
+                                        @if(isset($product->sale_price) && $product->sale_price)
+                                           
+                                            <span class="sale-price" style="color:#198754 ">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
+                                        @else
+                                            <span class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
+                                        @endif
+                                    </div>
+                                    <p class="card-text text-muted mb-3">{{ isset($product->description) ? Str::limit($product->description, 100) : $product->nombre_places }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-eye"></i> Détails
+                                        </a>
+                                        <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-primary">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="h6">Lit Moderne</h3>
-                        <p class="text-muted mb-2">Chambre</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">150,000 FCFA</span>
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-cart-plus"></i> Ajouter
-                            </button>
+                    @empty
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Aucun produit disponible dans cette catégorie.
+                            </div>
                         </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
-
-            <!-- Product Card -->
-            <div class="col-md-4 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="position-relative">
-                        <img src="/images/products/canape-1.jpg" class="card-img-top" alt="Canapé">
-                        <div class="position-absolute top-0 end-0 p-2">
-                            <button class="btn btn-light btn-sm rounded-circle">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="h6">Canapé d'Angle</h3>
-                        <p class="text-muted mb-2">Salon</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">250,000 FCFA</span>
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-cart-plus"></i> Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card -->
-            <div class="col-md-4 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="position-relative">
-                        <img src="/images/products/table-1.jpg" class="card-img-top" alt="Table">
-                        <div class="position-absolute top-0 end-0 p-2">
-                            <button class="btn btn-light btn-sm rounded-circle">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="h6">Table à Manger</h3>
-                        <p class="text-muted mb-2">Salle à manger</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">180,000 FCFA</span>
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-cart-plus"></i> Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card -->
-            <div class="col-md-4 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="position-relative">
-                        <img src="/images/products/armoire-1.jpg" class="card-img-top" alt="Armoire">
-                        <div class="position-absolute top-0 end-0 p-2">
-                            <button class="btn btn-light btn-sm rounded-circle">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="h6">Armoire Moderne</h3>
-                        <p class="text-muted mb-2">Chambre</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">200,000 FCFA</span>
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-cart-plus"></i> Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Précédent</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Suivant</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        @endforeach
     </div>
 </section>
+
+@push('styles')
+<style>
+.category-section {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.category-section:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #eee;
+}
+
+.product-card {
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Styles pour le prix original et le prix soldé */
+.original-price {
+    font-size: 0.85rem;
+    color: 
+#dc3545 !important;
+    text-decoration: line-through;
+    text-decoration-color: 
+#dc3545;
+}
+
+.sale-price {
+    font-size: 1.1rem;
+    color: 
+#198754 !important;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(25, 135, 84, 0.1);
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+
+.product-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+}
+</style>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilter = document.getElementById('category-filter');
+    const priceFilter = document.getElementById('price-filter');
+    const sortFilter = document.getElementById('sort-filter');
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const productsContainer = document.getElementById('products-container'); // Assurez-vous que cet ID est unique si vous avez plusieurs sections de produits, ou ciblez plus spécifiquement.
+    const productCards = document.querySelectorAll('.product-card');
+
+    function filterProducts() {
+        const categoryValue = categoryFilter.value;
+        const priceValue = priceFilter.value;
+        const sortValue = sortFilter.value;
+        const searchValue = searchInput.value.toLowerCase();
+
+        let visibleCards = [];
+
+        productCards.forEach(card => {
+            const category = card.dataset.category;
+            const price = parseInt(card.dataset.price);
+            const description = card.querySelector('.card-text') ? card.querySelector('.card-text').textContent.toLowerCase() : '';
+            const productNameOrBadge = card.querySelector('.badge') ? card.querySelector('.badge').textContent.toLowerCase() : ''; // Ajustez si le nom du produit est ailleurs
+
+            let show = true;
+
+            if (categoryValue && category !== categoryValue) {
+                show = false;
+            }
+
+            if (priceValue) {
+                const [minStr, maxStr] = priceValue.split('-');
+                const min = parseInt(minStr);
+                const max = maxStr ? parseInt(maxStr) : null;
+
+                if (max !== null && (price < min || price > max)) {
+                    show = false;
+                } else if (max === null && price < min) { // Pour les cas comme "300000+"
+                    show = false;
+                }
+            }
+            
+            // Recherche dans la description ou le badge/nom de catégorie
+            const cardTextContent = (card.textContent || card.innerText || "").toLowerCase();
+            if (searchValue && !cardTextContent.includes(searchValue)) {
+                 show = false;
+            }
+
+
+            if (show) {
+                card.style.display = 'block';
+                visibleCards.push(card);
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Regrouper les cartes par catégorie parente (`div.row.g-4`)
+        // et appliquer le tri à l'intérieur de chaque groupe.
+        document.querySelectorAll('div.row.g-4').forEach(container => {
+            let cardsInContainer = Array.from(container.querySelectorAll('.product-card')).filter(card => card.style.display !== 'none');
+
+            if (sortValue) {
+                cardsInContainer.sort((a, b) => {
+                    const priceA = parseInt(a.dataset.price);
+                    const priceB = parseInt(b.dataset.price);
+                    // La date de création ou la popularité nécessiteraient des data-attributes supplémentaires
+                    // const dateA = new Date(a.dataset.createdAt); 
+                    // const dateB = new Date(b.dataset.createdAt);
+                    // const popularityA = parseInt(a.dataset.popularity);
+                    // const popularityB = parseInt(b.dataset.popularity);
+
+                    if (sortValue === 'price-asc') {
+                        return priceA - priceB;
+                    } else if (sortValue === 'price-desc') {
+                        return priceB - priceA;
+                    }
+                    // Ajoutez ici la logique pour 'newest' et 'popular' si vous avez les données
+                    // else if (sortValue === 'newest') {
+                    //     return dateB - dateA;
+                    // } else if (sortValue === 'popular') {
+                    //     return popularityB - popularityA;
+                    // }
+                    return 0;
+                });
+            }
+            
+            // Réinsérer les cartes triées dans leur conteneur
+            cardsInContainer.forEach(card => {
+                container.appendChild(card);
+            });
+        });
+    }
+
+    categoryFilter.addEventListener('change', filterProducts);
+    priceFilter.addEventListener('change', filterProducts);
+    sortFilter.addEventListener('change', filterProducts);
+    searchButton.addEventListener('click', filterProducts);
+    searchInput.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter' || searchInput.value.length === 0 || searchInput.value.length > 2) { // Filtre à l'entrée ou si le champ est vidé
+            filterProducts();
+        }
+    });
+
+    // Initial filter call if needed, e.g. to apply default sort or filters from URL params
+    // filterProducts(); 
+});
+</script>
+@endpush
 
 <!-- Newsletter -->
 <section class="py-5 bg-light">
@@ -198,4 +347,4 @@
         </div>
     </div>
 </section>
-@endsection 
+@endsection
