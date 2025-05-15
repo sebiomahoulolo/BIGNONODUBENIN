@@ -45,7 +45,7 @@
                         </div>
 
                         {{-- Produit --}}
-                        <div class="mb-3 col-3 col-lg-3">
+                        <div class="mb-3 col-12 col-lg-3">
                             <label for="product" class="col-form-label">Produit</label>
                             <select class="form-select @error('category_id') is-invalid @enderror" id="product"
                                 name="category_id">
