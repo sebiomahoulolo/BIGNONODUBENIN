@@ -93,7 +93,7 @@
                 <img src="{{ asset('images/logo_bignon.png') }}" alt="Logo Bignon">
                 <h1 class="fs-4 d-none d-md-block text-black mb-0">BIGNON DU BENIN</h1>
             </a>
-            <div class=" d-md-none position-relative px-2 " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+            {{-- <li class="position-relative px-2 " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
                 aria-controls="staticBackdrop">
                 <a href="#" class="text-danger px-3 position-relative d-inline-block">
                     <i class="fa-solid fa-cart-plus fa-lg text-secondary fs-3"></i>
@@ -102,7 +102,7 @@
                         0
                     </span>
                 </a>
-            </div>
+            </li> --}}
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -133,7 +133,7 @@
                         <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
                     </li>
                     <!-- Panier (badge) -->
-                    <li class="d-none d-md-block position-relative px-2" data-bs-toggle="offcanvas"
+                    <li class="position-relative px-2" data-bs-toggle="offcanvas"
                         data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
                         <a href="#" class="text-danger px-3 position-relative d-inline-block">
                             <i class="fa-solid fa-cart-plus fa-lg text-secondary fs-3"></i>

@@ -15,11 +15,11 @@ class PageController extends Controller
             ->with('category')
             ->take(8)
             ->get();
-            
+
         $categories = Category::withCount('products')
             ->where('is_active', true)
             ->get();
-            
+
         return view('app', compact('featuredProducts', 'categories'));
     }
 
@@ -67,7 +67,7 @@ class PageController extends Controller
 
         $products = $category->products()
             ->where('is_active', true)
-            ->paginate(12);
+            ->limit(12);
 
         return view('pages.category-show', compact('category', 'products'));
     }
@@ -155,7 +155,7 @@ class PageController extends Controller
     public function productDetail($id)
     {
         $product = Product::with('category')->findOrFail($id);
-        
+
         // Récupérer les produits similaires (même catégorie)
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
@@ -163,7 +163,7 @@ class PageController extends Controller
             ->with('category')
             ->take(4)
             ->get();
-            
+
         return view('pages.product-detail', compact('product', 'relatedProducts'));
     }
-} 
+}
