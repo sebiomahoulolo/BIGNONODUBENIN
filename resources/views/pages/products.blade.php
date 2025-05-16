@@ -340,15 +340,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <input type="email" class="form-control form-control-lg" placeholder="Votre adresse email">
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary btn-lg w-100">S'inscrire</button>
+                        <button type="submit" class="btn  btn-lg w-100"style="color: white  ;  background-color: #366ba2"  >S'inscrire</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
-<<<<<<< HEAD
 @endsection
-=======NaN
-@endsection
->>>>>>> 61f53dc15168e0d7702783da156d5860167af2b1
