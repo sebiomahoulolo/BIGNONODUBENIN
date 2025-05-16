@@ -4,30 +4,30 @@
     <!-- Ajout du lien CDN Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Barre de recherche -->
+    {{-- <!-- Barre de recherche -->
     <section class="py-4 bg-light">
         <div class="container">
             <div class="search-bar animate-fadeInUp">
                 <input type="text" class="form-control" placeholder="Rechercher un produit...">
             </div>
         </div>
-    </section>
+    </section> --}}
 
-    <section class="hero-section"
+    <section data-aos="zoom" data-aos-duration="300" class="hero-section"
         style="background-image: url('https://static.wixstatic.com/media/641465_5fc4647dc99644749ffa3767b665ff97~mv2.png/v1/fill/w_1280,h_515,al_c,q_90,enc_avif,quality_auto/641465_5fc4647dc99644749ffa3767b665ff97~mv2.png')">
-        <div class="hero-content">
+        <div class="hero-content" style="{{ base_color_header() }};">
             <h1 class="display-4 fw-bold mb-4">Bienvenue à Bignon du Benin</h1>
             <p class="lead">Découvrez notre collection exclusive de meubles de qualité</p>
         </div>
     </section>
 
     <!-- Produits en vedette -->
-    <section class="py-5">
+    <section  class="py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Nos Produits en Vedette</h2>
+            <h2 data-aos="zoom-up" data-aos-duration="300" data-aos-delay="500" class="text-center mb-5">Nos Produits en Vedette</h2>
             <div class="row g-4">
                 @foreach ($featuredProducts as $product)
-                    <div class="col-md-3">
+                    <div data-aos="flip-right" data-aos-duration="300" data-aos-delay="300" class="col-md-3">
                         <div class="card h-100 border-0 shadow-sm product-card">
                             <div class="product-image-container">
                                 @if ($product->images && count($product->images) > 0)
@@ -46,7 +46,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="badge bg-primary">{{ $product->category->name }}</span>
+                                    <span class="badge " style="{{ base_color() }}">{{ $product->category->name }}</span>
                                 </div>
                                 <div class="price-wrapper mb-3">
                                     @if ($product->sale_price)
@@ -61,11 +61,12 @@
                                 </div>
                                 <p class="card-text text-muted mb-3">{{ Str::limit($product->description, 100) }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('pages.product.detail', $product->id) }}"
-                                        class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}" style="{{ border_color() }}"
+                                        class="btn btn-outline-primary button-hover btn-sm" style="{{ text_color_1() }}"
+ >
                                         <i class="bi bi-eye"></i> Détails
                                     </a>
-                                    <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-primary">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-primary border-0" style="{{ base_color() }}">
                                         <i class="bi bi-cart-plus"></i>
                                     </a>
                                 </div>
@@ -78,14 +79,14 @@
     </section>
 
     <!-- Catégories -->
-    <section class="py-5">
+    <section  class="py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Nos Catégories</h2>
+            <h2 data-aos="fade" data-aos-duration="300" data-aos-delay="300" class="text-center mb-5">Nos Catégories</h2>
             <div class="row g-4">
                 @forelse (getCategory() as $category)
-                    <div class="col-md-4">
+                    <div data-aos="fade" data-aos-duration="300" class="col-md-4">
                         <div class="category-card">
-                            <a href="">
+                            <a href="{{ route('category.show', ['slug' => $category->name]) }}">
                                 <img src="{{ asset('images/canape1.webp') }}" alt="{{ $category->name }}">
                                 <div class="category-overlay">
                                     <h4>{{ $category->name }}</h4>
@@ -100,19 +101,19 @@
                     </div>
                 @endforelse
                 <div class="col-md-12 py-3">
-                    <a href="{{ route('pages.categories') }}" class=" w-100 btn btn-lg btn-primary">Voir plus</a>
+                    <a data-aos="zoom-down" data-aos-duration="300" data-aos-delay="500"  zoom-up href="{{ route('pages.categories') }}" class=" w-100 btn btn-lg btn-primary border-0" style="{{ base_color() }}">Voir plus</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Pourquoi nous choisir -->
-    <section class="py-5">
+    <section data-aos="fade" data-aos-duration="300" data-aos-delay="500" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5">Pourquoi nous choisir ?</h2>
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="feature-card animate-on-scroll">
+                <div data-aos="zoom-up" data-aos-duration="300" data-aos-delay="500" class="col-md-4">
+                    <div class="feature-card animate-on-scroll shadow-lg">
                         <div class="feature-icon">
                             <i class="fas fa-medal"></i>
                         </div>
@@ -120,8 +121,8 @@
                         <p>Des matériaux de première qualité pour des meubles qui durent.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card animate-on-scroll">
+                <div data-aos="zoom-up" data-aos-duration="300" data-aos-delay="500" class="col-md-4">
+                    <div class="feature-card animate-on-scroll shadow-lg">
                         <div class="feature-icon">
                             <i class="fas fa-truck"></i>
                         </div>
@@ -129,8 +130,8 @@
                         <p>Service de livraison express dans tout le Bénin.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card animate-on-scroll">
+                <div data-aos="zoom-up" data-aos-duration="300" data-aos-delay="500" class="col-md-4">
+                    <div class="feature-card animate-on-scroll shadow-lg">
                         <div class="feature-icon">
                             <i class="fas fa-headset"></i>
                         </div>
@@ -194,11 +195,11 @@
     <!-- Témoignages -->
     <section class="py-5 bg-light">
         <div class="container">
-            <h2 class="text-center mb-5">Ce que disent nos clients</h2>
+            <h2 data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="text-center mb-5">Ce que disent nos clients</h2>
             <div class="row">
-                <div class="col-md-4">
+                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="col-md-4">
                     <div class="testimonial-card">
-                        <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar">
+                        {{-- <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar"> --}}
                         <h5>Marie K.</h5>
                         <p class="text-muted">"Service exceptionnel et produits de qualité. Je recommande vivement!"</p>
                         <div class="text-warning">
@@ -206,9 +207,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="col-md-4">
                     <div class="testimonial-card">
-                        <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar">
+                        {{-- <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar"> --}}
                         <h5>Pierre D.</h5>
                         <p class="text-muted">"Les meubles sont magnifiques et le service client est au top!"</p>
                         <div class="text-warning">
@@ -216,9 +217,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="col-md-4">
                     <div class="testimonial-card">
-                        <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar">
+                        {{-- <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar"> --}}
                         <h5>Sophie M.</h5>
                         <p class="text-muted">"Une expérience d'achat agréable du début à la fin."</p>
                         <div class="text-warning">
@@ -240,19 +241,19 @@
                         <h5>Clients Satisfaits</h5>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div  class="col-md-3">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="500">0</div>
                         <h5>Produits Vendus</h5>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div  class="col-md-3">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="50">0</div>
                         <h5>Années d'Expérience</h5>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div   class="col-md-3">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="24">0</div>
                         <h5>Heures de Support</h5>
@@ -265,14 +266,14 @@
     <!-- Newsletter -->
     <section class="newsletter-section">
         <div class="container">
-            <div class="text-center mb-4">
+            <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="text-center mb-4">
                 <h2>Restez informé de nos nouveautés</h2>
                 <p class="text-muted">Inscrivez-vous à notre newsletter pour recevoir nos dernières offres</p>
             </div>
-            <form class="newsletter-form">
+            <form data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="newsletter-form">
                 <div class="input-group">
                     <input type="email" class="form-control" placeholder="Votre adresse email">
-                    <button type="submit" class="btn">S'inscrire</button>
+                    <button style="{{ base_color() }}" type="submit" class="btn">S'inscrire</button>
                 </div>
             </form>
         </div>

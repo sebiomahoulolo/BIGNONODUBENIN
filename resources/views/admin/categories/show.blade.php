@@ -97,7 +97,7 @@
                                     <td>{{ $product->order_items_count }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-primary">
+                                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline">
@@ -153,4 +153,4 @@
         </div>
     @endif
 </div>
-@endsection 
+@endsection

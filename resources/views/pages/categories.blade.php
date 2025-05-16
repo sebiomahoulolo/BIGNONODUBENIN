@@ -2,9 +2,9 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section" style="background-image: url('{{ asset('images/categories-hero.jpg') }}')">
-        <div class="hero-content">
-            <h1 class="display-4 fw-bold mb-4">Nos Catégories</h1>
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="hero-section" style="background-image: url('{{ asset('images/WhatsApp Image 2025-05-12 à 17.31.30_35a956fb.jpg') }}')">
+        <div class="hero-content" style="{{ base_color_header() }};">
+            <h1 class="display-4 fw-bold mb-4" >Nos Catégories</h1>
             <p class="lead">Découvrez notre large gamme de meubles pour tous vos besoins</p>
         </div>
     </section>
@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row g-4">
             @forelse($categories as $category)
-            <div class="col-md-6 col-lg-4">
+            <div data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="col-md-6 col-lg-4">
                 <div class="category-card">
                     <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
                     <div class="category-overlay">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-          
+
             </div>
             @empty
             <div class="col-12">
@@ -87,29 +87,29 @@
         <div class="container">
             <h2 class="text-center mb-5">Pourquoi choisir nos catégories ?</h2>
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-check-circle"></i>
+                <div data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="col-md-4">
+                    <div class="feature-card shadow-lg">
+                        <div class="feature-icon" style="{{ base_color() }}">
+                            <i class="fas fa-check-circle text-white" ></i>
                         </div>
                         <h4>Qualité Garantie</h4>
                         <p>Tous nos meubles sont fabriqués avec des matériaux de première qualité pour une durabilité
                             optimale.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-palette"></i>
+                <div data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="col-md-4">
+                    <div class="feature-card shadow-lg">
+                        <div class="feature-icon" style="{{ base_color() }}">
+                            <i class="fas fa-palette text-white"></i>
                         </div>
                         <h4>Design Moderne</h4>
                         <p>Des designs contemporains qui s'adaptent à tous les styles d'intérieur.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-truck"></i>
+                <div data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="col-md-4">
+                    <div class="feature-card shadow-lg">
+                        <div class="feature-icon" style="{{ base_color() }}">
+                            <i class="fas fa-truck text-white"></i>
                         </div>
                         <h4>Livraison Rapide</h4>
                         <p>Service de livraison express dans tout le Bénin pour votre confort.</p>
@@ -120,11 +120,11 @@
     </section>
 
     <!-- Call to Action -->
-    <section class="py-5">
-        <div class="container text-center">
+    <section class="py-5 mb-3">
+        <div data-aos="fade" data-aos-duration="1500" data-aos-delay="500" class="container text-center">
             <h2 class="mb-4">Besoin d'aide pour choisir ?</h2>
             <p class="lead mb-4">Notre équipe d'experts est là pour vous conseiller dans le choix de vos meubles.</p>
-            <a href="{{ route('pages.contact') }}" class="btn btn-primary btn-lg">Contactez-nous</a>
+            <a href="{{ route('pages.contact') }}" class="btn btn-primary border-0 btn-lg" style="{{ base_color() }}">Contactez-nous</a>
         </div>
     </section>
 @endsection

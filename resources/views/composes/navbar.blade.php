@@ -16,7 +16,7 @@
         <span class="mobile-menu-close">&times;</span>
     </div>
     <ul class="mobile-menu-nav">
-    
+
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
         </li>
@@ -26,10 +26,10 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.about') }}">À propos</a>
         </li>
-         <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal"
-                            data-bs-target="#DemanderDevis">Demandez un Devis</a>
-                    </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#DemanderDevis">Demandez un
+                Devis</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
         </li>
@@ -53,7 +53,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Accueil</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
                     </li>
@@ -63,9 +65,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.about') }}">À propos</a>
                     </li>
-                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal"
-                            data-bs-target="#DemanderDevis">Demandez un Devis</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#DemanderDevis">Demandez un Devis</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
@@ -83,8 +84,8 @@
                     </li>
                 </ul>
 
-                </div>
             </div>
+        </div>
         </div>
     </nav>
 
@@ -147,8 +148,8 @@
                                 <select class="form-select" id="product" name="product">
                                     <option value="">Selectionner un produit</option>
                                     @foreach (getProducts() as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                    @endforeach
+<option value="{{ $product->id }}">{{ $product->name }}</option>
+@endforeach
                                 </select>
                             </div>
 

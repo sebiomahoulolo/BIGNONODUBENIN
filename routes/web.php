@@ -17,15 +17,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\DemandeDevisController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+
+
 // Routes publiques
 Route::get('/', function () {
     $featuredProducts = Product::where('is_featured', true)->get();
     return view('app', ['featuredProducts' => $featuredProducts]);
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-});
+
 Route::get('/login', function () {
     return view('auth.login'); // Vue de connexion
 })->name('login');
@@ -36,11 +36,11 @@ Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact'
 Route::get('/products', [PageController::class, 'products'])->name('pages.products');
 Route::get('/categories', [PageController::class, 'categories'])->name('pages.categories');
 Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('category.show');
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
 Route::get('/product/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
 
 //Route demande de devis
-Route::post('store-demande-devis', [DemandeDevisController::class, 'storeDemandeDevis'])->name('store.demande-devis');
-Route::get('liste-demande-devis', [DemandeDevisController::class, 'listeDemandeDevis'])->name('liste.demande-devis');
+Route::get('liste-demande-devis', [DemandeDevisController::class, 'index'])->name('liste.demande-devis');
 
 // Routes du panier
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -75,27 +75,28 @@ Route::prefix('categories')->name('pages.')->group(function () {
 });
 
 // Routes d'authentification
-Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login']);
-    Route::get('register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('register', [AuthController::class, 'register']);
+Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::get('register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('register', [AuthController::class, 'register']);
+
+// Route::middleware('guest')->group(function () {
     Route::get('forgot-password', [PasswordResetController::class, 'showRequestForm'])->name('password.request');
     Route::post('forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
     Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
-});
+// });
 
 // Routes pour les utilisateurs authentifiés
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 });
 
 // Routes admin
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    
+    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
     // Produits
     Route::resource('products', ProductController::class);
     Route::post('products/{product}/delete-image', [ProductController::class, 'deleteImage'])->name('products.delete-image');
@@ -124,14 +125,23 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 });
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
-Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
-Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
-Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
-Route::get('/admin/demande-devis', [DemandeDevisController::class, 'indeµx'])->name('admin.demande-devis.index');
-Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
-Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
+// Route demande devis
+Route::post('store-demande-devis', [DemandeDevisController::class, 'storeDemandeDevis'])->name('store.demande-devis');
+
+// nécessite une connexion avant l'acces
+Route::middleware(['auth'])->group(function () {
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+    Route::get('/admin/demande-devis', [DemandeDevisController::class, 'index'])->name('admin.demande-devis.index');
+    Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
+    Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
+});
+
+// Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
 
 Route::get('/politique-de-confidentialite', function () {
     return view('pages.privacy-policy');

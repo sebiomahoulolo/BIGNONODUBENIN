@@ -37,7 +37,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <form action="{{ route('admin.categories.update', $category) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -46,7 +46,7 @@
                             <label for="name" class="form-label">
                                 <i class="fas fa-tag me-1"></i> Nom de la catégorie
                             </label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
                                 id="name" name="name" value="{{ old('name', $category->name) }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -58,7 +58,7 @@
                             <label for="description" class="form-label">
                                 <i class="fas fa-align-left me-1"></i> Description
                             </label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" 
+                            <textarea class="form-control @error('description') is-invalid @enderror"
                                 id="description" name="description" rows="3">{{ old('description', $category->description) }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -72,13 +72,13 @@
                             </label>
                             @if($category->image)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $category->image) }}" 
-                                        alt="{{ $category->name }}" 
-                                        class="img-thumbnail" 
+                                    <img src="{{ asset('storage/' . $category->image) }}"
+                                        alt="{{ $category->name }}"
+                                        class="img-thumbnail"
                                         style="max-width: 200px;">
                                 </div>
                             @endif
-                            <input type="file" class="form-control @error('image') is-invalid @enderror" 
+                            <input type="file" class="form-control @error('image') is-invalid @enderror"
                                 id="image" name="image" accept="image/*">
                             <div class="form-text">Laissez vide pour conserver l'image actuelle</div>
                             @error('image')
@@ -89,7 +89,7 @@
                         <!-- Statut -->
                         <div class="mb-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_active" 
+                                <input class="form-check-input" type="checkbox" id="is_active"
                                     name="is_active" value="1" {{ old('is_active', $category->is_active) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="is_active">
                                     <i class="fas fa-toggle-on me-1"></i> Catégorie active
@@ -184,4 +184,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

@@ -48,7 +48,7 @@
                         <tbody>
                             @foreach($categories as $category)
                             <tr>
-                                
+
                                 <td>
                                     <strong>{{ $category->name }}</strong>
                                     <div class="small text-muted">ID: {{ $category->id }}</div>
@@ -65,7 +65,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.categories.show', $category) }}" class="btn btn-sm btn-info me-1" title="Voir">
+                                        <a href="{{ route('admin.categories.show', $category->id) }}" class="btn btn-sm btn-info me-1" title="Voir">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-primary me-1" title="Modifier">

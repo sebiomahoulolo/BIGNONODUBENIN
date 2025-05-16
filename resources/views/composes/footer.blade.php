@@ -1,11 +1,12 @@
 <!--Section demandez un devis -->
-<div id="demanderDevis"></div>
+<div id="DemanderDevis"></div>
 <section class="bg-light py-5" style="margin-top: 100px">
     <div class="container">
-        <div class="row">
+        <div data-aos="fade" data-aos-duration="1300" data-aos-delay="300" class="row">
             <h2 class="text-center mb-5">Demandez un devis</h2>
             @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show position-absolute top-0 end-0" role="alert">
+                <div class="alert alert-success alert-dismissible fade show position-absolute top-0 end-0"
+                    role="alert">
                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -16,8 +17,8 @@
                     <div class="row">
                         {{-- Nom --}}
                         <div class="mb-3 col-12 col-lg-3">
-                            <label for="name" class="col-form-label">Nom</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                            <label for="name" class="col-form-label fw-bold">Nom <span class=" text-danger fw-bold">*</span></label>
+                            <input type="text" class="form-control border-2 @error('name') is-invalid @enderror"
                                 id="name" name="name" value="{{ old('name') }}">
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -26,8 +27,8 @@
 
                         {{-- Email --}}
                         <div class="mb-3 col-12 col-lg-3">
-                            <label for="email" class="col-form-label">Adresse E-mail</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                            <label for="email" class="col-form-label fw-bold">Adresse E-mail <span class=" text-danger fw-bold">*</span></label>
+                            <input type="email" class="form-control border-2  @error('email') is-invalid @enderror"
                                 id="email" name="email" value="{{ old('email') }}">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -36,8 +37,8 @@
 
                         {{-- Matériel --}}
                         <div class="mb-3 col-12 col-lg-3">
-                            <label for="material" class="col-form-label">Matériel</label>
-                            <input type="text" class="form-control @error('material') is-invalid @enderror"
+                            <label for="material" class="col-form-label fw-bold">Matériel <span class=" text-danger fw-bold">*</span></label>
+                            <input type="text" class="form-control border-2 @error('material') is-invalid @enderror"
                                 id="material" name="material" value="{{ old('material') }}">
                             @error('material')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -46,8 +47,8 @@
 
                         {{-- Produit --}}
                         <div class="mb-3 col-12 col-lg-3">
-                            <label for="product" class="col-form-label">Produit</label>
-                            <select class="form-select @error('category_id') is-invalid @enderror" id="product"
+                            <label for="product" class="col-form-label fw-bold">Produit <span class=" text-danger fw-bold">*</span></label>
+                            <select class="form-select border-2 @error('category_id') is-invalid @enderror" id="product"
                                 name="category_id">
                                 <option value="">Sélectionner un produit</option>
                                 @foreach (getProducts() as $product)
@@ -64,7 +65,7 @@
 
                         {{-- Téléphone (indicatif + numéro) --}}
                         <div class="mb-3 col-12 col-lg-4">
-                            <label for="phone" class="col-form-label me-2">Numéro de téléphone</label>
+                            <label for="phone" class="col-form-label me-2 fw-bold">Numéro de téléphone <span class=" text-danger fw-bold">*</span></label>
                             <div class="d-flex align-items-center gap-2">
                                 @php
                                     $indicatifs = [
@@ -84,7 +85,7 @@
                                         ['code' => '+213', 'label' => '🇩🇿 (+213)'],
                                     ];
                                 @endphp
-                                <select class="form-select w-25 @error('indicatif') is-invalid @enderror"
+                                <select class="form-select w-25 border-2 @error('indicatif') is-invalid @enderror fw-bold"
                                     name="indicatif" id="indicatif">
                                     <option value="">Choisir</option>
                                     @foreach ($indicatifs as $indicatif)
@@ -95,7 +96,7 @@
                                     @endforeach
 
                                 </select>
-                                <input type="text" class="form-control w-75 @error('phone') is-invalid @enderror"
+                                <input type="text" class="form-control fw-bold w-75 @error('phone') is-invalid @enderror"
                                     id="phone" name="phone" value="{{ old('phone') }}">
                             </div>
                             @error('indicatif')
@@ -108,8 +109,8 @@
 
                         {{-- Ville --}}
                         <div class="mb-3 col-12 col-lg-4">
-                            <label for="city" class="col-form-label">Ville</label>
-                            <input type="text" class="form-control @error('city') is-invalid @enderror"
+                            <label for="city" class="col-form-label fw-bold">Ville <span class=" text-danger fw-bold">*</span></label>
+                            <input type="text" class="form-control border-2 @error('city') is-invalid @enderror"
                                 id="city" name="city" value="{{ old('city') }}">
                             @error('city')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -118,8 +119,8 @@
 
                         {{-- Délai de livraison --}}
                         <div class="mb-3 col-12 col-lg-4">
-                            <label for="delai_livraison" class="col-form-label">Délai de livraison</label>
-                            <input type="number" class="form-control @error('delai_livraison') is-invalid @enderror"
+                            <label for="delai_livraison" class="col-form-label fw-bold">Délai de livraison <span class=" text-danger fw-bold">*</span></label>
+                            <input type="number" class="form-control border-2 @error('delai_livraison') is-invalid @enderror"
                                 id="delai_livraison" name="delai_livraison" value="{{ old('delai_livraison') }}">
                             @error('delai_livraison')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -128,14 +129,15 @@
 
                         {{-- Description --}}
                         <div class="mb-3 col-12 col-lg-12">
-                            <label for="message-text" class="col-form-label">Description</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" id="message-text" name="description">{{ old('description') }}</textarea>
+                            <label for="message-text" class="col-form-label fw-bold">Description <span class=" text-danger fw-bold">*</span></label>
+                            <textarea class="form-control border-2 @error('description') is-invalid @enderror" id="message-text" name="description">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-lg btn-primary col-12">Envoyer</button>
+                        <button type="submit" class="btn btn-lg btn-primary col-12 border-0"
+                            style="{{ base_color() }}">Envoyer</button>
                 </form>
             </div>
         </div>
@@ -143,22 +145,18 @@
 </section>
 
 <!-- Footer -->
-<footer class="footer">
+<footer data-aos="fade" data-aos-duration="1300" data-aos-delay="300" class="footer">
     <div class="container">
         <div class="row">
 
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4">
                 <h5>À propos de nous</h5>
                 <p>BIGNON DU BENIN, votre spécialiste en meubles de qualité depuis plus de 10 ans. Nous vous offrons les
                     meilleurs produits pour votre intérieur.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                </div>
+
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h5>Liens Rapides</h5>
                 <ul class="footer-links">
                     <li><a href="{{ route('pages.products') }}">Produits</a></li>
@@ -167,25 +165,36 @@
                     <li><a href="{{ route('pages.contact') }}">Contact</a></li>
                 </ul>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4">
                 <h5>Contact</h5>
                 <ul class="footer-links">
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Rue du Commerce, Cotonou</li>
-                    <li><i class="fas fa-phone"></i> +229 123 456 789</li>
-                    <li><i class="fas fa-envelope"></i> contact@bignonbenin.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Cotonou, Cadjèhoun, à côté de la pharmacie Cadjèhoun</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Porto-Novo, Akonaboè, à côté de la bibliothèque nationale </li>
+                    <li><i class="fas fa-phone"></i> (+229) 01 97 06 93 05</li>
+                    <li><i class="fas fa-envelope"></i><a href="mailto:innobignon@gmail.com">innobignon@gmail.com</a></li>
                 </ul>
             </div>
-        </div>
-        <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.1);">
-        <div class="d-flex flex-column flex-md-row gap-3 justify-content-center text-md-center col-12">
-            <p class="mb-0">&copy; 2025 BIGNON DU BENIN. Tous droits réservés par FHC groupe sarl.</p>
-            {{-- <a href="#" class="text-white text-decoration-none me-3">Conditions d'utilisation</a> --}}
-            <a href="{{ route('legal-notice') }}" class="text-white text-decoration-none">Mentions légales</a>
-            <a href="{{ route('privacy-policy') }}" class="text-white text-decoration-none">Politique de
-                confidentialité</a>
+            <div class="col-md-3 mb-4">
+                <h5>Nous Suivre</h5>
+                <div class="social-links">
+                    <a href="https://web.facebook.com/bignon00229?mibextid=ZbWKwL&_rdc=1&_rdr#"><i
+                            class="fab fa-facebook"></i></a>
+                    <a href="https://www.tiktok.com/@229bignon1?_t=8kGBf86zCyM&_r=1"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
         </div>
     </div>
+
 </footer>
+<div class="container-fluid row bg-white py-3">
+    <div class="d-flex bg-white flex-column flex-md-row gap-3 justify-content-center text-md-center col-12">
+        <p class="mb-0 text-black">&copy; 2025 BIGNON DU BENIN. Tous droits réservés par FHC groupe sarl.</p>
+        {{-- <a href="#" class="text-white text-decoration-none me-3">Conditions d'utilisation</a> --}}
+        <a href="{{ route('legal-notice') }}" class="text-decoration-none text-black">Mentions légales</a>
+        <a href="{{ route('privacy-policy') }}" class="text-decoration-none text-black">Politique de
+            confidentialité</a>
+    </div>
+</div>
 
 <!-- Bouton retour en haut -->
 <a href="#" class="back-to-top">

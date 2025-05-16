@@ -27,6 +27,9 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
 
     @yield('styles')
 </head>
@@ -55,6 +58,12 @@
 
     <!-- fichier JS externe -->
     <script src="{{ asset('assets/js/cart.js') }}"></script>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 
     @yield('scripts')
 
@@ -86,5 +95,15 @@
     .position-top {
         top: 150px;
         position: relative;
+    }
+
+    .justify-text {
+        text-align: justify;
+    }
+
+    .button-hover:hover {
+        background-color: #e7f1fb;
+        color: #366ba2;
+        cursor: pointer;
     }
 </style>
