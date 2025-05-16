@@ -19,11 +19,48 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 
 
+
+
+// Route necessitant paas l authentification -------------------------------------------------------------------------------------
+
+Route::get('/politique-de-confidentialite', function () {
+    return view('pages.privacy-policy');
+})->name('privacy-policy');
+
+Route::get('/mentions-legales', function () {
+    return view('pages.legal-notice');
+})->name('legal-notice');
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
+// Routes pour le tableau de bord admin
+
+// Routes pour les catégories
+Route::prefix('categories')->name('pages.')->group(function () {
+    Route::get('/chambres', [PageController::class, 'chambres'])->name('chambres');
+    Route::get('/salons', [PageController::class, 'salons'])->name('salons');
+    Route::get('/salles-a-manger', [PageController::class, 'sallesAManger'])->name('salles-a-manger');
+    Route::get('/bureaux', [PageController::class, 'bureaux'])->name('bureaux');
+    Route::get('/cuisines', [PageController::class, 'cuisines'])->name('cuisines');
+});
+
+// Routes d'authentification
+Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::get('register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('register', [AuthController::class, 'register']);
+
+// Route::middleware('guest')->group(function () {
+Route::get('forgot-password', [PasswordResetController::class, 'showRequestForm'])->name('password.request');
+Route::post('forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
+
+
+
 // Routes publiques
 Route::get('/', function () {
     $featuredProducts = Product::where('is_featured', true)->get();
     return view('app', ['featuredProducts' => $featuredProducts]);
-});
+})->name('pages.app');
 
 
 Route::get('/login', function () {
@@ -65,38 +102,32 @@ Route::prefix('products')->name('pages.')->group(function () {
     Route::get('/commodes', [PageController::class, 'commodes'])->name('commodes');
 });
 
-// Routes pour les catégories
-Route::prefix('categories')->name('pages.')->group(function () {
-    Route::get('/chambres', [PageController::class, 'chambres'])->name('chambres');
-    Route::get('/salons', [PageController::class, 'salons'])->name('salons');
-    Route::get('/salles-a-manger', [PageController::class, 'sallesAManger'])->name('salles-a-manger');
-    Route::get('/bureaux', [PageController::class, 'bureaux'])->name('bureaux');
-    Route::get('/cuisines', [PageController::class, 'cuisines'])->name('cuisines');
+
+// Route demande devis
+Route::post('store-demande-devis', [DemandeDevisController::class, 'storeDemandeDevis'])->name('store.demande-devis');
+
+// FIN ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+// nécessite une connexion avant l'acces ------------------------------------------------------------------------------------------------------
+Route::middleware(['auth'])->group(function () {
+    Route::post('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+    // Route::get('admin/customers/export', [CustomerController::class, 'export'])->name('customers.export');
+    Route::get('/admin/demande-devis', [DemandeDevisController::class, 'index'])->name('admin.demande-devis.index');
+    Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
+    Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
 });
 
-// Routes d'authentification
-Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::get('register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('register', [AuthController::class, 'register']);
 
-// Route::middleware('guest')->group(function () {
-    Route::get('forgot-password', [PasswordResetController::class, 'showRequestForm'])->name('password.request');
-    Route::post('forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
-    Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-    Route::post('reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
-// });
-
-// Routes pour les utilisateurs authentifiés
-Route::middleware('auth')->group(function () {
-
-});
-
-// Routes admin
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
     // Produits
     Route::resource('products', ProductController::class);
     Route::post('products/{product}/delete-image', [ProductController::class, 'deleteImage'])->name('products.delete-image');
@@ -109,7 +140,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
 
     // Clients
-    Route::resource('customers', CustomerController::class);
+    // Route::resource('customers', CustomerController::class);
     Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
 
     // Paramètres
@@ -125,33 +156,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 });
 
-// Route demande devis
-Route::post('store-demande-devis', [DemandeDevisController::class, 'storeDemandeDevis'])->name('store.demande-devis');
-
-// nécessite une connexion avant l'acces
-Route::middleware(['auth'])->group(function () {
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
-    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
-    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
-    Route::get('/admin/demande-devis', [DemandeDevisController::class, 'index'])->name('admin.demande-devis.index');
-    Route::get('/admin/blog', [BlogController::class, 'index'])->name('admin.blog.index');
-    Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings.index');
-});
+// Fin ------------------------------------------------------------------------------------------------------------------------------------
 
 // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
 
-Route::get('/politique-de-confidentialite', function () {
-    return view('pages.privacy-policy');
-})->name('privacy-policy');
 
-Route::get('/mentions-legales', function () {
-    return view('pages.legal-notice');
-})->name('legal-notice');
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
-// Routes pour le tableau de bord admin
 
 
 // Route principale
