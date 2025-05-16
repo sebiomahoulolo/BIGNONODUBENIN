@@ -1,64 +1,79 @@
 @extends('layouts.app')
 
 @section('content')
-   <!-- Section Détail du produit -->
-<!-- Section Détail du produit -->
-<div class="container py-5">
-    <div class="row">
-        <!-- Carrousel d'images (modifié pour n'afficher que l'image principale statique) -->
-        <div class="col-lg-6 col-md-12 mb-4">
-            <div class="product-carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img id="mainProductImage" src="{{ asset('storage/' . $product->images[0]) }}" class="d-block w-100 main-image rounded" alt="{{ $product->nombre_places }}">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Miniatures -->
-            <div class="row mt-3 thumbnails-container">
-                @foreach ($product->images as $key => $image)
-                    <div class="col-3">
-                        <div class="thumbnail-item {{ $key === 0 ? 'active' : '' }}">
-                            <img src="{{ asset('storage/' . $image) }}" class="img-fluid rounded thumbnail-image" alt="{{ $product->nombre_places }}" onclick="swapImages(this)">
+    <!-- Section Détail du produit -->
+    <!-- Section Détail du produit -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Carrousel d'images (modifié pour n'afficher que l'image principale statique) -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="product-carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img id="mainProductImage" src="{{ asset('storage/' . $product->images[0]) }}"
+                                class="d-block w-100 main-image rounded" alt="{{ $product->nombre_places }}">
                         </div>
                     </div>
-                @endforeach
+                </div>
+
+                <!-- Miniatures -->
+                <div class="row mt-3 thumbnails-container">
+                    @foreach ($product->images as $key => $image)
+                        <div class="col-3">
+                            <div class="thumbnail-item {{ $key === 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $image) }}" class="img-fluid rounded thumbnail-image"
+                                    alt="{{ $product->nombre_places }}" onclick="swapImages(this)">
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
 
-        <!-- Détails du produit -->
-        <div class="col-lg-6 col-md-12">
-            <div class="product-details">
-                <h1 class="product-title mb-3">
-                    <span class="badge "style="color:rgb(227, 236, 247)  ;  background-color: #366ba2">{{ $product->category->name }}</span>
-                </h1>
+            <!-- Détails du produit -->
+            <div class="col-lg-6 col-md-12">
+                <div class="product-details">
+                    <h1 class="product-title mb-3">
+                        <span
+                            class="badge "style="color:rgb(227, 236, 247)  ;  background-color: #366ba2">{{ $product->category->name }}</span>
+                    </h1>
 
-                <div class="price-container mb-4">
-                    @if ($product->sale_price)
-                        <span class="original-price text-muted text-decoration-line-through me-2" >{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
-                        <span class="sale-price fw-bold text-success me-2" >{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
-                        <span class="discount-badge badge bg-danger">{{ $product->discount_percentage }}%</span>
-                    @else
-                        <span class="current-price fw-bold text-primary">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
-                    @endif
-                </div>
+                    <div class="price-container mb-4">
+                        @if ($product->sale_price)
+                            <span
+                                class="original-price text-muted text-decoration-line-through me-2 fs-6 fs-sm-6 fs-md-6 fs-lg-6 fs-xl-6 fs-xxl-6">
+                                {{ number_format($product->price, 0, ',', ' ') }} FCFA
+                            </span>
+                            <span class="sale-price fw-bold text-success me fs-2 fs-sm-6 fs-md-3 fs-lg-3 fs-xl-3 fs-xxl-3">
+                                {{ number_format($product->sale_price, 0, ',', ' ') }} FCFA
+                            </span>
+                            <span class="discount-badge badge bg-danger fs-6 fs-sm-6 fs-md-6 fs-lg-6 fs-xl-6 fs-xxl-6">
+                                {{ $product->discount_percentage }}%
+                            </span>
+                        @else
+                            <span
+                                class="current-price fw-bold text-primary">{{ number_format($product->price, 0, ',', ' ') }}
+                                FCFA</span>
+                        @endif
+                    </div>
 
-                <div class="description-container mb-4">
-                    <h5 class="fw-bold">Description</h5>
-                    <p>{{ $product->description }}</p>
-                </div>
+                    <div class="description-container mb-4">
+                        <h5 class="fw-bold">Description</h5>
+                        <p>{{ $product->description }}</p>
+                    </div>
 
-                <div class="specifications-container mb-4">
-                    <h5 class="fw-bold">Caractéristiques</h5>
-                    <ul class="list-unstyled">
-                        <li style="color: #ff2c2c"><i class="bi bi-people me-2" style="color: #ff2c2c"></i>Nombre de places : {{ $product->nombre_places }}</li>
-                        <li style="color:#ff2c2c"><i class="bi bi-box me-2 "style="color: #ff2c2c"></i>Matière : {{ $product->matiere }}</li>
-                        <li style="color:#ff2c2c"><i class="bi bi-check-circle me-2"style="color: #ff2c2c"></i>Stock : {{ $product->stock }} unités</li>
-                    </ul>
-                </div>
+                    <div class="specifications-container mb-4">
+                        <h5 class="fw-bold">Caractéristiques</h5>
+                        <ul class="list-unstyled">
+                            <li style="color: #ff2c2c"><i class="bi bi-people me-2" style="color: #ff2c2c"></i>Nombre de
+                                places : {{ $product->nombre_places }}</li>
+                            <li style="color:#ff2c2c"><i class="bi bi-box me-2 "style="color: #ff2c2c"></i>Matière :
+                                {{ $product->matiere }}</li>
+                            <li style="color:#ff2c2c"><i class="bi bi-check-circle me-2"style="color: #ff2c2c"></i>Stock :
+                                {{ $product->stock }} unités</li>
+                        </ul>
+                    </div>
 
-<form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form mb-4">
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form mb-4">
                         @csrf
                         <div class="row align-items-center">
                             {{-- <div class="col-auto">
@@ -77,7 +92,7 @@
 
                                 <div class="col position-relative">
 
-                                     <!-- Mini-modal de partage -->
+                                    <!-- Mini-modal de partage -->
                                     <div class="share-options d-none start-0 mb-2 p-2 bg-white border rounded-4 shadow z-5"
                                         style="min-width: 250px;">
                                         <div class="d-flex flex-wrap gap-2 justify-content-center">
@@ -105,7 +120,8 @@
 
                                     <!-- Bouton Partager -->
                                     <button type="button" class="btn  btn-lg w-100 add-to-cart-btn"
-                                        onclick="toggleShareOptions(this)" style="color:rgb(227, 236, 247)  ;  background-color: #366ba2   ">
+                                        onclick="toggleShareOptions(this)"
+                                        style="color:rgb(227, 236, 247)  ;  background-color: #366ba2   ">
                                         <i class="bi bi-cart-plus"></i> Partager
                                     </button>
 
@@ -114,121 +130,130 @@
                             </div>
 
 
-                           <div class="col">
-    <button type="button" class="btn  btn-lg w-100 add-to-cart-btn add-to-cart"
-        data-id="{{ $product->id }}" 
-        data-name="{{ $product->category->name }}"
-        data-price="{{ $product->sale_price }}"
-data-img="{{ asset('storage/' . $product->images[0]) }}"
- style="color:rgb(227, 236, 247)  ;  background-color: #366ba2  ">
-        <i class="bi bi-cart-plus"></i> Ajouter au panier
-    </button>
-</div>
-<script>
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const name = this.getAttribute('data-name');
-            const price = this.getAttribute('data-price');
-            const image = document.getElementById('mainProductImage').src;
+                            <div class="col">
+                                <button type="button" class="btn  btn-lg w-100 add-to-cart-btn add-to-cart"
+                                    data-id="{{ $product->id }}" data-name="{{ $product->category->name }}"
+                                    data-price="{{ $product->sale_price }}"
+                                    data-img="{{ asset('storage/' . $product->images[0]) }}"
+                                    style="color:rgb(227, 236, 247)  ;  background-color: #366ba2  ">
+                                    <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                </button>
+                            </div>
+                            <script>
+                                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                                    button.addEventListener('click', function() {
+                                        const name = this.getAttribute('data-name');
+                                        const price = this.getAttribute('data-price');
+                                        const image = document.getElementById('mainProductImage').src;
 
-            // Exemple d'action : afficher dans la console
-            console.log('Produit ajouté au panier :');
-            console.log('Nom :', name);
-            console.log('Prix :', price);
-            console.log('Image principale :', image);
+                                        // Exemple d'action : afficher dans la console
+                                        console.log('Produit ajouté au panier :');
+                                        console.log('Nom :', name);
+                                        console.log('Prix :', price);
+                                        console.log('Image principale :', image);
 
-          
-        });
-    });
-</script>
+
+                                    });
+                                });
+                            </script>
 
                         </div>
                     </form>
 
-              
-                
+
+
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Script JS pour le swap des images -->
-<script>
-    function swapImages(thumbnailImg) {
-        const mainImage = document.getElementById('mainProductImage');
-        const tempSrc = mainImage.src;
-        mainImage.src = thumbnailImg.src;
-        thumbnailImg.src = tempSrc;
-    }
-</script>
+    <!-- Script JS pour le swap des images -->
+    <script>
+        function swapImages(thumbnailImg) {
+            const mainImage = document.getElementById('mainProductImage');
+            const tempSrc = mainImage.src;
+            mainImage.src = thumbnailImg.src;
+            thumbnailImg.src = tempSrc;
+        }
+    </script>
 
-<!-- Style pour surligner les miniatures (facultatif mais recommandé) -->
-<style>
-    .thumbnail-item img {
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: border 0.3s;
-    }
+    <!-- Style pour surligner les miniatures (facultatif mais recommandé) -->
+    <style>
+        .thumbnail-item img {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.3s;
+        }
 
-    .thumbnail-item img:hover {
-        border: 2px solid #366ba2;
-    }
-</style>
-
+        .thumbnail-item img:hover {
+            border: 2px solid #366ba2;
+        }
+    </style>
 
 
 
-   <!-- Section Produits similaires -->
-<section class="produits-similaires-section my-5">
-    <div class="container p-4 border border-primary rounded-4 shadow-sm">
-        <h3 class=" mb-4 text-center">Produits similaires</h3>
 
-        <div class="row g-4">
-            @foreach($relatedProducts as $product)
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="card h-100 border-0 shadow-sm product-card">
-                        <div class="position-relative">
-                            @if($product->images && count($product->images) > 0)
-                                <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
-                            @else
-                                <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
-                            @endif
+    <!-- Section Produits similaires -->
+    <section class="produits-similaires-section my-5">
+        <div class="container p-4 border border-primary rounded-4 shadow-sm">
+            <h3 class=" mb-4 text-center">Produits similaires</h3>
 
-                            <div class="product-overlay position-absolute top-0 end-0 m-2">
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-light btn-sm shadow-sm">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="card-body d-flex flex-column">
-                            <span class="badge  mb-2" style="color:white  ;  background-color: #366ba2">{{ $product->category->name }}</span>
-
-                            <div class="mb-2">
-                                @if($product->sale_price)
-                                    <span class="text-success fw-bold">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
+            <div class="row g-4">
+                @foreach ($relatedProducts as $product)
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="card h-100 border-0 shadow-sm product-card">
+                            <div class="position-relative">
+                                @if ($product->images && count($product->images) > 0)
+                                    <img src="{{ asset('storage/' . $product->images[0]) }}"
+                                        class="card-img-top rounded-top" alt="{{ $product->name }}">
                                 @else
-                                    <span class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
+                                    <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top"
+                                        alt="{{ $product->name }}">
                                 @endif
+
+                                <div class="product-overlay position-absolute top-0 end-0 m-2">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}"
+                                        class="btn btn-light btn-sm shadow-sm">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
                             </div>
 
-                            <p class="text-muted small flex-grow-1">{{ Str::limit($product->description, 100) }}</p>
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge  mb-2"
+                                    style="color:white  ;  background-color: #366ba2">{{ $product->category->name }}</span>
 
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-outline btn-sm" style="color:white  ;  background-color: #366ba2">
-                                    <i class="bi bi-eye"></i> Détails
-                                </a>
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn btn-sm" style="color:white  ;  background-color: #366ba2">
-                                    <i class="bi bi-cart-plus"></i>
-                                </a>
+                                <div class="mb-2">
+                                    @if ($product->sale_price)
+                                        <span
+                                            class="text-success fw-bold">{{ number_format($product->sale_price, 0, ',', ' ') }}
+                                            FCFA</span>
+                                    @else
+                                        <span
+                                            class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }}
+                                            FCFA</span>
+                                    @endif
+                                </div>
+
+                                <p class="text-muted small flex-grow-1">{{ Str::limit($product->description, 100) }}</p>
+
+                                <div class="d-flex justify-content-between mt-3">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}"
+                                        class="btn btn-outline btn-sm" style="color:white  ;  background-color: #366ba2">
+                                        <i class="bi bi-eye"></i> Détails
+                                    </a>
+                                    <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn btn-sm"
+                                        style="color:white  ;  background-color: #366ba2">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
 
