@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section data-aos="fade" data-aos-duration="1300" data-aos-delay="300"  class=" py-5" style="{{ base_color() }}">
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class=" py-5" style="{{ base_color() }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
@@ -14,7 +14,7 @@
     </section>
 
     <!-- Filters -->
-    <section data-aos="fade" data-aos-duration="1300" data-aos-delay="300"  class="py-4 bg-white border-bottom">
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="py-4 bg-white border-bottom">
         <div class="container">
             <div class="row g-3">
                 <div class="col-md-3">
@@ -56,7 +56,7 @@
     </section>
 
     <!-- Products Grid -->
-    <section data-aos="fade" data-aos-duration="1300" data-aos-delay="300"  class="py-5">
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="py-5">
         <div class="container">
             @foreach ($categories as $category)
                 <div class="category-section mb-5">

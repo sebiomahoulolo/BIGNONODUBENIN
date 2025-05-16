@@ -89,98 +89,6 @@
         </div>
     </nav>
 
-    {{-- Modal Demandez un devis  --}}
-    <!--div class="modal fade" id="DemanderDevis" tabindex="-1" aria-labelledby="DemanderDevis" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-sm-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="DemanderDevisLabel">Demandez un devis</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            {{-- Nom  --}}
-                            <div class="mb-3 col-12 col-lg-6">
-                                <label for="name" class="col-form-label">Nom</label>
-                                <input type="text" class="form-control" id="name">
-                            </div>
-
-                            {{-- Email  --}}
-                            <div class="mb-3 col-12 col-lg-6">
-                                <label for="email" class="col-form-label">Adresse E-mail</label>
-                                <input type="email" class="form-control" id="email">
-                            </div>
-
-                            {{-- Téléphone  --}}
-                            <div class="mb-3 col-12 col-lg-6">
-                                <label for="phone" class="col-form-label me-2">Numéro de téléphone</label>
-                                <div class=" d-flex align-items-center gap-2">
-                                    <select class="form-select w-25" name="indicatif" id="indicatif" required>
-                                        <option value="+229">🇧🇯 (+229)</option>
-                                        <option value="+225">🇨🇮 (+225)</option>
-                                        <option value="+226">🇧🇫 (+226)</option>
-                                        <option value="+228">🇹🇬 (+228)</option>
-                                        <option value="+237">🇨🇲 (+237)</option>
-                                        <option value="+33">🇫🇷 (+33)</option>
-                                        <option value="+1">🇺🇸 (+1)</option>
-                                        <option value="+44">🇬🇧 (+44)</option>
-                                        <option value="+49">🇩🇪 (+49)</option>
-                                        <option value="+34">🇪🇸 (+34)</option>
-                                        <option value="+39">🇮🇹 (+39)</option>
-                                        <option value="+212">🇲🇦 (+212)</option>
-                                        <option value="+216">🇹🇳 (+216)</option>
-                                        <option value="+213">🇩🇿 (+213)</option>
-                                    </select>
-                                    <input type="phone" class="form-control w-75" id="phone2" placeholder="">
-                                </div>
-                            </div>
-
-                            {{-- Ville  --}}
-                            <div class="mb-3 col-12 col-lg-6">
-                                <label for="city" class="col-form-label">Ville</label>
-                                <input type="email" class="form-control" id="city">
-                            </div>
-
-                            {{-- Produit  --}}
-                            <div class="mb-3 col-12 col-lg-6">
-                                <label for="product" class="col-form-label">Produit</label>
-                                <select class="form-select" id="product" name="product">
-                                    <option value="">Selectionner un produit</option>
-                                    @foreach (getProducts() as $product)
-<option value="{{ $product->id }}">{{ $product->name }}</option>
-@endforeach
-                                </select>
-                            </div>
-
-                            {{-- Materiel  --}}
-                            <div class="mb-3 col-12 col-lg-6">
-                                <label for="material" class="col-form-label">Matériel</label>
-                                <input type="text" class="form-control" id="material">
-                            </div>
-
-                            {{-- Delai de livraison  --}}
-                            <div class="mb-3 col-12 col-lg-12">
-                                <label for="delai_livraison" class="col-form-label">Délai de livraison</label>
-                                <input type="number" class="form-control" id="delai_livraison"
-                                    placeholder="ex: 5 jours">
-                            </div>
-
-                            {{-- Description  --}}
-                            <div class="mb-3 col-12 col-lg-12">
-                                <label for="message-text" class="col-form-label">Description</label>
-                                <textarea class="form-control" id="message-text"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary">Envoyer</button>
-                </div>
-            </div>
-        </div>
-    </div-->
 
     <!-- Modal positionné à droite -->
     <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
@@ -212,14 +120,33 @@
                         </tbody>
                     </table>
                 </div>
+                 <!-- Montant total -->
+            <div class="mt-4">
+                <p class="fw-bold mb-1">Total : <span id="total-amount">0 FCFA</span></p>
 
-                <!-- ✅ BOUTON VALIDER -->
-                <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-lg btn-success rounded-5">Valider</button>
+                <!-- Code promo (affiché seulement si panier non vide) -->
+                <div class="mb-3" id="promo-section" style="display: none;">
+                    <label for="promo-code" class="form-label">Utiliser un code promo : PROMO5</label>
+                    <div class="input-group">
+                        <input type="text" id="promo-code" class="form-control" placeholder="Ex : PROMO5">
+                        <button type="button" class="btn btn-outline" onclick="applyPromo()" style="color:white  ;  background-color: #366ba2">Appliquer</button>
+                    </div>
+                    <div id="promo-message" class="form-text text-success mt-1" style="display: none;">
+                        ✅ Code appliqué : réduction de 5%
+                    </div>
                 </div>
+
+                <!-- Montant après réduction -->
+                <p class="fw-bold">Total à payer : <span id="discounted-total">0 FCFA</span></p>
+            </div>
+
+            <!-- ✅ Bouton valider -->
+            <div class="d-flex justify-content-end mt-3" id="validate-button" style="display: none;">
+                <button type="submit" class="btn btn-lg  rounded-5" style="color:white  ;  background-color: #366ba2" >Valider</button>
+            </div>
             </form>
         </div>
     </div>
 
-
+</div>
 </header>

@@ -83,5 +83,5 @@ class CartController extends Controller
 
         return view('cart.checkout', compact('cart', 'total'));
     }
-} 
+ 
 }
