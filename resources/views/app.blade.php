@@ -28,7 +28,7 @@
             <div class="row g-4">
                 @foreach ($featuredProducts as $product)
                     <div data-aos="flip-right" data-aos-duration="300" data-aos-delay="300" class="col-md-3">
-                        <div class="card h-100 border-0 shadow-sm product-card">
+                        <div class="card h-100 border-0 shadow-md product-card">
                             <div class="product-image-container">
                                 @if ($product->images && count($product->images) > 0)
                                     <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top"
@@ -48,17 +48,22 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <span class="badge " style="{{ base_color() }}">{{ $product->category->name }}</span>
                                 </div>
-                                <div class="price-wrapper mb-3">
-                                    @if ($product->sale_price)
-                                        <span class="original-price me-2">{{ number_format($product->price, 0, ',', ' ') }}
-                                            FCFA</span>
-                                        <span class="sale-price">{{ number_format($product->sale_price, 0, ',', ' ') }}
-                                            FCFA</span>
-                                    @else
-                                        <span class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }}
-                                            FCFA</span>
-                                    @endif
-                                </div>
+                                <!-- HTML -->
+<div class="price-wrapper mb-3 d-flex flex-wrap align-items-center gap-2">
+    @if ($product->sale_price)
+        <span class="original-price text-muted text-decoration-line-through">
+            {{ number_format($product->price, 0, ',', ' ') }} FCFA
+        </span>
+        <span class="sale-price text-danger fw-bold">
+            {{ number_format($product->sale_price, 0, ',', ' ') }} FCFA
+        </span>
+    @else
+        <span class="text-primary fw-bold">
+            {{ number_format($product->price, 0, ',', ' ') }} FCFA
+        </span>
+    @endif
+</div>
+
                                 <p class="card-text text-muted mb-3">{{ Str::limit($product->description, 100) }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a href="{{ route('pages.product.detail', $product->id) }}" style="{{ border_color() }}"
@@ -353,6 +358,7 @@
 
 @section('styles')
     <style>
+    
         .product-card {
             background: white;
             border-radius: 15px;

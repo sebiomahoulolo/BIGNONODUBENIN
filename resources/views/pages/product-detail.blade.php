@@ -186,7 +186,7 @@ data-img="{{ asset('storage/' . $product->images[0]) }}"
         <div class="row g-4">
             @foreach($relatedProducts as $product)
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="card h-100 border-0 shadow-sm product-card">
+                    <div class="card h-100 border-0 shadow-md product-card">
                         <div class="position-relative">
                             @if($product->images && count($product->images) > 0)
                                 <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
