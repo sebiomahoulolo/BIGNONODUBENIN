@@ -23,8 +23,6 @@
                         <a href="{{ route('category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
                     </div>
                 </div>
-
-
             </div>
             @empty
             <div class="col-12">
@@ -36,51 +34,7 @@
         </div>
     </div>
 </section>
-    <!-- Catégories principales -->
-    <section class="py-5 position-relative">
-        <div class="container">
-            <div class="row g-4">
-                @forelse($categories as $category)
-                    <div class="col-md-6 col-lg-4">
-                        <div class="category-card">
-                            <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}"
-                                alt="{{ $category->name }}">
-                            <div class="category-overlay">
-                                <h4>{{ $category->name }}</h4>
-                                <p>{{ $category->description }}</p>
-                                <a href="{{ route('pages.category.show', $category->slug) }}"
-                                    class="btn btn-light mt-3">Découvrir</a>
-                            </div>
-                        </div>
 
-                        <!-- Produits de la catégorie -->
-                        @if ($category->products->isNotEmpty())
-                            <div class="category-products mt-3">
-                                <div class="row g-3">
-                                    @foreach ($category->products as $product)
-                                        <div class="col-4">
-                                            <div class="product-thumbnail">
-                                                <a href="{{ route('pages.product.detail', $product->id) }}">
-                                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.jpg') }}"
-                                                        alt="{{ $product->name }}" class="img-fluid">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-info">
-                            Aucune catégorie disponible pour le moment.
-                        </div>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-    </section>
 
     <!-- Pourquoi choisir nos catégories -->
     <section class="py-5 bg-light">
