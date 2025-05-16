@@ -198,14 +198,30 @@
         <div class="container p-4 border border-primary rounded-4 shadow-sm">
             <h3 class=" mb-4 text-center">Produits similaires</h3>
 
-            <div class="row g-4">
-                @foreach ($relatedProducts as $product)
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <div class="card h-100 border-0 shadow-sm product-card">
-                            <div class="position-relative">
-                                @if ($product->images && count($product->images) > 0)
-                                    <img src="{{ asset('storage/' . $product->images[0]) }}"
-                                        class="card-img-top rounded-top" alt="{{ $product->name }}">
+        <div class="row g-4">
+            @foreach($relatedProducts as $product)
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="card h-100 border-0 shadow-md product-card">
+                        <div class="position-relative">
+                            @if($product->images && count($product->images) > 0)
+                                <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
+                            @else
+                                <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
+                            @endif
+
+                            <div class="product-overlay position-absolute top-0 end-0 m-2">
+                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-light btn-sm shadow-sm">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge  mb-2" style="color:white  ;  background-color: #366ba2">{{ $product->category->name }}</span>
+
+                            <div class="mb-2">
+                                @if($product->sale_price)
+                                    <span class="text-success fw-bold">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
                                 @else
                                     <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top"
                                         alt="{{ $product->name }}">
