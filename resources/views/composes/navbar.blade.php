@@ -1,3 +1,5 @@
+
+
 <!-- Panier flottant -->
 <div class="floating-cart">
     <div class="cart-icon">
@@ -8,6 +10,7 @@
         <span>0 FCFA</span>
     </div>
 </div>
+
 
 <!-- Menu mobile -->
 <div class="mobile-menu">
@@ -38,6 +41,49 @@
 
 {{-- HEADER  --}}
 <header class="bg-light position-fixed top-0 w-100" style="z-index: 9999;">
+   
+
+   <!-- Bannière (Visible uniquement sur les grands écrans) -->
+<div class="banner d-none d-md-flex justify-content-between align-items-center px-4 py-2 border-bottom" style="color:white  ;  background-color:rgb(45, 85, 128)">
+    <div class="info d-flex gap-4 align-items-center  small">
+        <span><i class="bi bi-geo-alt-fill me-1"></i> Cotonou, Cadjèhoun, à côté de la pharmacie Cadjèhoun</span>
+         <span><i class="bi bi-geo-alt-fill me-1"></i> Porto-Novo, Akonaboè, à côté de la bibliothèque nationale</span>
+        <span><i class="bi bi-telephone-fill me-1"></i> 24h/7j  (+229) 01 97 06 93 05</span>
+        <span id="date-time" class="date-time"><i class="bi bi-clock me-1"></i> Chargement...</span>
+    </div>
+    <div class="social-icons d-flex gap-3">
+
+
+        <a href="https://web.facebook.com/bignon00229?mibextid=ZbWKwL&_rdc=1&_rdr#" target="_blank" class="text-dark"><i class="bi bi-facebook fs-5"style="color:white"></i></a>
+       
+        <a href="https://www.tiktok.com/@229bignon1?_t=8kGBf86zCyM&_r=1" target="_blank" class="text-dark"><i class="fa-brands fa-tiktok fs-5"style="color:white"></i></a>
+        <a href="" target="_blank" class="text-dark"><i class="bi bi-whatsapp fs-5" style="color:white"></i></a>
+    </div>
+</div>
+
+<!-- Script pour afficher l'heure -->
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        const formatter = new Intl.DateTimeFormat('fr-FR', options);
+        document.getElementById('date-time').innerHTML = '<i class="bi bi-clock me-1"></i> ' + formatter.format(now);
+    }
+
+    // Met à jour l'heure chaque seconde
+    setInterval(updateDateTime, 1000);
+    updateDateTime(); // Première exécution immédiate
+</script>
+
+   
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-3" href="#">
