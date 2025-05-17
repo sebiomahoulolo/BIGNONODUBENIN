@@ -16,7 +16,7 @@
     <section data-aos="zoom" data-aos-duration="300" class="hero-section"
         style="background-image: url('https://static.wixstatic.com/media/641465_5fc4647dc99644749ffa3767b665ff97~mv2.png/v1/fill/w_1280,h_515,al_c,q_90,enc_avif,quality_auto/641465_5fc4647dc99644749ffa3767b665ff97~mv2.png')">
         <div class="hero-content" style="{{ base_color_header() }};">
-            <h1 class="display-4 fw-bold mb-4">Bienvenue à Bignon du Benin</h1>
+            <h1 class="display-4 fw-bold mb-4 text-uppercase">Bienvenue à Bignon du Benin</h1>
             <p class="lead">Découvrez notre collection exclusive de meubles de qualité</p>
         </div>
     </section>
@@ -358,7 +358,7 @@
 
 @section('styles')
     <style>
-    
+
         .product-card {
             background: white;
             border-radius: 15px;
