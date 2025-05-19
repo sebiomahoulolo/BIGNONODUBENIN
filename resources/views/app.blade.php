@@ -240,31 +240,31 @@
     <section class="stats-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="7000">0</div>
                         <h5>Clients Satisfaits</h5>
                     </div>
                 </div>
-                <div  class="col-md-3">
+                <div  class="col-md-4">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="7000">0</div>
                         <h5>Produits Vendus</h5>
                     </div>
                 </div>
-                <div  class="col-md-3">
+                <div  class="col-md-4">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="10">0</div>
                         <h5>Années d'Expérience</h5>
                     </div>
                 </div>
-                <div   class="col-md-3">
+                <div   class="col-md-6">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="24">0</div>
                         <h5>Heures de Support</h5>
                     </div>
                 </div>
-                <div   class="col-md-3">
+                <div   class="col-md-6">
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="7000">0</div>
                         <h5>Avis des Clients</h5>
