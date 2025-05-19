@@ -11,17 +11,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number')->unique();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('shipping_cost', 10, 2);
-            $table->decimal('total', 10, 2);
-            $table->string('status')->default('pending');
-            $table->string('payment_status')->default('pending');
-            $table->string('payment_method');
-            $table->string('shipping_method');
-            $table->json('shipping_address');
-            $table->json('billing_address');
-            $table->text('notes')->nullable();
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('total_amount_promo', 10, 2);
+            $table->boolean('status_code_promo')->default('1');
+            $table->string('status')->default('En Cours');
             $table->timestamps();
         });
 
@@ -30,6 +23,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
+            $table->string('image_path');
             $table->decimal('price', 10, 2);
             $table->decimal('total', 10, 2);
             $table->timestamps();
@@ -41,4 +35,4 @@ return new class extends Migration
         Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
     }
-}; 
+};
