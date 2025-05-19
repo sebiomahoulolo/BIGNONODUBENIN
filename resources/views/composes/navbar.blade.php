@@ -30,7 +30,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#DemanderDevis"><b>Demandez un
-                Devis</b></a>
+                    Devis</b></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.contact') }}"><b>Contact</b></a>
@@ -38,7 +38,8 @@
     </ul>
 </div>
 
-{{-- HEADER  grand ecran --}}<hr>
+{{-- HEADER  grand ecran --}}
+<hr>
 <header class="bg-light position-fixed top-0 w-100" style="z-index: 9999;">
 
 
@@ -154,7 +155,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <form id="product-form" action="{ route('produits.valider') }" method="POST">
+            <form id="product-form" action="{ route('store-panier-valider') }" method="POST">
                 @csrf
                 <div class="table-responsive">
                     <table class="table table-striped">

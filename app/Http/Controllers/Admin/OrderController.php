@@ -36,7 +36,7 @@ class OrderController extends Controller
                         ->orWhereHas('user', function($q) use ($request) {
                             $q->where('name', 'like', "%{$request->search}%")
                                 ->orWhere('email', 'like', "%{$request->search}%");
-                        });
+                    });
                 });
             });
 
@@ -234,7 +234,7 @@ class OrderController extends Controller
 
         $callback = function() use ($orders) {
             $file = fopen('php://output', 'w');
-            
+
             // En-têtes du CSV
             fputcsv($file, [
                 'N° Commande',
@@ -266,4 +266,10 @@ class OrderController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
-} 
+
+
+    public function storePanier(Request $request){
+
+        dd($request);
+    }
+}
