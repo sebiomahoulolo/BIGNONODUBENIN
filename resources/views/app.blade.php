@@ -92,8 +92,8 @@
                     <div data-aos="fade" data-aos-duration="300" class="col-md-4">
                         <div class="category-card">
                             <a href="{{ route('category.show', ['slug' => $category->name]) }}">
-                                <img src="{{ asset('images/canape1.webp') }}" alt="{{ $category->name }}">
-                                <div class="category-overlay">
+                                <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
+                     <div class="category-overlay">
                                     <h4>{{ $category->name }}</h4>
                                     <p>{{ $category->description }}</p>
                                 </div>
