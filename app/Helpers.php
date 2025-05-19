@@ -52,7 +52,7 @@ if (!function_exists('second_color')) {
 }
 
 if (!function_exists('text_color_2')) {
-    function text_color()
+    function text_color_2()
     {
         return "color :  #222222";
     }

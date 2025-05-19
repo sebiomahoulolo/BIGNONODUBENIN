@@ -91,7 +91,7 @@
                 @forelse (getCategory() as $category)
                     <div data-aos="fade" data-aos-duration="300" class="col-md-4">
                         <div class="category-card">
-                            <a href="{{ route('category.show', ['slug' => $category->name]) }}">
+                            <a href="{{ route('pages.category.show', ['slug' => $category->name]) }}">
                                 <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
                      <div class="category-overlay">
                                     <h4>{{ $category->name }}</h4>
@@ -275,12 +275,31 @@
                 <h2>Restez informé de nos nouveautés</h2>
                 <p class="text-muted">Inscrivez-vous à notre newsletter pour recevoir nos dernières offres</p>
             </div>
-            <form data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="newsletter-form">
-                <div class="input-group">
-                    <input type="email" class="form-control" placeholder="Votre adresse email">
-                    <button style="{{ base_color() }}" type="submit" class="btn">S'inscrire</button>
-                </div>
-            </form>
+        <form action="{{ route('newsletter.store') }}" method="POST" class="newsletter-form" data-aos="fade" data-aos-duration="300" data-aos-delay="500">
+    @csrf
+    <div class="input-group">
+        <input type="email" name="email" class="form-control" placeholder="Votre adresse email" required>
+        <button style="{{ base_color() }}" type="submit" class="btn">S'inscrire</button>
+    </div>
+</form>
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        Veuillez corriger les erreurs ci-dessous :
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
         </div>
     </section>
 @endsection

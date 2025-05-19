@@ -44,6 +44,14 @@ class Product extends Model
     {
         $this->attributes['stock'] = (int) $value;
     }
+    
+    public function getFirstImageAttribute()
+{
+    $images = is_array($this->images) ? $this->images : json_decode($this->images, true);
+    return $images[0] ?? null;
+}
+
+
 
     public function category(): BelongsTo
     {

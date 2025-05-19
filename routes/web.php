@@ -14,6 +14,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\DemandeDevisController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
@@ -70,15 +72,15 @@ Route::get('/login', function () {
 
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
+Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('pages.category.show');
 Route::get('/products', [PageController::class, 'products'])->name('pages.products');
 Route::get('/categories', [PageController::class, 'categories'])->name('pages.categories');
-Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('category.show');
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
+Route::get('/categories/{slug}', [PageController::class, 'categoryShow'])->name('pages.category.show');
 Route::get('/product/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
 
 //Route demande de devis
 Route::get('liste-demande-devis', [DemandeDevisController::class, 'index'])->name('liste.demande-devis');
-
 // Routes du panier
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
@@ -156,10 +158,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 });
 
+// MAILENVOYE
+Route::post('/send-email', [MailController::class, 'sendEmail']);
+//newsletter
+Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+Route::get('/newsletter/send-latest-products', [NewsletterController::class, 'sendLatestProducts'])->name('newsletter.sendLatest');
+
+
 // Fin ------------------------------------------------------------------------------------------------------------------------------------
 
 // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // J'ajoute .test pour éviter conflit avec un nom existant
-
 
 
 

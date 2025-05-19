@@ -4,23 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Models\Category;
 
 class PageController extends Controller
 {
     public function index()
     {
         $featuredProducts = Product::where('is_featured', true)
-            ->where('is_active', true)
-            ->with('category')
-            ->take(8)
-            ->get();
+         ->where('stock', '>', 0)
+    ->where('is_active', true)
+    ->with('category')
+    ->take(8)
+    ->get();
 
-        $categories = Category::withCount('products')
-            ->where('is_active', true)
-            ->get();
 
-        return view('app', compact('featuredProducts', 'categories'));
+            
+        return view('app', compact('featuredProducts'));
     }
 
     public function about()
@@ -33,19 +31,7 @@ class PageController extends Controller
         return view('pages.contact');
     }
 
-    public function products()
-    {
-        $categories = Category::with(['products' => function($query) {
-            $query->where('is_active', true)
-                  ->orderBy('created_at', 'desc')
-                  ->take(4);
-        }])
-        ->where('is_active', true)
-        ->orderBy('name')
-        ->get();
-
-        return view('pages.products', compact('categories'));
-    }
+  
 
     public function categories()
     {
@@ -67,10 +53,21 @@ class PageController extends Controller
 
         $products = $category->products()
             ->where('is_active', true)
-            ->limit(12);
+            ->paginate(12);
 
         return view('pages.category-show', compact('category', 'products'));
     }
+
+    public function showPage($page)
+{
+    $view = 'pages.' . $page;
+
+    if (view()->exists($view)) {
+        return view($view);
+    }
+
+    abort(404);
+}
 
     public function lits()
     {
@@ -152,18 +149,34 @@ class PageController extends Controller
         return view('pages.cuisines');
     }
 
-    public function productDetail($id)
-    {
-        $product = Product::with('category')->findOrFail($id);
+   public function productDetail($id)
+{
+    // Récupérer le produit
+    $product = \App\Models\Product::findOrFail($id);
 
-        // Récupérer les produits similaires (même catégorie)
-        $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->where('is_active', true)
-            ->with('category')
-            ->take(4)
-            ->get();
-
-        return view('pages.product-detail', compact('product', 'relatedProducts'));
+    // Vérifier que la catégorie existe
+    if (!$product->category) {
+        return abort(404, "Catégorie du produit introuvable !");
     }
+
+    // Trouver les produits similaires de la même catégorie
+    $relatedProducts = \App\Models\Product::where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id) // Exclure le produit en cours
+        ->where('is_active', true)
+        ->limit(4) // Limite à 4 produits similaires
+        ->get();
+
+    return view('pages.product-detail', compact('product', 'relatedProducts'));
 }
+public function products()
+{
+    // Récupérer toutes les catégories actives
+    $categories = \App\Models\Category::where('is_active', true)->get();
+
+    // Récupérer les produits actifs avec pagination
+    $products = \App\Models\Product::where('is_active', true)->paginate(12);
+
+    return view('pages.products', compact('categories', 'products'));
+}
+
+} 

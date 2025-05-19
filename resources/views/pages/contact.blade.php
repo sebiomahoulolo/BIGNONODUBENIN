@@ -60,39 +60,36 @@
                     <div class="card border-0 shadow-lg">
                         <div class="card-body p-5">
                             <h2 class="text-center mb-4">Envoyez-nous un message</h2>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="name" class="form-label">Nom complet <span
-                                                class=" text-danger fw-bold">*</span></label>
-                                        <input type="text" class="form-control border-2" id="name" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="email" class="form-label">Email<span
-                                                class=" text-danger fw-bold">*</span></label>
-                                        <input type="email" class="form-control border-2" id="email" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Téléphone<span
-                                                class=" text-danger fw-bold">*</span></label>
-                                        <input type="tel" class="form-control border-2" id="phone">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="subject" class="form-label">Sujet<span
-                                                class=" text-danger fw-bold">*</span></label>
-                                        <input type="text" class="form-control border-2" id="subject" required>
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="message" class="form-label">Message<span
-                                                class=" text-danger fw-bold">*</span></label>
-                                        <textarea class="form-control border-2" id="message" rows="5" required></textarea>
-                                    </div>
-                                    <div class="col-12">
+<form action="/send-email" method="POST">
+    @csrf
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="name" class="form-label">Nom complet <span class="text-danger fw-bold">*</span></label>
+            <input type="text" class="form-control border-2" id="name" name="name" required>
+        </div>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email<span class="text-danger fw-bold">*</span></label>
+            <input type="email" class="form-control border-2" id="email" name="email" required>
+        </div>
+        <div class="col-md-6">
+            <label for="phone" class="form-label">Téléphone<span class="text-danger fw-bold">*</span></label>
+            <input type="tel" class="form-control border-2" id="phone" name="phone">
+        </div>
+        <div class="col-md-6">
+            <label for="subject" class="form-label">Sujet<span class="text-danger fw-bold">*</span></label>
+            <input type="text" class="form-control border-2" id="subject" name="subject" required>
+        </div>
+        <div class="col-12">
+            <label for="message" class="form-label">Message<span class="text-danger fw-bold">*</span></label>
+            <textarea class="form-control border-2" id="message" name="message" rows="5" required></textarea>
+        </div>
+       <div class="col-12">
                                         <button type="submit" class="btn btn-primary w-100 border-0 "
                                             style="{{ base_color() }}">Envoyer le message</button>
                                     </div>
-                                </div>
-                            </form>
+    </div>
+</form>
+
                         </div>
                     </div>
                 </div>

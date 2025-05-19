@@ -62,7 +62,7 @@
                 <div class="category-section mb-5">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 class="h3 mb-0" >{{ $category->name }}</h2>
-                        <a href="{{ route('category.show', $category->slug) }}" class="btn btn-outline-primary button-hover" style="{{ border_color() }}">
+                        <a href="{{ route('pages.category.show', $category->slug) }}" class="btn btn-outline-primary button-hover" style="{{ border_color() }}">
                             Voir tous <i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     </div>

@@ -1,3 +1,52 @@
+<style>
+    /* Styles pour le bouton WhatsApp flottant */
+    #whatsapp-button {
+        position: fixed;
+        bottom: 20px; /* Position initiale */
+        left: 10px;
+        background-color: #25D366;
+        color: white;
+        width: 50px; /* Taille du bouton */
+        height: 50px; /* Taille du bouton pour le rendre circulaire */
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: moveUpDown 3s infinite alternate ease-in-out, colorChange 4s infinite alternate ease-in-out;
+        text-decoration: none; /* Supprime le soulignement */
+    }
+
+    /* Taille de l'icône WhatsApp */
+    #whatsapp-button i {
+        font-size: 24px;
+        text-decoration: none; /* Supprime le soulignement */
+    }
+
+    /* Animation de mouvement vertical */
+    @keyframes moveUpDown {
+        0% { bottom: 20px; }
+        100% { bottom: 80px; }
+    }
+
+    /* Animation de changement de couleur */
+    @keyframes colorChange {
+        0% { background-color: #25D366; } /* Vert */
+        50% { background-color: #366ba2; } /* Bleu */
+        90% { background-color: #ff2c2c; } /* Rouge */
+        
+    }
+</style>
+
+<!-- Bouton WhatsApp flottant -->
+<a href="https://wa.me/+22997069305" target="_blank" id="whatsapp-button">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+
+
 <!--Section demandez un devis -->
 <div id="DemanderDevis"></div>
 <section class="bg-light py-5" style="margin-top: 100px">
@@ -188,7 +237,7 @@
 </footer>
 <div class="container-fluid row bg-white py-3">
     <div class="d-flex bg-white flex-column flex-md-row gap-3 justify-content-center text-md-center col-12">
-        <p class="mb-0 text-black">&copy; 2025 BIGNON DU BENIN. Tous droits réservés par FHC groupe sarl.</p>
+        <p class="mb-0 text-black">&copy; 2025 BIGNON DU BENIN. Tous droits réservés par FHC GROUPE sarl.</p>
         {{-- <a href="#" class="text-white text-decoration-none me-3">Conditions d'utilisation</a> --}}
         <a href="{{ route('legal-notice') }}" class="text-decoration-none text-black">Mentions légales</a>
         <a href="{{ route('privacy-policy') }}" class="text-decoration-none text-black">Politique de
