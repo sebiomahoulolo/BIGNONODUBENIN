@@ -42,7 +42,7 @@
 
 
     <!-- Bannière (Visible uniquement sur les grands écrans) -->
-    <div class="banner d-none d-md-flex justify-content-between align-items-center px-4 py-2 border-bottom"
+    <div class="banner d-none d-md-flex justify-content-between align-items-center px-4 py-2 border-2 border-bottom border-t-white"
         style="color:white  ;  background-color:rgb(45, 85, 128)">
         <div class="info d-flex gap-4 align-items-center  small">
             <span><i class="bi bi-geo-alt-fill me-1"></i> Cotonou, Cadjèhoun, à côté de la pharmacie Cadjèhoun</span>
@@ -52,8 +52,6 @@
             <span id="date-time" class="date-time"><i class="bi bi-clock me-1"></i> Chargement...</span>
         </div>
         <div class="social-icons d-flex gap-3">
-
-
             <a href="https://web.facebook.com/bignon00229?mibextid=ZbWKwL&_rdc=1&_rdr#" target="_blank"
                 class="text-dark"><i class="bi bi-facebook fs-5"style="color:white"></i></a>
 
@@ -86,23 +84,22 @@
         updateDateTime(); // Première exécution immédiate
     </script>
 
-
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+            <a class="navbar-brand d-flex align-items-center gap-3" href="/">
                 <img src="{{ asset('images/logo_bignon.png') }}" alt="Logo Bignon">
                 <h1 class="fs-4 d-none d-md-block text-black mb-0">BIGNON DU BENIN</h1>
             </a>
-            {{-- <li class="position-relative px-2 " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+            <div class="d-md-none position-relative px-2 " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
                 aria-controls="staticBackdrop">
                 <a href="#" class="text-danger px-3 position-relative d-inline-block">
                     <i class="fa-solid fa-cart-plus fa-lg text-secondary fs-3"></i>
                     <span id="cart-badge"
-                        class="position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger font-bold">
+                        class="position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger font-bold cart-badge">
                         0
                     </span>
                 </a>
-            </li> --}}
+            </div>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -110,35 +107,33 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Accueil</a>
+                        <a class="nav-link fw-bold" href="/">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
+                        <a class="nav-link fw-bold" href="{{ route('pages.products') }}">Produits</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pages.categories') }}">Catégories</a>
+                        <a class="nav-link fw-bold" href="{{ route('pages.categories') }}">Catégories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pages.about') }}">À propos</a>
+                        <a class="nav-link fw-bold" href="{{ route('pages.about') }}">À propos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#DemanderDevis">Demandez un Devis</a>
+                        <a class="nav-link fw-bold" href="#DemanderDevis">Demandez un Devis</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
+                        <a class="nav-link fw-bold" href="{{ route('pages.contact') }}">Contact</a>
                     </li>
                     <!-- Panier (badge) -->
-                    <li class="position-relative px-2" data-bs-toggle="offcanvas"
+                    <li class="d-none d-md-block position-relative px-2" data-bs-toggle="offcanvas"
                         data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
                         <a href="#" class="text-danger px-3 position-relative d-inline-block">
                             <i class="fa-solid fa-cart-plus fa-lg text-secondary fs-3"></i>
                             <span id="cart-badge"
-                                class="position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger font-bold">
+                                class="position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger font-bold cart-badge">
                                 0
                             </span>
                         </a>
@@ -149,7 +144,6 @@
         </div>
         </div>
     </nav>
-
 
     <!-- Modal positionné à droite -->
     <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"

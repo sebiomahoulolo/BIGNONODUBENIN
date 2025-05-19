@@ -242,19 +242,19 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="1000">0</div>
+                        <div class="stat-number" data-count="7000">0</div>
                         <h5>Clients Satisfaits</h5>
                     </div>
                 </div>
                 <div  class="col-md-3">
                     <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="500">0</div>
+                        <div class="stat-number" data-count="7000">0</div>
                         <h5>Produits Vendus</h5>
                     </div>
                 </div>
                 <div  class="col-md-3">
                     <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="50">0</div>
+                        <div class="stat-number" data-count="10">0</div>
                         <h5>Années d'Expérience</h5>
                     </div>
                 </div>
@@ -262,6 +262,12 @@
                     <div class="stat-card animate-on-scroll">
                         <div class="stat-number" data-count="24">0</div>
                         <h5>Heures de Support</h5>
+                    </div>
+                </div>
+                <div   class="col-md-3">
+                    <div class="stat-card animate-on-scroll">
+                        <div class="stat-number" data-count="7000">0</div>
+                        <h5>Avis des Clients</h5>
                     </div>
                 </div>
             </div>

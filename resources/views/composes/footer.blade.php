@@ -120,7 +120,7 @@
                         {{-- Délai de livraison --}}
                         <div class="mb-3 col-12 col-lg-4">
                             <label for="delai_livraison" class="col-form-label fw-bold">Délai de livraison <span class=" text-danger fw-bold">*</span></label>
-                            <input type="number" class="form-control border-2 @error('delai_livraison') is-invalid @enderror"
+                            <input type="number" class="form-control border-2 @error('delai_livraison') is-invalid @enderror" placeholder=" ex: 5 jours"
                                 id="delai_livraison" name="delai_livraison" value="{{ old('delai_livraison') }}">
                             @error('delai_livraison')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -148,7 +148,6 @@
 <footer data-aos="fade" data-aos-duration="1300" data-aos-delay="300" class="footer">
     <div class="container">
         <div class="row">
-
 
             <div class="col-md-3 mb-4">
                 <h5>À propos de nous</h5>
@@ -180,8 +179,15 @@
                     <a href="https://web.facebook.com/bignon00229?mibextid=ZbWKwL&_rdc=1&_rdr#"><i
                             class="fab fa-facebook"></i></a>
                     <a href="https://www.tiktok.com/@229bignon1?_t=8kGBf86zCyM&_r=1"><i class="fab fa-tiktok"></i></a>
+
                 </div>
             </div>
+            {{-- <div class="col-md-3 mb-4">
+                <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+                <img src="{{ asset('images/logo_bignon.png') }}" alt="Logo Bignon">
+                <h1 class="fs-4 d-none d-md-block text-black mb-0 text-white">BIGNON DU BENIN</h1>
+            </a>
+            </div> --}}
         </div>
     </div>
 

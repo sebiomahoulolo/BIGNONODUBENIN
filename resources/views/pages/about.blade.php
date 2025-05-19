@@ -5,21 +5,21 @@
         <div data-aos="fade" data-aos-duration="1300" data-aos-delay="300"  class="row">
             <div class="col-md-6">
                 <h1 class="display-4 mb-4">À propos de Bignon du Benin</h1>
-                <p class="lead justify-text">Votre partenaire de confiance pour l'aménagement de votre intérieur depuis plus de 50 ans.
+                <p class="lead justify-text">Votre partenaire de confiance pour l'aménagement de votre intérieur depuis plus de 10 ans.
                 </p>
                 <p class="justify-text">Chez Bignon du Benin, nous nous engageons à fournir des meubles de qualité supérieure qui allient
                     élégance, confort et durabilité. Notre passion pour l'excellence et notre dévouement à la satisfaction
                     client nous ont permis de devenir un leader dans l'industrie du meuble au Bénin.</p>
             </div>
             <div class="col-md-6 d-flex justify-content-center">
-                <img class="w-75 card" src="{{ asset('images/about-us.avif') }}" alt="Notre showroom"
+                <img class="w-50 card" src="{{ asset('images/about-us.avif') }}" alt="Notre showroom"
                     class="img-fluid rounded shadow">
             </div>
         </div>
 
         <div data-aos="fade" data-aos-duration="1300" data-aos-delay="300"  class="row py-5">
             <div class="col-md-6 d-flex justify-content-center">
-                <img class="w-75 card" src="{{ asset('images/vision.jpeg') }}" alt="Notre showroom"
+                <img class="w-50 card" src="{{ asset('images/vision.jpeg') }}" alt="Notre showroom"
                     class="img-fluid rounded shadow">
             </div>
             <div class="col-md-6">
@@ -45,7 +45,7 @@
                     leurs besoins.</p>
             </div>
             <div class="col-md-6 d-flex justify-content-center">
-                <img class="w-75 card" src="{{ asset('images/mission.webp') }}" alt="Notre showroom"
+                <img class="w-5à card" src="{{ asset('images/mission.webp') }}" alt="Notre showroom"
                     class="img-fluid rounded shadow">
             </div>
         </div>

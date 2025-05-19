@@ -4,7 +4,7 @@ $(document).ready(function () {
     const promoSection = $('#promo-section');
     const validateButton = $('#validate-button');
     const cartBody = $('#cart-body');
-    const cartBadge = $('#cart-badge');
+    const cartBadge = $('.cart-badge');
     const totalAmountElement = $("#total-amount");
     const discountedTotalElement = $("#discounted-total");
     const emptyRowHTML = `
@@ -112,7 +112,7 @@ $(document).ready(function () {
             <tr>
                 <td class="d-flex flex-column align-items-center">
                     <img style="width: 50px;" src="${img}" alt="${name}">
-                    
+
                     <strong class="text-center" style="font-size: 12px">${name}</strong>
                     <input type="hidden" name="produits[][id]" value="${id}">
                     <input type="hidden" name="produits[][nom]" value="${name}">
