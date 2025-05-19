@@ -40,9 +40,9 @@ Route::prefix('categories')->name('pages.')->group(function () {
     Route::get('/chambres', [PageController::class, 'chambres'])->name('chambres');
     Route::get('/salons', [PageController::class, 'salons'])->name('salons');
     Route::get('/salles-a-manger', [PageController::class, 'sallesAManger'])->name('salles-a-manger');
-    Route::get('/bureaux', [PageController::class, 'bureaux'])->name('bureaux');
     Route::get('/cuisines', [PageController::class, 'cuisines'])->name('cuisines');
 });
+Route::get('/categories/{slug}', [PageController::class, 'categoryShow'])->name('pages.category');
 
 // Routes d'authentification
 Route::get('login', [AuthController::class, 'showLogin'])->name('login');

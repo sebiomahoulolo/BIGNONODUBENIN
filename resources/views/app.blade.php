@@ -3,6 +3,7 @@
 @section('content')
     <!-- Ajout du lien CDN Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     {{-- <!-- Barre de recherche -->
     <section class="py-4 bg-light">
@@ -237,42 +238,50 @@
     </section>
 
     <!-- Statistiques -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="7000">0</div>
-                        <h5>Clients Satisfaits</h5>
-                    </div>
-                </div>
-                <div  class="col-md-4">
-                    <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="7000">0</div>
-                        <h5>Produits Vendus</h5>
-                    </div>
-                </div>
-                <div  class="col-md-4">
-                    <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="10">0</div>
-                        <h5>Années d'Expérience</h5>
-                    </div>
-                </div>
-                <div   class="col-md-6">
-                    <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="24">0</div>
-                        <h5>Heures de Support</h5>
-                    </div>
-                </div>
-                <div   class="col-md-6">
-                    <div class="stat-card animate-on-scroll">
-                        <div class="stat-number" data-count="7000">0</div>
-                        <h5>Avis des Clients</h5>
-                    </div>
+<section class="stats-section">
+    <div class="container">
+        <div class="row d-flex flex-wrap">
+            <div class="col-md-2">
+                <div class="stat-card animate-on-scroll">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-number" data-count="7000">7000</div>
+                    <h5>Clients Satisfaits</h5>
                 </div>
             </div>
+           
+            <div class="col-md-2">
+                <div class="stat-card animate-on-scroll">
+                    <i class="fas fa-award"></i>
+                    <div class="stat-number" data-count="10">10</div>
+                    <h5>Années d'Expérience</h5>
+                </div>
+            </div>
+             <div class="col-md-2">
+                <div class="stat-card animate-on-scroll">
+                    <i class="fas fa-comments"></i>
+                    <div class="stat-number" data-count="7000">7000</div>
+                    <h5>Avis des Clients</h5>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card animate-on-scroll">
+                    <i class="fas fa-headset"></i>
+                    <div class="stat-number" data-count="24">24</div>
+                    <h5>Heures de Support</h5>
+                </div>
+            </div>
+             <div class="col-md-2">
+                <div class="stat-card animate-on-scroll">
+                    <i class="fas fa-box-open"></i>
+                    <div class="stat-number" data-count="7000">7000</div>
+                    <h5>Produits Vendus</h5>
+                </div>
+            </div>
+           
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Newsletter -->
     <section class="newsletter-section">
@@ -403,6 +412,25 @@
             overflow: hidden;
             height: 250px;
         }
+.stats-section .row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.stat-card {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+}
+.stat-card i {
+    font-size: 40px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+}
 
         .product-image-container img {
             width: 100%;

@@ -1,4 +1,50 @@
+<a href="#" id="scrollTopBtn" aria-label="Remonter">
+    <i class="fas fa-arrow-up"></i>
+</a>
+
+
+<script>
+    window.onscroll = function () {
+        let scrollBtn = document.getElementById("scrollTopBtn");
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            scrollBtn.style.display = "block";
+        } else {
+            scrollBtn.style.display = "none";
+        }
+    };
+
+    document.getElementById("scrollTopBtn").addEventListener("click", function (event) {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+</script>
+
 <style>
+    #scrollTopBtn {
+        display: none; /* Caché par défaut */
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 999;
+        background-color: #0056b3;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 50%;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #scrollTopBtn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<style>
+
+
+
     /* Styles pour le bouton WhatsApp flottant */
     #whatsapp-button {
         position: fixed;
@@ -222,13 +268,15 @@
                     <li><i class="fas fa-envelope"></i><a href="mailto:innobignon@gmail.com">innobignon@gmail.com</a></li>
                 </ul>
             </div>
+            
             <div class="col-md-3 mb-4">
                 <h5>Nous Suivre</h5>
                 <div class="social-links">
                     <a href="https://web.facebook.com/bignon00229?mibextid=ZbWKwL&_rdc=1&_rdr#"><i
                             class="fab fa-facebook"></i></a>
                     <a href="https://www.tiktok.com/@229bignon1?_t=8kGBf86zCyM&_r=1"><i class="fab fa-tiktok"></i></a>
-
+ <a href="https://wa.me/+22997069305" target="_blank" class="text-dark"><i class="bi bi-whatsapp fs-5"
+                    style="color:white"></i></a>
                 </div>
             </div>
             {{-- <div class="col-md-3 mb-4">
@@ -241,6 +289,8 @@
     </div>
 
 </footer>
+
+
 <div class="container-fluid row bg-white py-3">
     <div class="d-flex bg-white flex-column flex-md-row gap-3 justify-content-center text-md-center col-12">
         <p class="mb-0 text-black">&copy; 2025 BIGNON DU BENIN. Tous droits réservés par FHC GROUPE sarl.</p>

@@ -54,11 +54,11 @@
                                 <i class="fas fa-shopping-cart"></i> Commandes
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!--li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }} text-white" href="{{ route('admin.customers.index') }}">
                                 <i class="fas fa-users"></i> Clients
                             </a>
-                        </li>
+                        </li-->
 
 
                          <li class="nav-item">
