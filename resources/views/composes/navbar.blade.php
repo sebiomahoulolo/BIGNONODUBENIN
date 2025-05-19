@@ -1,4 +1,5 @@
 <!-- Panier flottant -->
+
 <div class="floating-cart">
     <div class="cart-icon">
         <i class="fas fa-shopping-cart fa-2x"></i>
@@ -19,25 +20,25 @@
     <ul class="mobile-menu-nav">
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('pages.products') }}">Produits</a>
+            <a class="nav-link" href="{{ route('pages.products') }}"><b>Produits</b></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('pages.categories') }}">Catégories</a>
+            <a class="nav-link" href="{{ route('pages.categories') }}"><b>Catégories</b></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('pages.about') }}">À propos</a>
+            <a class="nav-link" href="{{ route('pages.about') }}"><b>À propos</b></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#DemanderDevis">Demandez un
-                Devis</a>
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#DemanderDevis"><b>Demandez un
+                Devis</b></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('pages.contact') }}">Contact</a>
+            <a class="nav-link" href="{{ route('pages.contact') }}"><b>Contact</b></a>
         </li>
     </ul>
 </div>
 
-{{-- HEADER  grand ecran --}}
+{{-- HEADER  grand ecran --}}<hr>
 <header class="bg-light position-fixed top-0 w-100" style="z-index: 9999;">
 
 
@@ -57,7 +58,7 @@
 
             <a href="https://www.tiktok.com/@229bignon1?_t=8kGBf86zCyM&_r=1" target="_blank" class="text-dark"><i
                     class="fa-brands fa-tiktok fs-5"style="color:white"></i></a>
-            <a href="" target="_blank" class="text-dark"><i class="bi bi-whatsapp fs-5"
+            <a href="https://wa.me/+22997069305" target="_blank" class="text-dark"><i class="bi bi-whatsapp fs-5"
                     style="color:white"></i></a>
         </div>
     </div>

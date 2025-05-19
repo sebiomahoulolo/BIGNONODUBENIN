@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bignon du Benin</title>
+  <title>BIGNON DU BENIN | Boutique de meubles</title>
+
+    <!-- Ajout de l'icône -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_bignon.png') }}">
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

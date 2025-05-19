@@ -2,7 +2,6 @@
 
 @section('content')
     <!-- Section Détail du produit -->
-    <!-- Section Détail du produit -->
     <div class="container py-5">
         <div class="row">
             <!-- Carrousel d'images (modifié pour n'afficher que l'image principale statique) -->
@@ -194,82 +193,56 @@
 
 
     <!-- Section Produits similaires -->
-    <section class="produits-similaires-section my-5">
-        <div class="container p-4 border border-primary rounded-4 shadow-sm">
-            <h3 class=" mb-4 text-center">Produits similaires</h3>
+<section class="produits-similaires-section my-5">
+    <div class="container p-4 border border-primary rounded-4 shadow-sm">
+        <h3 class="mb-4 text-center">Produits similaires</h3>
 
         <div class="row g-4">
-            @foreach($relatedProducts as $product)
+            @foreach ($relatedProducts as $product)
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                     <div class="card h-100 border-0 shadow-md product-card">
                         <div class="position-relative">
-                            @if($product->images && count($product->images) > 0)
-                                <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
-                            @else
-                                <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top" alt="{{ $product->name }}">
-                            @endif
+                            <img src="{{ asset($product->images && count($product->images) > 0 ? 'storage/' . $product->images[0] : 'images/no-image.jpg') }}"
+                                class="card-img-top rounded-top" alt="{{ $product->name }}">
 
                             <div class="product-overlay position-absolute top-0 end-0 m-2">
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-light btn-sm shadow-sm">
+                                <a href="{{ route('pages.product.detail', $product->id) }}"
+                                    class="btn btn-light btn-sm shadow-sm">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </div>
                         </div>
 
                         <div class="card-body d-flex flex-column">
-                            <span class="badge  mb-2" style="color:white  ;  background-color: #366ba2">{{ $product->category->name }}</span>
+                            <span class="badge mb-2" style="color:white; background-color: #366ba2">
+                                {{ $product->category->name }}
+                            </span>
 
                             <div class="mb-2">
-                                @if($product->sale_price)
-                                    <span class="text-success fw-bold">{{ number_format($product->sale_price, 0, ',', ' ') }} FCFA</span>
-                                @else
-                                    <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top"
-                                        alt="{{ $product->name }}">
-                                @endif
-
-                                <div class="product-overlay position-absolute top-0 end-0 m-2">
-                                    <a href="{{ route('pages.product.detail', $product->id) }}"
-                                        class="btn btn-light btn-sm shadow-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </div>
+                                <span class="text-success fw-bold">
+                                    {{ $product->sale_price ? number_format($product->sale_price, 0, ',', ' ') . ' FCFA' : 'Prix non disponible' }}
+                                </span>
                             </div>
 
-                            <div class="card-body d-flex flex-column">
-                                <span class="badge  mb-2"
-                                    style="color:white  ;  background-color: #366ba2">{{ $product->category->name }}</span>
+                            <p class="text-muted small flex-grow-1">{{ Str::limit($product->description, 100) }}</p>
 
-                                <div class="mb-2">
-                                    @if ($product->sale_price)
-                                        <span
-                                            class="text-success fw-bold">{{ number_format($product->sale_price, 0, ',', ' ') }}
-                                            FCFA</span>
-                                    @else
-                                        <span
-                                            class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }}
-                                            FCFA</span>
-                                    @endif
-                                </div>
-
-                                <p class="text-muted small flex-grow-1">{{ Str::limit($product->description, 100) }}</p>
-
-                                <div class="d-flex justify-content-between mt-3">
-                                    <a href="{{ route('pages.product.detail', $product->id) }}"
-                                        class="btn btn-outline btn-sm" style="color:white  ;  background-color: #366ba2">
-                                        <i class="bi bi-eye"></i> Détails
-                                    </a>
-                                    <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn btn-sm"
-                                        style="color:white  ;  background-color: #366ba2">
-                                        <i class="bi bi-cart-plus"></i>
-                                    </a>
-                                </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <a href="{{ route('pages.product.detail', $product->id) }}"
+                                    class="btn btn-outline btn-sm" style="color:white; background-color: #366ba2">
+                                    <i class="bi bi-eye"></i> Détails
+                                </a>
+                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn btn-sm"
+                                    style="color:white; background-color: #366ba2">
+                                    <i class="bi bi-cart-plus"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
 
 
 
@@ -795,28 +768,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
                     // Gestion des miniatures
-                    const thumbnails = document.querySelectorAll('.thumbnail-item'); <<
-                    <<
-                    <<
-                    <
-                    HEAD
-                        <<
-                        <<
-                        <<
-                        <
-                        Updated upstream
+                    const thumbnails = document.querySelectorAll('.thumbnail-item'); 
                     thumbnails.forEach(thumb => {
                         thumb.addEventListener('click', function() {
                             thumbnails.forEach(t => t.classList.remove('active'));
                             this.classList.add('active');
-                        }); ===
-                        ===
-                        = ===
-                        ===
-                        = >>>
-                        >>>
-                        >
-                        4 d18588fce04aef23792227ce91fa87d3cfe4515
+                        });
                         const mainImages = document.querySelectorAll('.main-image');
                         const carousel = document.querySelector('#productCarousel');
                         const bsCarousel = new bootstrap.Carousel(carousel);
@@ -825,19 +782,7 @@
                         window.changeMainImage = function(index) {
                             // Mettre à jour le carousel
                             bsCarousel.to(index); <<
-                            <<
-                            <<
-                            <
-                            HEAD
-
-                                ===
-                                ===
-                                =
-
-                                >>>
-                                >>>
-                                >
-                                4 d18588fce04aef23792227ce91fa87d3cfe4515
+                      
                             // Mettre à jour les miniatures
                             thumbnails.forEach(t => t.classList.remove('active'));
                             thumbnails[index].classList.add('active');
@@ -848,18 +793,7 @@
                             thumbnails.forEach(t => t.classList.remove('active'));
                             thumbnails[e.to].classList.add('active'); <<
                             <<
-                            <<
-                            <
-                            HEAD
-                                >>>
-                                >>>
-                                >
-                                Stashed changes ===
-                                ===
-                                = >>>
-                                >>>
-                                >
-                                4 d18588fce04aef23792227ce91fa87d3cfe4515
+                            
                         });
 
                         // Gestion du sélecteur de quantité

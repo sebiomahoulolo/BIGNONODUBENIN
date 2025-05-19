@@ -1,8 +1,27 @@
+{{-- Message de confirmation Laravel --}}
+@if(session('success'))
+    <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        {{ session('success') }}
+    </div>
+@endif
+
+{{-- Message d’erreur si besoin --}}
+@if(session('error'))
+    <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        {{ session('error') }}
+    </div>
+@endif
+
+
 @extends('layouts.admin')
 
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Gestion des Produits</h1>
+        <form action="{{ route('newsletter.sendLatest') }}" method="GET">
+    <button class="btn btn-primary">📩 Envoyer les nouveaux produits par mail</button>
+</form>
+
         <div class="btn-toolbar mb-2 mb-md-0">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">
                 <i class="fas fa-plus"></i> Nouveau Produit

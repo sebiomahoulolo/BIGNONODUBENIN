@@ -20,7 +20,7 @@
                     <div class="category-overlay">
                         <h4>{{ $category->name }}</h4>
                         <p>{{ $category->description }}</p>
-                        <a href="{{ route('category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
+                        <a href="{{ route('pages.category.show', $category->slug) }}" class="btn btn-light mt-3">Découvrir</a>
                     </div>
                 </div>
             </div>
