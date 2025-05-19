@@ -32,7 +32,7 @@ Route::get('/politique-de-confidentialite', function () {
 Route::get('/mentions-legales', function () {
     return view('pages.legal-notice');
 })->name('legal-notice');
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
+
 // Routes pour le tableau de bord admin
 
 // Routes pour les catégories
@@ -71,10 +71,9 @@ Route::get('/login', function () {
 
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('pages.category.show');
-Route::get('/category/{slug}', [PageController::class, 'categoryShow'])->name('pages.category.show');
 Route::get('/products', [PageController::class, 'products'])->name('pages.products');
 Route::get('/categories', [PageController::class, 'categories'])->name('pages.categories');
+
 Route::get('/categories/{slug}', [PageController::class, 'categoryShow'])->name('pages.category.show');
 Route::get('/product/{id}', [PageController::class, 'productDetail'])->name('pages.product.detail');
 
