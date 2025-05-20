@@ -213,7 +213,7 @@
                 <!-- ✅ Bouton valider -->
                 <div class="d-flex justify-content-end mt-3" id="validate-button" style="display: none;">
                     <button type="button" class="btn btn-lg  rounded-5" data-bs-toggle="modal"
-                        data-bs-target="#confirmModal"
+                        data-bs-target="#confirmModal" id="btn-valider"
                         style="color:white  ;  background-color: #366ba2">Valider</button>
                 </div>
 
