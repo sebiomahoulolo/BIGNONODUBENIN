@@ -72,6 +72,10 @@ public function billingAddress()
 {
     return $this->belongsTo(BillingAddress::class);
 }
+public function customer()
+{
+    return $this->belongsTo(Customer::class);
+}
 
 
 } 
