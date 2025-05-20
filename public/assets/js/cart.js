@@ -18,6 +18,17 @@ $(document).ready(function () {
         return cartBody.find('tr:not(#empty-row)').length;
     }
 
+     function verifierPanier() {
+        const lignes = $('#cart-body tr');
+        const boutonValider = $('#btn-valider');
+
+        if (lignes.length === 1 && lignes.attr('id') === 'empty-row') {
+            boutonValider.prop('disabled', true);
+        } else {
+            boutonValider.prop('disabled', false);
+        }
+    }
+
     // Vérifie si un produit avec cet ID est déjà dans le panier
     function isProductAlreadyAdded(productId) {
         let isAdded = false;
@@ -76,25 +87,28 @@ $(document).ready(function () {
         });
     }
 
-    function updateCartDisplay() {
-        const productCount = getProductCount();
-        cartBadge.text(productCount);
-        updateTotalsDisplay();
-        saveCartToLocalStorage();
-        updateAddToCartButtonStates(); // Mettre à jour l'état des boutons
+   function updateCartDisplay() {
+    const productCount = getProductCount();
+    cartBadge.text(productCount);
+    updateTotalsDisplay();
+    saveCartToLocalStorage();
+    updateAddToCartButtonStates();
 
-        if (productCount > 0) {
-            promoSection.show();
-            validateButton.show();
-            $('#empty-row').remove();
-        } else {
-            promoSection.hide();
-            validateButton.hide();
-            if (cartBody.find('#empty-row').length === 0) {
-                cartBody.append(emptyRowHTML);
-            }
+    if (productCount > 0) {
+        promoSection.show();
+        validateButton.show();
+        $('#empty-row').remove();
+    } else {
+        promoSection.hide();
+        validateButton.hide();
+        if (cartBody.find('#empty-row').length === 0) {
+            cartBody.append(emptyRowHTML);
         }
     }
+
+    verifierPanier(); // ✅ Ajoute cette ligne ici
+}
+
 
     // Ajout du produit au panier
     function addProductToCart(id, name, price, img, quantite = 1) {
@@ -105,7 +119,6 @@ $(document).ready(function () {
             alert("Impossible d'ajouter le produit : informations manquantes ou incorrectes.");
             return;
         }
-
 
         if (isProductAlreadyAdded(String(id))) { // Convertir id en string pour la comparaison
             // Déjà géré par updateAddToCartButtonStates, mais une alerte peut être utile
