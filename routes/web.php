@@ -118,6 +118,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
     Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
     Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/admin/orders/{id}/detail', [OrderController::class, 'getItemsPanier'])->name('admin.orders.detail');
     Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
     // Route::get('admin/customers/export', [CustomerController::class, 'export'])->name('customers.export');
     Route::get('/admin/demande-devis', [DemandeDevisController::class, 'index'])->name('admin.demande-devis.index');

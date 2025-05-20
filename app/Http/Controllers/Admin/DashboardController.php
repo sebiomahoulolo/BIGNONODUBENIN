@@ -118,5 +118,5 @@ public function index()
             ->get();
     }
 
-    
-} 
+
+}
