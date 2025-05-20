@@ -40,6 +40,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $total = 0;
+                            @endphp
                             @foreach ($orderItem as $item)
                                 <tr>
                                     <td><img src="{{ $item->image_path }}" alt=""></td>
@@ -48,7 +51,14 @@
                                     <td>{{ number_format($item->price, 0, ',', ' ') }} FCFA</td>
                                     <td>{{ number_format($item->price * $item->quantity, 0, ',', ' ') }} FCFA</td>
                                 </tr>
+                                @php
+                                   $total += $item->price * $item->quantity
+                                @endphp
                             @endforeach
+                            <tr >
+                                <td colspan="4" class=" fw-bold bg-primary-subtle text-center">TOTAL</td>
+                                <td class=" fw-bold">{{ number_format($total, 0, ',', ' ')  }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
