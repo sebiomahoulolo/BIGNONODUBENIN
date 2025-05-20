@@ -30,7 +30,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#DemanderDevis"><b>Demandez un
-                Devis</b></a>
+                    Devis</b></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pages.contact') }}"><b>Contact</b></a>
@@ -38,7 +38,8 @@
     </ul>
 </div>
 
-{{-- HEADER  grand ecran --}}<hr>
+{{-- HEADER  grand ecran --}}
+<hr>
 <header class="bg-light position-fixed top-0 w-100" style="z-index: 9999;">
 
 
@@ -154,10 +155,10 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <form id="product-form" action="{ route('produits.valider') }" method="POST">
+            <form id="product-form" action="{{ route('store-panier-valider') }}" method="POST">
                 @csrf
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="table-id">
                         <thead>
                             <tr>
                                 <th class="bg-secondary-subtle" style="font-size: 12px">Produit</th>
@@ -178,13 +179,20 @@
                 </div>
                 <!-- Montant total -->
                 <div class="mt-4">
-                    <p class="fw-bold mb-1">Total : <span id="total-amount">0 FCFA</span></p>
+                    {{-- <p class="fw-bold mb-1">Total : <span id="total-amount">0 FCFA</span></p> --}}
+                    <div class=" row d-flex align-items-center">
+                        <label for="total-amount-input" class="fw-bold mb-1 col">Total :</label>
+                        <input type="text" id="total-amount-input" name="total_amount" value="0 FCFA"
+                            class="form-control fw-bold mb-1 total-amount border-0 col" />
+                    </div>
+
 
                     <!-- Code promo (affiché seulement si panier non vide) -->
                     <div class="mb-3" id="promo-section" style="display: none;">
                         <label for="promo-code" class="form-label">Utiliser un code promo : PROMO5</label>
                         <div class="input-group">
-                            <input type="text" id="promo-code" class="form-control" placeholder="Ex : PROMO5">
+                            <input type="text" id="promo-code" name="code_promo" class="form-control"
+                                placeholder="Ex : PROMO5">
                             <button type="button" class="btn btn-outline" onclick="applyPromo()"
                                 style="color:white  ;  background-color: #366ba2">Appliquer</button>
                         </div>
@@ -194,7 +202,12 @@
                     </div>
 
                     <!-- Montant après réduction -->
-                    <p class="fw-bold">Total à payer : <span id="discounted-total">0 FCFA</span></p>
+                    {{-- <p class="fw-bold">Total à payer : <span id="discounted-total">0 FCFA</span></p> --}}
+                    <div class=" row d-flex align-items-center">
+                        <label for="total-promo-code" class="fw-bold mb-1 col">Total à payer  :</label>
+                            <input type="text" id="total-promo-code" name="total_promo" class="form-control fw-bold mb-1 total-amount border-0 col"
+                                value="0 FCFA">
+                    </div>
                 </div>
 
                 <!-- ✅ Bouton valider -->

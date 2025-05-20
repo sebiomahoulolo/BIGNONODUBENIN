@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\ShippingAddress;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -63,4 +64,14 @@ class Order extends Model
             default => 'Inconnu'
         };
     }
+    public function shippingAddress()
+{
+    return $this->belongsTo(ShippingAddress::class);
+}
+public function billingAddress()
+{
+    return $this->belongsTo(BillingAddress::class);
+}
+
+
 } 

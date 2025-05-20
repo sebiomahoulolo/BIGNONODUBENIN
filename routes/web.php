@@ -69,7 +69,6 @@ Route::get('/login', function () {
     return view('auth.login'); // Vue de connexion
 })->name('login');
 
-
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
 Route::get('/products', [PageController::class, 'products'])->name('pages.products');
@@ -106,6 +105,7 @@ Route::prefix('products')->name('pages.')->group(function () {
 
 // Route demande devis
 Route::post('store-demande-devis', [DemandeDevisController::class, 'storeDemandeDevis'])->name('store.demande-devis');
+Route::post('store-panier-valider', [OrderController::class, 'storePanier'])->name('store-panier-valider');
 
 // FIN ---------------------------------------------------------------------------------------------------------------------------
 

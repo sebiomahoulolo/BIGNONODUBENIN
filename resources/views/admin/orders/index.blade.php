@@ -30,11 +30,11 @@
                     <thead>
                         <tr>
                             <th>N° Commande</th>
-                            <th>Client</th>
                             <th>Date</th>
-                            <th>Total</th>
+                            <th>Réference Commande</th>
                             <th>Statut</th>
-                            <th>Paiement</th>
+                            <th>Code Promo Appliqué</th>
+                            <th>Total à payer</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -84,4 +84,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

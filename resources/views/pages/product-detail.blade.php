@@ -193,56 +193,54 @@
 
 
     <!-- Section Produits similaires -->
-<section class="produits-similaires-section my-5">
-    <div class="container p-4 border border-primary rounded-4 shadow-sm">
-        <h3 class="mb-4 text-center">Produits similaires</h3>
+    <section class="produits-similaires-section my-5">
+        <div class="container p-4 border border-primary rounded-4 shadow-sm">
+            <h3 class="mb-4 text-center">Produits similaires</h3>
 
-        <div class="row g-4">
-            @foreach ($relatedProducts as $product)
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="card h-100 border-0 shadow-md product-card">
-                        <div class="position-relative">
-                            <img src="{{ asset($product->images && count($product->images) > 0 ? 'storage/' . $product->images[0] : 'images/no-image.jpg') }}"
-                                class="card-img-top rounded-top" alt="{{ $product->name }}">
+            <div class="row g-4">
+                @foreach ($relatedProducts as $product)
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="card h-100 border-0 shadow-md product-card">
+                            <div class="position-relative">
+                                <img src="{{ asset($product->images && count($product->images) > 0 ? 'storage/' . $product->images[0] : 'images/no-image.jpg') }}"
+                                    class="card-img-top rounded-top" alt="{{ $product->name }}">
 
-                            <div class="product-overlay position-absolute top-0 end-0 m-2">
-                                <a href="{{ route('pages.product.detail', $product->id) }}"
-                                    class="btn btn-light btn-sm shadow-sm">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                                <div class="product-overlay position-absolute top-0 end-0 m-2">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}"
+                                        class="btn btn-light btn-sm shadow-sm">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="card-body d-flex flex-column">
-                            <span class="badge mb-2" style="color:white; background-color: #366ba2">
-                                {{ $product->category->name }}
-                            </span>
-
-                            <div class="mb-2">
-                                <span class="text-success fw-bold">
-                                    {{ $product->sale_price ? number_format($product->sale_price, 0, ',', ' ') . ' FCFA' : 'Prix non disponible' }}
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge mb-2" style="color:white; background-color: #366ba2">
+                                    {{ $product->category->name }}
                                 </span>
-                            </div>
 
-                            <p class="text-muted small flex-grow-1">{{ Str::limit($product->description, 100) }}</p>
-
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('pages.product.detail', $product->id) }}"
-                                    class="btn btn-outline btn-sm" style="color:white; background-color: #366ba2">
-                                    <i class="bi bi-eye"></i> Détails
-                                </a>
-                                <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn btn-sm"
-                                    style="color:white; background-color: #366ba2">
-                                    <i class="bi bi-cart-plus"></i>
-                                </a>
+                                <div class="mb-2">
+                                    <span class="text-success fw-bold">
+                                        {{ $product->sale_price ? number_format($product->sale_price, 0, ',', ' ') . ' FCFA' : 'Prix non disponible' }}
+                                    </span>
+                                </div>
+                                <p class="text-muted small flex-grow-1">{{ Str::limit($product->description, 100) }}</p>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}"
+                                        class="btn btn-outline btn-sm" style="color:white; background-color: #366ba2">
+                                        <i class="bi bi-eye"></i> Détails
+                                    </a>
+                                    <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn btn-sm"
+                                        style="color:white; background-color: #366ba2">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
 
@@ -768,7 +766,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
                     // Gestion des miniatures
-                    const thumbnails = document.querySelectorAll('.thumbnail-item'); 
+                    const thumbnails = document.querySelectorAll('.thumbnail-item');
                     thumbnails.forEach(thumb => {
                         thumb.addEventListener('click', function() {
                             thumbnails.forEach(t => t.classList.remove('active'));
@@ -782,7 +780,7 @@
                         window.changeMainImage = function(index) {
                             // Mettre à jour le carousel
                             bsCarousel.to(index); <<
-                      
+
                             // Mettre à jour les miniatures
                             thumbnails.forEach(t => t.classList.remove('active'));
                             thumbnails[index].classList.add('active');
@@ -793,7 +791,7 @@
                             thumbnails.forEach(t => t.classList.remove('active'));
                             thumbnails[e.to].classList.add('active'); <<
                             <<
-                            
+
                         });
 
                         // Gestion du sélecteur de quantité

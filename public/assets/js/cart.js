@@ -22,7 +22,7 @@ $(document).ready(function () {
     function isProductAlreadyAdded(productId) {
         let isAdded = false;
         cartBody.find('tr:not(#empty-row)').each(function () {
-            const existingProductId = $(this).find('input[name="produits[][id]"]').val();
+            const existingProductId = $(this).find('input[name^="produits"][name$="[id]"]').val();
             if (existingProductId === productId) {
                 isAdded = true;
                 return false; // Sortir de la boucle .each
@@ -33,9 +33,12 @@ $(document).ready(function () {
 
     function calculateTotalAmount() {
         let currentTotal = 0;
-        cartBody.find('input[name="produits[][montant]"]').each(function () {
+        cartBody.find('input[name^="produits"][name$="[montant]"]').each(function () {
             currentTotal += parseFloat($(this).val()) || 0;
         });
+
+         // Met à jour la valeur de l'input (chaine formatée)
+        $('#total-amount-input').val(`${formatPrice(currentTotal)} FCFA`);
         return currentTotal;
     }
 
@@ -45,9 +48,12 @@ $(document).ready(function () {
 
         if (promoApplied) {
             const reduced = currentTotalAmount * 0.95; // 5% de réduction
+             $('#total-promo-code').val(`${formatPrice(reduced)} FCFA`);
+
             discountedTotalElement.text(`${formatPrice(reduced)} FCFA`);
         } else {
             discountedTotalElement.text(`${formatPrice(currentTotalAmount)} FCFA`);
+            $('#total-promo-code').val(`${formatPrice(currentTotalAmount)} FCFA`);
         }
     }
 
@@ -92,6 +98,7 @@ $(document).ready(function () {
 
     // Ajout du produit au panier
     function addProductToCart(id, name, price, img, quantite = 1) {
+
         // Validation des données d'entrée
         if (!id || !name || typeof price !== 'number' || isNaN(price) || price <= 0 || !img) {
             console.error("Données produit invalides pour l'ajout :", { id, name, price, img });
@@ -99,12 +106,13 @@ $(document).ready(function () {
             return;
         }
 
+
         if (isProductAlreadyAdded(String(id))) { // Convertir id en string pour la comparaison
             // Déjà géré par updateAddToCartButtonStates, mais une alerte peut être utile
             // alert('Ce produit est déjà dans votre panier.');
             return;
         }
-
+        const index = getProductCount(); // <<< 🔹 AJOUT ICI 🔹
         const montant = quantite * price;
 
         // L'image est bien utilisée ici via la variable `img`
@@ -114,18 +122,18 @@ $(document).ready(function () {
                     <img style="width: 50px;" src="${img}" alt="${name}">
 
                     <strong class="text-center" style="font-size: 12px">${name}</strong>
-                    <input type="hidden" name="produits[][id]" value="${id}">
-                    <input type="hidden" name="produits[][nom]" value="${name}">
-                    <input type="hidden" name="produits[][image]" value="${img}">
+                    <input type="hidden" name="produits[${index}][id]" value="${id}">
+                    <input type="hidden" name="produits[${index}][nom]" value="${name}">
+                    <input type="hidden" name="produits[${index}][image]" value="${img}">
                 </td>
                 <td>
-                    <input type="number" name="produits[][quantite]" value="${quantite}" class="form-control form-control-sm w-75 mx-auto" min="1" data-product-id="${id}">
+                    <input type="number" name="produits[${index}][quantite]" value="${quantite}" class="form-control form-control-sm w-75 mx-auto" min="1" data-product-id="${id}">
                 </td>
                 <td>
-                    <input type="text" name="produits[][prix]" value="${price}" class="form-control form-control-sm w-100" readonly>
+                    <input type="text" name="produits[${index}][prix]" value="${price}" class="form-control form-control-sm w-100" readonly>
                 </td>
                 <td>
-                    <input type="text" name="produits[][montant]" value="${montant}" class="form-control form-control-sm w-100" readonly>
+                    <input type="text" name="produits[${index}][montant]" value="${montant}" class="form-control form-control-sm w-100" readonly>
                 </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger remove-item">
@@ -142,11 +150,11 @@ $(document).ready(function () {
     function saveCartToLocalStorage() {
         const cartData = [];
         cartBody.find('tr:not(#empty-row)').each(function () {
-            const id = $(this).find('input[name="produits[][id]"]').val();
-            const name = $(this).find('input[name="produits[][nom]"]').val();
-            const img = $(this).find('input[name="produits[][image]"]').val();
-            const prix = parseFloat($(this).find('input[name="produits[][prix]"]').val());
-            const quantite = parseInt($(this).find('input[name="produits[][quantite]"]').val());
+            const id = $(this).find('input[name^="produits"][name$="[id]"]').val();
+            const name = $(this).find('input[name^="produits"][name$="[nom]"]').val();
+            const img = $(this).find('input[name^="produits"][name$="[image]"]').val();
+            const prix = parseFloat($(this).find('input[name^="produits"][name$="[prix]"]').val());
+            const quantite = parseInt($(this).find('input[name^="produits"][name$="[quantite]"]').val());
 
             if (id && name && img && !isNaN(prix) && !isNaN(quantite)) {
                  cartData.push({ id, name, img, prix, quantite });
@@ -224,7 +232,7 @@ $(document).ready(function () {
 
     cartBody.on('click', '.remove-item', function () {
         const row = $(this).closest('tr');
-        const productId = row.find('input[name="produits[][id]"]').val();
+        const productId = row.find('input[name^="produits"][name$="[id]"]').val();
 
         row.remove();
 
@@ -236,7 +244,7 @@ $(document).ready(function () {
         updateCartDisplay(); // Cela va aussi appeler updateAddToCartButtonStates pour réactiver le bouton
     });
 
-    cartBody.on('input change', 'input[name="produits[][quantite]"]', function () {
+    cartBody.on('input change', 'input[name^="produits"][name$="[quantite]"]', function () {
         const row = $(this).closest('tr');
         let quantite = parseInt($(this).val());
 
@@ -245,10 +253,10 @@ $(document).ready(function () {
             $(this).val(1);
         }
 
-        const prix = parseFloat(row.find('input[name="produits[][prix]"]').val());
+        const prix = parseFloat(row.find('input[name^="produits"][name$="[prix]"]').val());
         const montant = quantite * prix;
 
-        row.find('input[name="produits[][montant]"]').val(montant.toFixed(0));
+        row.find('input[name^="produits"][name$="[montant]"]').val(montant.toFixed(0));
         updateCartDisplay(); // Met à jour les totaux et sauvegarde
     });
 
