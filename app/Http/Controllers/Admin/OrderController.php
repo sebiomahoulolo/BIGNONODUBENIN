@@ -26,25 +26,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
 
-        $query = Order::all();
-        // $query = Order::with(['user', 'items.product'])
-        //     ->when($request->status, function ($q) use ($request) {
-        //         return $q->where('status', $request->status);
-        //     })
-        //     ->when($request->payment_status, function ($q) use ($request) {
-        //         return $q->where('payment_status', $request->payment_status);
-        //     })
-        //     ->when($request->search, function ($q) use ($request) {
-        //         return $q->where(function ($query) use ($request) {
-        //             $query->where('order_number', 'like', "%{$request->search}%")
-        //                 ->orWhereHas('user', function ($q) use ($request) {
-        //                     $q->where('name', 'like', "%{$request->search}%")
-        //                         ->orWhere('email', 'like', "%{$request->search}%");
-        //                 });
-        //         });
-        //     });
-
-        $orders = $query->latest()->paginate(10);
+        $orders = Order::orderBy('id', 'desc')->paginate(10);
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -313,11 +295,25 @@ class OrderController extends Controller
             $orderItem->product_id = $produit['id'];
             $orderItem->quantity = $produit['quantite'];
             $orderItem->image_path = $produit['image'];
-            $orderItem->price = $produit['prix'] ;
+            $orderItem->price = $produit['prix'];
             $orderItem->total = $produit['montant'];
             $orderItem->save();
-
         }
         return to_route('pages.app')->with('success', "Votre commande a été enregistrement avec succès!");
+    }
+
+    public function getItemsPanier($id)
+    {
+        $order = Order::findOrFail($id);
+        if ($order) {
+            // $orderItem = OrderItem::where('order_id', '=', $order->id)->get();
+            $orderItem = OrderItem::join('products', 'order_items.product_id', '=', 'products.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('order_items.*', 'categories.name as category_name')
+                ->where('order_items.order_id', '=', $order->id)
+                ->get();
+        }
+        // dd($order, $orderItem);
+        return view('admin.orders.detail', compact(['order', 'orderItem']));
     }
 }
