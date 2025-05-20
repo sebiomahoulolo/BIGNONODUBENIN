@@ -16,6 +16,13 @@ class DashboardController extends Controller
 
     public function index()
     {
+
+        $orders = Order::join('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.name', 'customers.phone')
+            ->orderBy('orders.id', 'desc')
+            ->paginate(10);
+
+
         // Statistiques pour les cartes
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
@@ -61,14 +68,14 @@ class DashboardController extends Controller
                 $q->whereMonth('created_at', Carbon::now()->month);
             });
         }])
-        ->withSum(['products' => function ($query) {
-            $query->whereHas('orderItems', function ($q) {
-                $q->whereMonth('created_at', Carbon::now()->month);
-            });
-        }], 'price')
-        ->get()
-        ->sortByDesc('products_sum_price')
-        ->take(3);
+            ->withSum(['products' => function ($query) {
+                $query->whereHas('orderItems', function ($q) {
+                    $q->whereMonth('created_at', Carbon::now()->month);
+                });
+            }], 'price')
+            ->get()
+            ->sortByDesc('products_sum_price')
+            ->take(3);
 
         $categoryLabels = $categoryData->pluck('name')->toArray();
         $categoryValues = $categoryData->pluck('products_sum_price')->toArray();
@@ -104,7 +111,7 @@ class DashboardController extends Controller
             'category_values' => $categoryValues
         ];
 
-        return view('admin.dashboard', compact('stats'));
+        return view('admin.dashboard', compact(['stats', 'orders']));
     }
 
     public function getSalesData(Request $request)
@@ -117,6 +124,4 @@ class DashboardController extends Controller
             ->orderByDesc('total')
             ->get();
     }
-
-
 }

@@ -31,6 +31,8 @@
                             <tr>
                                 <th>N° Commande</th>
                                 <th>Date</th>
+                                <th>Client</th>
+                                <th>Téléphone</th>
                                 <th>Code Promo Appliqué</th>
                                 <th>Total à payer</th>
                                 {{-- <th>Statut</th> --}}
@@ -42,6 +44,8 @@
                                 <tr>
                                     <td class=" fw-bold">{{ $order->order_number }}</td>
                                     <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                    <td>{{ $order->name}}</td>
+                                    <td>{{ $order->phone}}</td>
                                     <td>
                                         <span
                                             class="badge {{ $order->status_code_promo == 1 ? 'bg-success' : 'bg-danger' }}">

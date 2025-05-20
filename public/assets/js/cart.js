@@ -300,3 +300,54 @@ $(document).ready(function () {
     loadCartFromLocalStorage(); // Charge les produits et met à jour implicitement les boutons via addProductToCart
     updateCartDisplay();      // Appel final pour s'assurer que tout est correct (surtout si le panier était vide)
 });
+
+$(document).ready(function () {
+        // Lorsqu'on clique sur le bouton "Soumettre"
+        $('#confirmModal #button-send').on('click', function () {
+            let isValid = true;
+
+            // Récupération des champs
+            let name = $('#name').val().trim();
+            let email = $('#email').val().trim();
+            let phone = $('#phone').val().trim();
+            let indicatif = $('#indicatif').val().trim();
+
+            // Réinitialiser les styles
+            $('#name, #email, #phone').removeClass('is-invalid');
+
+            // Vérification du nom
+            if (name === '') {
+                $('#name').addClass('is-invalid');
+                isValid = false;
+            }
+
+            // Vérification de l’email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '' || !emailRegex.test(email)) {
+                $('#email').addClass('is-invalid');
+                isValid = false;
+            }
+
+            // Vérification du téléphone
+            if (phone === '' || isNaN(phone)) {
+                $('#phone').addClass('is-invalid');
+                isValid = false;
+            }
+
+            // Vérification du téléphone
+            if (indicatif === '' ) {
+                $('#indicatif').addClass('is-invalid');
+                isValid = false;
+            }
+
+            // Si tout est valide, soumettre le formulaire
+            if (isValid) {
+                $('#product-form').submit();
+            }
+        });
+
+        // Supprimer le style d'erreur en cas de saisie
+        $('#name, #email, #phone, #indicatif').on('input', function () {
+            $(this).removeClass('is-invalid');
+        });
+    });

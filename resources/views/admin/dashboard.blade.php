@@ -120,78 +120,74 @@
                 </div>
 
                 <!-- Dernières commandes -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Dernières commandes</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Client</th>
-                                        <th>Produit</th>
-                                        <th>Montant</th>
-                                        <th>Statut</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- @forelse($stats['recent_orders'] as $order)
-                                        <tr>
-                                            <td>#{{ $order->id }}</td>
-                                            <td>{{ $order->user->name }}</td>
-                                            <td>
-                                                @if ($order->items->count() > 1)
-                                                    {{ $order->items->first()->product->name }}
-                                                    <span class="text-muted">(+{{ $order->items->count() - 1 }}
-                                                        autres)</span>
-                                                @else
-                                                    {{ $order->items->first()->product->name ?? 'N/A' }}
-                                                @endif
-                                            </td>
-                                            <td>{{ number_format($order->total, 0, ',', ' ') }} FCFA</td>
-                                            <td>
-                                                @php
-                                                    $statusClass =
-                                                        [
-                                                            'pending' => 'bg-warning',
-                                                            'processing' => 'bg-info',
-                                                            'shipped' => 'bg-primary',
-                                                            'delivered' => 'bg-success',
-                                                            'cancelled' => 'bg-danger',
-                                                        ][$order->status] ?? 'bg-secondary';
+                    <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>N° Commande</th>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Téléphone</th>
+                                <th>Code Promo Appliqué</th>
+                                <th>Total à payer</th>
+                                {{-- <th>Statut</th> --}}
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td class=" fw-bold">{{ $order->order_number }}</td>
+                                    <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                    <td>{{ $order->name}}</td>
+                                    <td>{{ $order->phone}}</td>
+                                    <td>
+                                        <span
+                                            class="badge {{ $order->status_code_promo == 1 ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $order->status_code_promo == 1 ? 'Oui' : 'Non' }}
+                                        </span>
+                                    </td>
 
-                                                    $statusLabels = [
-                                                        'pending' => 'En attente',
-                                                        'processing' => 'En traitement',
-                                                        'shipped' => 'Expédié',
-                                                        'delivered' => 'Livré',
-                                                        'cancelled' => 'Annulé',
-                                                    ];
-                                                @endphp
-                                                <span class="badge {{ $statusClass }}">
-                                                    {{ $statusLabels[$order->status] ?? $order->status }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('admin.orders.show', $order->id) }}"
-                                                    class="btn btn-sm btn-primary">Voir</a>
-                                                <a href="{{ route('admin.orders.edit', $order->id) }}"
-                                                    class="btn btn-sm btn-info">Modifier</a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center">Aucune commande trouvée</td>
-                                        </tr>
-                                    @endforelse --}}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                    <td>{{ number_format($order->total_amount_promo, 0, ',', ' ') }} FCFA</td>
+                                    {{-- <td>
+                                        <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.orders.edit', $order) }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if ($order->status === 'cancelled')
+                                            <form action="{{ route('admin.orders.destroy', $order) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </td> --}}
+                                    <td>
+                                         <a href="{{ route('admin.orders.detail', $order->id) }}"
+                                                    class="btn btn-sm btn-info me-1" title="Voir">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+
+                <!-- Pagination -->
+                <div class="mt-3 d-flex justify-content-center">
+                    {{ $orders->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
+        </div>
             </main>
         </div>
     </div>
