@@ -17,7 +17,7 @@ class PageController extends Controller
     ->get();
 
 
-            
+
         return view('app', compact('featuredProducts'));
     }
 
@@ -31,7 +31,7 @@ class PageController extends Controller
         return view('pages.contact');
     }
 
-  
+
 
     public function categories()
     {
@@ -47,9 +47,11 @@ class PageController extends Controller
 
     public function categoryShow($slug)
     {
+
         $category = \App\Models\Category::where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
+
 
         $products = $category->products()
             ->where('is_active', true)
@@ -141,6 +143,7 @@ class PageController extends Controller
 
     public function bureaux()
     {
+
         return view('pages.bureaux');
     }
 
@@ -179,4 +182,4 @@ public function products()
     return view('pages.products', compact('categories', 'products'));
 }
 
-} 
+}

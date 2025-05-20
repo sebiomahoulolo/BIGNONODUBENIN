@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -26,7 +27,11 @@ class OrderController extends Controller
     public function index(Request $request)
     {
 
-        $orders = Order::orderBy('id', 'desc')->paginate(10);
+        // $orders = Order::orderBy('id', 'desc')->paginate(10);
+        $orders = Order::join('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.name', 'customers.phone')
+            ->orderBy('orders.id', 'desc')
+            ->paginate(10);
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -253,9 +258,10 @@ class OrderController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
-
     public function storePanier(Request $request)
     {
+
+        // dd($request);
         $validated = $request->validate([
             'produits' => 'required|array|min:1',
             'produits.*.id' => 'required',
@@ -267,7 +273,16 @@ class OrderController extends Controller
             'total_amount' => 'required|string',
             'total_promo' => 'required|string',
             'code_promo' => 'nullable|string',
+            'name' => 'required|string',
+            'email' => 'required|string',
+            'phone' => 'required|string',
+            'indicatif' => 'required|string',
         ]);
+
+        // Information sur le client collecter
+        $name = $validated['name'];
+        $phone = $validated['indicatif'] . '' . $validated['phone'];
+        $email = $validated['email'];
 
         $total = (int) str_replace([' ', 'FCFA'], '', $validated['total_amount']);
         $totalPromo = (int) str_replace([' ', 'FCFA'], '', $validated['total_promo']);
@@ -278,10 +293,30 @@ class OrderController extends Controller
             $code_promo_status = 1;
         }
 
+        // Verifie si le email existe deja dans la table customer
+        $emailExist = Customer::where('email', '=', $email)->first();
+
+
+
+        if (!$emailExist) {
+            $customer = new Customer();
+            $customer->name = $name;
+            $customer->email = $email;
+            $customer->phone = $phone;
+            $customer->save();
+
+            $customer_id = $customer->id;
+        } else {
+            $customer_id = $emailExist->id;
+        }
+
+
+
         $orderNumber = 'ORD-' . date('Ymd') . '-' . rand(1000, 9999);
 
         $order = new Order();
         $order->order_number = $orderNumber;
+        $order->customer_id = $customer_id;
         $order->total_amount = $total;
         $order->total_amount_promo = $totalPromo;
         $order->status_code_promo = $code_promo_status;

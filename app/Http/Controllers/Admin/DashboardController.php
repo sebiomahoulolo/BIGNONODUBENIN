@@ -20,13 +20,27 @@ public function index()
     $currentMonth = Carbon::now()->month;
     $currentYear = Carbon::now()->year;
 
+
     $monthlyOrders = Order::whereMonth('created_at', $currentMonth)
         ->whereYear('created_at', $currentYear)
         ->count();
 
+ 
+
+        $orders = Order::join('customers', 'orders.customer_id', '=', 'customers.id')
+            ->select('orders.*', 'customers.name', 'customers.phone')
+            ->orderBy('orders.id', 'desc')
+            ->paginate(10);
+
+
+        // Statistiques pour les cartes
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+
     $monthlyRevenue = Order::whereMonth('created_at', $currentMonth)
         ->whereYear('created_at', $currentYear)
-        ->sum('total');
+        ->sum('total_amount_promo');
 
     $productsInStock = Product::where('is_active', true)
         ->where('stock', '>', 0)
@@ -48,7 +62,7 @@ public function index()
 
         $monthlySales = Order::whereMonth('created_at', $month->month)
             ->whereYear('created_at', $month->year)
-            ->sum('total');
+            ->sum('total_amount_promo');
 
         $salesData[] = $monthlySales;
     }
@@ -67,8 +81,20 @@ public function index()
     ->sortByDesc('products_sum_price')
     ->take(3);
 
-    $categoryLabels = $categoryData->pluck('name')->toArray();
-    $categoryValues = $categoryData->pluck('products_sum_price')->toArray();
+        // Données pour le graphique des revenus par catégorie
+        $categoryData = Category::withCount(['products' => function ($query) {
+            $query->whereHas('orderItems', function ($q) {
+                $q->whereMonth('created_at', Carbon::now()->month);
+            });
+        }])
+            ->withSum(['products' => function ($query) {
+                $query->whereHas('orderItems', function ($q) {
+                    $q->whereMonth('created_at', Carbon::now()->month);
+                });
+            }], 'price')
+            ->get()
+            ->sortByDesc('products_sum_price')
+            ->take(3);
 
     $stats = [
         'total_orders' => $monthlyOrders,
@@ -78,7 +104,7 @@ public function index()
         'recent_orders' => $latestOrders,
         'monthly_sales' => Order::select(
             DB::raw('MONTH(created_at) as month'),
-            DB::raw('SUM(total) as total')
+            DB::raw('SUM(total_amount_promo) as total')
         )
             ->whereYear('created_at', Carbon::now()->year)
             ->groupBy('month')
@@ -97,15 +123,15 @@ public function index()
         }),
         'sales_labels' => $salesLabels,
         'sales_data' => $salesData,
-        'category_labels' => $categoryLabels,
-        'category_values' => $categoryValues
+        //'category_labels' => $categoryLabels,
+        //'category_values' => $categoryValues
     ];
 
-    return view('admin.dashboard', compact('stats'));
-}
 
 
 
+        return view('admin.dashboard', compact(['stats', 'orders']));
+    }
 
     public function getSalesData(Request $request)
     {
@@ -117,6 +143,4 @@ public function index()
             ->orderByDesc('total')
             ->get();
     }
-
-
 }

@@ -148,14 +148,14 @@
     </nav>
 
     <!-- Modal positionné à droite -->
-    <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
-        aria-labelledby="staticBackdropLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="staticBackdropLabel">Panier</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <form id="product-form" action="{{ route('store-panier-valider') }}" method="POST">
+    <form id="product-form" action="{{ route('store-panier-valider') }}" method="POST">
+        <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+            aria-labelledby="staticBackdropLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="staticBackdropLabel">Panier</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
                 @csrf
                 <div class="table-responsive">
                     <table class="table table-striped" id="table-id">
@@ -204,20 +204,100 @@
                     <!-- Montant après réduction -->
                     {{-- <p class="fw-bold">Total à payer : <span id="discounted-total">0 FCFA</span></p> --}}
                     <div class=" row d-flex align-items-center">
-                        <label for="total-promo-code" class="fw-bold mb-1 col">Total à payer  :</label>
-                            <input type="text" id="total-promo-code" name="total_promo" class="form-control fw-bold mb-1 total-amount border-0 col"
-                                value="0 FCFA">
+                        <label for="total-promo-code" class="fw-bold mb-1 col">Total à payer :</label>
+                        <input type="text" id="total-promo-code" name="total_promo"
+                            class="form-control fw-bold mb-1 total-amount border-0 col" value="0 FCFA">
                     </div>
                 </div>
 
                 <!-- ✅ Bouton valider -->
                 <div class="d-flex justify-content-end mt-3" id="validate-button" style="display: none;">
-                    <button type="submit" class="btn btn-lg  rounded-5"
+                    <button type="button" class="btn btn-lg  rounded-5" data-bs-toggle="modal"
+                        data-bs-target="#confirmModal"
                         style="color:white  ;  background-color: #366ba2">Valider</button>
                 </div>
-            </form>
-        </div>
-    </div>
 
+                <!-- Modal -->
+                <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Informations</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="invalid-feedback">
+                                        Veuillez renseigner ce champ correctement.
+                                    </div>
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="name" class="fw-bold">Nom Complet <span
+                                                class=" text-danger fw-bold">*</span></label>
+                                        <input type="text" name="name" id="name"
+                                            placeholder="Jean Roland" class=" form-control border-2 fw-bold" required>
+                                        <div class="invalid-feedback">Veuillez entrer votre nom complet.</div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="name" class="fw-bold">Adresse E-mail <span
+                                                class=" text-danger fw-bold">*</span></label>
+                                        <input type="email" name="email" id="email"
+                                            placeholder="jean@gmail.com" class=" form-control border-2 fw-bold" required>
+                                        <div class="invalid-feedback">Veuillez entrer votre adresse email.</div>
+                                    </div>
+                                    <div class="mb-3 col-md-12">
+                                        <label for="phone" class="col-form-label me-2 fw-bold">Numéro de téléphone
+                                            <span class=" text-danger fw-bold">*</span></label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @php
+                                                $indicatifs = [
+                                                    ['code' => '+229', 'label' => '🇧🇯 (+229)'],
+                                                    ['code' => '+225', 'label' => '🇨🇮 (+225)'],
+                                                    ['code' => '+226', 'label' => '🇧🇫 (+226)'],
+                                                    ['code' => '+228', 'label' => '🇹🇬 (+228)'],
+                                                    ['code' => '+237', 'label' => '🇨🇲 (+237)'],
+                                                    ['code' => '+33', 'label' => '🇫🇷 (+33)'],
+                                                    ['code' => '+1', 'label' => '🇺🇸 (+1)'],
+                                                    ['code' => '+44', 'label' => '🇬🇧 (+44)'],
+                                                    ['code' => '+49', 'label' => '🇩🇪 (+49)'],
+                                                    ['code' => '+34', 'label' => '🇪🇸 (+34)'],
+                                                    ['code' => '+39', 'label' => '🇮🇹 (+39)'],
+                                                    ['code' => '+212', 'label' => '🇲🇦 (+212)'],
+                                                    ['code' => '+216', 'label' => '🇹🇳 (+216)'],
+                                                    ['code' => '+213', 'label' => '🇩🇿 (+213)'],
+                                                ];
+                                            @endphp
+                                            <select
+                                                class="form-select w-25 border-2 @error('indicatif') is-invalid @enderror fw-bold"
+                                                name="indicatif" id="indicatif">
+                                                <option value="">Choisir</option>
+                                                @foreach ($indicatifs as $indicatif)
+                                                    <option value="{{ $indicatif['code'] }}"
+                                                        {{ old('indicatif') == $indicatif['code'] ? 'selected' : '' }}>
+                                                        {{ $indicatif['label'] }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
+                                            <input type="number" class="form-control fw-bold w-75 " name="phone"
+                                                id="phone" placeholder="ex:0197222222">
+                                                <div class="invalid-feedback">Veuillez entrer votre numéro de téléphone.</div>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-primary"
+                                        id="button-send">Soumettre</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </form>
     </div>
 </header>

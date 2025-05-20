@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Newsletter;
 use App\Models\Product;
@@ -27,6 +28,7 @@ public function store(Request $request)
 public function sendLatestProducts()
 {
     $subscribers = Newsletter::all();
+    $customers = Customer::all();
     $latestProducts = Product::latest()->take(4)->get();
 
     foreach ($subscribers as $subscriber) {
@@ -36,6 +38,18 @@ public function sendLatestProducts()
         ], function ($message) use ($subscriber) {
             $message->to($subscriber->email)
                     ->subject('🛍️ Nouveaux produits disponibles sur notre plateforme !');
+
+        });
+    }
+
+     foreach ($customers as $customer) {
+        Mail::send('emails.latest-products', [
+            'products' => $latestProducts,
+            'customer' => $customer
+        ], function ($message) use ($customer) {
+            $message->to($customer->email)
+                    ->subject('🛍️ Nouveaux produits disponibles sur notre plateforme !');
+
         });
     }
 
