@@ -309,6 +309,8 @@ $(document).ready(function () {
         $shareDiv.toggleClass('d-none');
     });
 
+    
+
     // --- INITIALISATION ---
     loadCartFromLocalStorage(); // Charge les produits et met à jour implicitement les boutons via addProductToCart
     updateCartDisplay();      // Appel final pour s'assurer que tout est correct (surtout si le panier était vide)

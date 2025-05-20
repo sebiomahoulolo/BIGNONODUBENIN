@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->string('material');
+            $table->string('material')->nullable();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('phone');
             $table->string('ville');

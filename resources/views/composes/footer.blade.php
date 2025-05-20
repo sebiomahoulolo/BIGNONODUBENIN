@@ -82,7 +82,7 @@
         0% { background-color: #25D366; } /* Vert */
         50% { background-color: #366ba2; } /* Bleu */
         90% { background-color: #ff2c2c; } /* Rouge */
-        
+
     }
 </style>
 
@@ -132,7 +132,7 @@
 
                         {{-- Matériel --}}
                         <div class="mb-3 col-12 col-lg-3">
-                            <label for="material" class="col-form-label fw-bold">Matériel <span class=" text-danger fw-bold">*</span></label>
+                            <label for="material" class="col-form-label fw-bold">Matériel</label>
                             <input type="text" class="form-control border-2 @error('material') is-invalid @enderror"
                                 id="material" name="material" value="{{ old('material') }}">
                             @error('material')
@@ -160,7 +160,7 @@
 
                         {{-- Téléphone (indicatif + numéro) --}}
                         <div class="mb-3 col-12 col-lg-4">
-                            <label for="phone" class="col-form-label me-2 fw-bold">Numéro de téléphone <span class=" text-danger fw-bold">*</span></label>
+                            <label for="phone" class="col-form-label me-2 fw-bold">Numéro de téléphone WhatSapp<span class=" text-danger fw-bold">*</span></label>
                             <div class="d-flex align-items-center gap-2">
                                 @php
                                     $indicatifs = [
@@ -268,7 +268,7 @@
                     <li><i class="fas fa-envelope"></i><a href="mailto:innobignon@gmail.com">innobignon@gmail.com</a></li>
                 </ul>
             </div>
-            
+
             <div class="col-md-3 mb-4">
                 <h5>Nous Suivre</h5>
                 <div class="social-links">
