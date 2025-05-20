@@ -12,6 +12,9 @@ use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Mail\OrderConfirmation;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Str;
 
 
@@ -323,6 +326,7 @@ class OrderController extends Controller
         $order->status = "En Cours";
         $order->save();
 
+
         foreach ($validated['produits'] as $produit) {
             $orderItem = new OrderItem();
 
@@ -333,7 +337,15 @@ class OrderController extends Controller
             $orderItem->price = $produit['prix'];
             $orderItem->total = $produit['montant'];
             $orderItem->save();
+           // Après avoir sauvegardé la commande :
+$order->load('customer'); // très important !
+
+Mail::to($order->customer->email)->send(new OrderConfirmation($order));
+
+            
         }
+         // **ENVOI DU MAIL APRÈS QUE TOUT SOIT ENREGISTRÉ**
+  
         return to_route('pages.app')->with('success', "Votre commande a été enregistrement avec succès!");
     }
 
