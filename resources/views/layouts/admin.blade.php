@@ -3,32 +3,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BIGNON DU BENIN | Boutique de meubles</title>
+    <title>BIGNON DU BENIN | Boutique de meubles</title>
 
     <!-- Ajout de l'icône -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo_bignon.png') }}">
-
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-    {{-- Bootstrap css --}}
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-
-    {{-- Style css  --}}
+    
+    <!-- Style CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     @stack('styles')
 </head>
 <body>
+
     <div class="container-fluid">
         <div class="row">
+            <!-- Navbar pour mobile -->
+            <nav class="navbar navbar-dark bg-dark d-md-none">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+
             <!-- Sidebar -->
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+            <nav id="sidebar" class="col-md-3 col-lg-2 bg-dark sidebar collapse d-md-block">
                 <div class="position-sticky pt-3">
                     <div class="text-center mb-4">
                         <img src="{{ asset('images/logo_bignon.png') }}" alt="Logo" class="img-fluid" style="max-width: 120px;">
@@ -54,20 +61,11 @@
                                 <i class="fas fa-shopping-cart"></i> Commandes
                             </a>
                         </li>
-                        <!--li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }} text-white" href="{{ route('admin.customers.index') }}">
-                                <i class="fas fa-users"></i> Clients
-                            </a>
-                        </li-->
-
-
-                         <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.demande-devis.*') ? 'active' : '' }} text-white" href="{{ route('admin.demande-devis.index') }}">
                                 <i class="fa-solid fa-newspaper"></i> Demandes devis
                             </a>
                         </li>
-
-
                         <li class="nav-item mt-2">
                             <form method="POST" action="{{ route('admin.logout') }}" class="d-inline">
                                 @csrf
@@ -87,10 +85,8 @@
         </div>
     </div>
 
-    <!-- bootstrap JS -->
+    <!-- Bootstrap JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     @stack('scripts')
 </body>
