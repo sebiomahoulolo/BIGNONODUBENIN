@@ -5,7 +5,7 @@
         <div data-aos="fade" data-aos-duration="1300" data-aos-delay="300"  class="row">
             <div class="col-md-6">
                 <h1 class="display-4 mb-4">À propos de Bignon du Benin</h1>
-                <p class="lead justify-text">Votre partenaire de confiance pour l'aménagement de votre intérieur depuis plus de 10 ans.
+                <p class="lead justify-text">Votre partenaire de confiance pour l'aménagement de votre intérieur depuis plus de 07 ans.
                 </p>
                 <p class="justify-text">Chez Bignon du Benin, nous nous engageons à fournir des meubles de qualité supérieure qui allient
                     élégance, confort et durabilité. Notre passion pour l'excellence et notre dévouement à la satisfaction

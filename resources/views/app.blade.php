@@ -251,7 +251,7 @@
                 <div class="col-md-2">
                     <div class="stat-card animate-on-scroll">
                         <i class="fas fa-users"></i>
-                        <div class="stat-number" data-count="7000">7000</div>
+                        <div class="stat-number" data-count="4105">4105</div>
                         <h5>Clients Satisfaits</h5>
                     </div>
                 </div>
@@ -259,14 +259,14 @@
                 <div class="col-md-2">
                     <div class="stat-card animate-on-scroll">
                         <i class="fas fa-award"></i>
-                        <div class="stat-number" data-count="10">10</div>
+                        <div class="stat-number" data-count="07">07</div>
                         <h5>Années d'Expérience</h5>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="stat-card animate-on-scroll">
                         <i class="fas fa-comments"></i>
-                        <div class="stat-number" data-count="7000">7000</div>
+                        <div class="stat-number" data-count="4230">4230</div>
                         <h5>Avis des Clients</h5>
                     </div>
                 </div>
@@ -280,7 +280,7 @@
                 <div class="col-md-2">
                     <div class="stat-card animate-on-scroll">
                         <i class="fas fa-box-open"></i>
-                        <div class="stat-number" data-count="7000">7000</div>
+                        <div class="stat-number" data-count="4105">4105</div>
                         <h5>Produits Vendus</h5>
                     </div>
                 </div>

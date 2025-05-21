@@ -265,7 +265,7 @@
                     <li><i class="fas fa-map-marker-alt"></i> Cotonou, Cadjèhoun, à côté de la pharmacie Cadjèhoun</li>
                     <li><i class="fas fa-map-marker-alt"></i> Porto-Novo, Akonaboè, à côté de la bibliothèque nationale </li>
                     <li><i class="fas fa-phone"></i> (+229) 01 97 06 93 05</li>
-                    <li><i class="fas fa-envelope"></i><a href="mailto:innobignon@gmail.com">innobignon@gmail.com</a></li>
+                    <li><i class="fas fa-envelope"></i><a href="mailto:bignondubenin1@gmail.com">bignondubenin1@gmail.com</a></li>
                 </ul>
             </div>
 

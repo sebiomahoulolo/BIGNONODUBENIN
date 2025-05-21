@@ -44,7 +44,7 @@
                         <div class="card-body text-center p-4">
                             <i class="bi bi-envelope display-4  mb-3" style="{{ text_color_1() }}"></i>
                             <h3 class="h5">Email</h3>
-                            <p class="text-muted">innobignon@gmail.com</p>
+                            <p class="text-muted "><a href="mailto:bignondubenin1@gmail.com" class=" text-decoration-none">bignondubenin1@gmail.com</a></p>
                         </div>
                     </div>
                 </div>
