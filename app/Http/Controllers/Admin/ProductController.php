@@ -112,7 +112,7 @@ class ProductController extends Controller
         $images = [];
         foreach ($request->file('images') as $image) {
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('products/');
+            $destinationPath = public_path('storages/products/');
 
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);

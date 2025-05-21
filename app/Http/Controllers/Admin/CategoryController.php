@@ -78,8 +78,7 @@ public function store(Request $request)
             'parent_id' => 'nullable|exists:categories,id',
             'order' => 'nullable|integer',
             'is_active' => 'boolean',
-            'images' => 'nullable|array|max:8',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         DB::beginTransaction();
@@ -87,28 +86,21 @@ public function store(Request $request)
         // Générer le slug
         $validated['slug'] = Str::slug($validated['name']);
 
-        // Enregistrement des images dans public/categories/
-        $images = [];
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('categories/');
+        // Gestion de l'image (enregistrement dans public/categories/)
+        if ($request->hasFile('image')) {
+            $filename = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $destinationPath = public_path('storages/categories');
 
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0755, true);
-                }
-
-                $image->move($destinationPath, $filename);
-
-                // Stocke le chemin relatif
-                $images[] = 'categories/' . $filename;
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
             }
 
-            // Encode les chemins en JSON
-            $validated['image'] = json_encode($images);
+            $request->file('image')->move($destinationPath, $filename);
+
+            // Enregistrer le chemin relatif
+            $validated['image'] = 'categories/' . $filename;
         }
 
-        // Création de la catégorie
         $category = Category::create($validated);
 
         DB::commit();
@@ -130,6 +122,7 @@ public function store(Request $request)
             ->with('error', 'Une erreur est survenue lors de la création de la catégorie : ' . $e->getMessage());
     }
 }
+
 
 
     public function show(Category $category)

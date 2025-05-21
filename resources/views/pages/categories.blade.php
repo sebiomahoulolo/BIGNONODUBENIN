@@ -16,7 +16,7 @@
             @forelse($categories as $category)
             <div data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="col-md-6 col-lg-4">
                 <div class="category-card">
-                    <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
+                    <img src="{{ $category->image ? asset( 'storages/' .$category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
                     <div class="category-overlay">
                         <h4>{{ $category->name }}</h4>
                         <p>{{ $category->description }}</p>

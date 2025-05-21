@@ -34,7 +34,7 @@
                             <div class="product-image-container">
 
                                 {{-- @if ($product->images && count(json_decode($product->images, true)) > 0) --}}
-                                    <img src="{{ asset($product->images[0]) }}" class="card-img-top" alt="{{ $product->name }}">
+                                    <img src="{{ asset('storages/' .$product->images[0]) }}" class="card-img-top" alt="{{ $product->name }}">
                                 {{-- @else
                                     <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top"
                                         alt="{{ $product->name }}">
@@ -96,7 +96,7 @@
                     <div data-aos="fade" data-aos-duration="300" class="col-md-4">
                         <div class="category-card">
                             <a href="{{ route('pages.category.show', ['slug' => $category->name]) }}">
-                                <img src="{{ $category->image ? asset('products/' . $category->image) : asset('images/canape1.webp') }}"
+                                <img src="{{ $category->images ? asset('storage/'.$category->image) : asset('images/canape1.webp') }}"
                                     alt="{{ $category->name }}">
                                 <div class="category-overlay">
                                     <h4>{{ $category->name }}</h4>
