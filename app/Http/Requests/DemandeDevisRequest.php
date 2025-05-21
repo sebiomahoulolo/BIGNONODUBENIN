@@ -24,7 +24,7 @@ class DemandeDevisRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'material' => 'required|string',
+            // 'material' => 'required|string',
             'category_id' => 'required|integer',
             'indicatif' => 'required|string',
             'phone' => 'required|string',
@@ -40,7 +40,7 @@ class DemandeDevisRequest extends FormRequest
             'name.required' => 'Le nom est obligatoire.',
             'email.required' => 'L’adresse e-mail est obligatoire.',
             'email.email' => 'Le format de l’e-mail est invalide.',
-            'material.required' => 'Le matériel est requis.',
+            // 'material.required' => 'Le matériel est requis.',
             'category_id.required' => 'Le produit est requis.',
             'indicatif.required' => 'L’indicatif est requis.',
             'phone.required' => 'Le numéro de téléphone est requis.',

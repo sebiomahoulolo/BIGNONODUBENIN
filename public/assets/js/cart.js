@@ -309,6 +309,8 @@ $(document).ready(function () {
         $shareDiv.toggleClass('d-none');
     });
 
+
+
     // --- INITIALISATION ---
     loadCartFromLocalStorage(); // Charge les produits et met à jour implicitement les boutons via addProductToCart
     updateCartDisplay();      // Appel final pour s'assurer que tout est correct (surtout si le panier était vide)
@@ -356,7 +358,9 @@ $(document).ready(function () {
             // Si tout est valide, soumettre le formulaire
             if (isValid) {
                 $('#product-form').submit();
+                localStorage.removeItem('cartData');
             }
+
         });
 
         // Supprimer le style d'erreur en cas de saisie

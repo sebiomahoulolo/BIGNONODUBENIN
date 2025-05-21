@@ -92,6 +92,7 @@
                 <img src="{{ asset('images/logo_bignon.png') }}" alt="Logo Bignon">
                 <h1 class="fs-4 d-none d-md-block text-black mb-0">BIGNON DU BENIN</h1>
             </a>
+
             <div class="d-md-none position-relative px-2 " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
                 aria-controls="staticBackdrop">
                 <a href="#" class="text-danger px-3 position-relative d-inline-block">
@@ -186,7 +187,6 @@
                             class="form-control fw-bold mb-1 total-amount border-0 col" />
                     </div>
 
-
                     <!-- Code promo (affiché seulement si panier non vide) -->
                     <div class="mb-3" id="promo-section" style="display: none;">
                         <label for="promo-code" class="form-label">Utiliser un code promo : PROMO5</label>
@@ -244,7 +244,8 @@
                                         <label for="name" class="fw-bold">Adresse E-mail <span
                                                 class=" text-danger fw-bold">*</span></label>
                                         <input type="email" name="email" id="email"
-                                            placeholder="jean@gmail.com" class=" form-control border-2 fw-bold" required>
+                                            placeholder="jean@gmail.com" class=" form-control border-2 fw-bold"
+                                            required>
                                         <div class="invalid-feedback">Veuillez entrer votre adresse email.</div>
                                     </div>
                                     <div class="mb-3 col-md-12">
@@ -283,8 +284,9 @@
                                             </select>
                                             <input type="number" class="form-control fw-bold w-75 " name="phone"
                                                 id="phone" placeholder="ex:0197222222">
-                                                <div class="invalid-feedback">Veuillez entrer votre numéro de téléphone.</div>
+                                            <div class="invalid-feedback">Veuillez entrer votre numéro de téléphone.
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -299,5 +301,6 @@
                 </div>
             </div>
     </form>
+
     </div>
 </header>

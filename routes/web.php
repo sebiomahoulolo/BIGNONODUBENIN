@@ -52,6 +52,7 @@ Route::post('reset-password', [PasswordResetController::class, 'reset'])->name('
 // Routes publiques
 Route::get('/', function () {
     $featuredProducts = Product::where('is_featured', true)->get();
+    // dd($featuredProducts);
     return view('app', ['featuredProducts' => $featuredProducts]);
 })->name('pages.app');
 

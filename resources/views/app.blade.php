@@ -3,7 +3,7 @@
 @section('content')
     <!-- Ajout du lien CDN Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     {{-- <!-- Barre de recherche -->
     <section class="py-4 bg-light">
@@ -23,21 +23,23 @@
     </section>
 
     <!-- Produits en vedette -->
-    <section  class="py-5">
+    <section class="py-5">
         <div class="container">
-            <h2 data-aos="zoom-up" data-aos-duration="300" data-aos-delay="500" class="text-center mb-5">Nos Produits en Vedette</h2>
+            <h2 data-aos="zoom-up" data-aos-duration="300" data-aos-delay="500" class="text-center mb-5">Nos Produits en
+                Vedette</h2>
             <div class="row g-4">
                 @foreach ($featuredProducts as $product)
                     <div data-aos="flip-right" data-aos-duration="300" data-aos-delay="300" class="col-md-3">
                         <div class="card h-100 border-0 shadow-md product-card">
                             <div class="product-image-container">
-                                @if ($product->images && count($product->images) > 0)
-                                    <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top"
-                                        alt="{{ $product->name }}">
-                                @else
+
+                                {{-- @if ($product->images && count(json_decode($product->images, true)) > 0) --}}
+                                    <img src="{{ asset($product->images[0]) }}" class="card-img-top" alt="{{ $product->name }}">
+                                {{-- @else
                                     <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top"
                                         alt="{{ $product->name }}">
-                                @endif
+                                @endif --}}
+
                                 <div class="product-overlay">
                                     <a href="{{ route('pages.product.detail', $product->id) }}"
                                         class="btn btn-light btn-sm">
@@ -50,29 +52,30 @@
                                     <span class="badge " style="{{ base_color() }}">{{ $product->category->name }}</span>
                                 </div>
                                 <!-- HTML -->
-<div class="price-wrapper mb-3 d-flex flex-wrap align-items-center gap-2">
-    @if ($product->sale_price)
-        <span class="original-price text-muted text-decoration-line-through">
-            {{ number_format($product->price, 0, ',', ' ') }} FCFA
-        </span>
-        <span class="sale-price text-danger fw-bold">
-            {{ number_format($product->sale_price, 0, ',', ' ') }} FCFA
-        </span>
-    @else
-        <span class="text-primary fw-bold">
-            {{ number_format($product->price, 0, ',', ' ') }} FCFA
-        </span>
-    @endif
-</div>
+                                <div class="price-wrapper mb-3 d-flex flex-wrap align-items-center gap-2">
+                                    @if ($product->sale_price)
+                                        <span class="original-price text-muted text-decoration-line-through">
+                                            {{ number_format($product->price, 0, ',', ' ') }} FCFA
+                                        </span>
+                                        <span class="sale-price text-danger fw-bold">
+                                            {{ number_format($product->sale_price, 0, ',', ' ') }} FCFA
+                                        </span>
+                                    @else
+                                        <span class="text-primary fw-bold">
+                                            {{ number_format($product->price, 0, ',', ' ') }} FCFA
+                                        </span>
+                                    @endif
+                                </div>
 
                                 <p class="card-text text-muted mb-3">{{ Str::limit($product->description, 100) }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('pages.product.detail', $product->id) }}" style="{{ border_color() }}"
-                                        class="btn btn-outline-primary button-hover btn-sm" style="{{ text_color_1() }}"
- >
+                                    <a href="{{ route('pages.product.detail', $product->id) }}"
+                                        style="{{ border_color() }}" class="btn btn-outline-primary button-hover btn-sm"
+                                        style="{{ text_color_1() }}">
                                         <i class="bi bi-eye"></i> Détails
                                     </a>
-                                    <a href="{{ route('pages.product.detail', $product->id) }}" class="btn btn-primary border-0" style="{{ base_color() }}">
+                                    <a href="{{ route('pages.product.detail', $product->id) }}"
+                                        class="btn btn-primary border-0" style="{{ base_color() }}">
                                         <i class="bi bi-cart-plus"></i>
                                     </a>
                                 </div>
@@ -85,7 +88,7 @@
     </section>
 
     <!-- Catégories -->
-    <section  class="py-5">
+    <section class="py-5">
         <div class="container">
             <h2 data-aos="fade" data-aos-duration="300" data-aos-delay="300" class="text-center mb-5">Nos Catégories</h2>
             <div class="row g-4">
@@ -93,8 +96,9 @@
                     <div data-aos="fade" data-aos-duration="300" class="col-md-4">
                         <div class="category-card">
                             <a href="{{ route('pages.category.show', ['slug' => $category->name]) }}">
-                                <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('images/canape1.webp') }}" alt="{{ $category->name }}">
-                     <div class="category-overlay">
+                                <img src="{{ $category->image ? asset('products/' . $category->image) : asset('images/canape1.webp') }}"
+                                    alt="{{ $category->name }}">
+                                <div class="category-overlay">
                                     <h4>{{ $category->name }}</h4>
                                     <p>{{ $category->description }}</p>
                                 </div>
@@ -107,7 +111,9 @@
                     </div>
                 @endforelse
                 <div class="col-md-12 py-3">
-                    <a data-aos="zoom-down" data-aos-duration="300" data-aos-delay="500"  zoom-up href="{{ route('pages.categories') }}" class=" w-100 btn btn-lg btn-primary border-0" style="{{ base_color() }}">Voir plus</a>
+                    <a data-aos="zoom-down" data-aos-duration="300" data-aos-delay="500" zoom-up
+                        href="{{ route('pages.categories') }}" class=" w-100 btn btn-lg btn-primary border-0"
+                        style="{{ base_color() }}">Voir plus</a>
                 </div>
             </div>
         </div>
@@ -201,9 +207,10 @@
     <!-- Témoignages -->
     <section class="py-5 bg-light">
         <div class="container">
-            <h2 data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="text-center mb-5">Ce que disent nos clients</h2>
+            <h2 data-aos="fade" data-aos-duration="300" data-aos-delay="500" class="text-center mb-5">Ce que disent nos
+                clients</h2>
             <div class="row">
-                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="col-md-4">
+                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500" class="col-md-4">
                     <div class="testimonial-card">
                         {{-- <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar"> --}}
                         <h5>Marie K.</h5>
@@ -213,7 +220,7 @@
                         </div>
                     </div>
                 </div>
-                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="col-md-4">
+                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500" class="col-md-4">
                     <div class="testimonial-card">
                         {{-- <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar"> --}}
                         <h5>Pierre D.</h5>
@@ -223,7 +230,7 @@
                         </div>
                     </div>
                 </div>
-                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="col-md-4">
+                <div data-aos="fade" data-aos-duration="300" data-aos-delay="500" class="col-md-4">
                     <div class="testimonial-card">
                         {{-- <img src="https://via.placeholder.com/80" alt="Client" class="testimonial-avatar"> --}}
                         <h5>Sophie M.</h5>
@@ -238,81 +245,83 @@
     </section>
 
     <!-- Statistiques -->
-<section class="stats-section">
-    <div class="container">
-        <div class="row d-flex flex-wrap">
-            <div class="col-md-2">
-                <div class="stat-card animate-on-scroll">
-                    <i class="fas fa-users"></i>
-                    <div class="stat-number" data-count="7000">7000</div>
-                    <h5>Clients Satisfaits</h5>
+    <section class="stats-section">
+        <div class="container">
+            <div class="row d-flex flex-wrap">
+                <div class="col-md-2">
+                    <div class="stat-card animate-on-scroll">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-number" data-count="7000">7000</div>
+                        <h5>Clients Satisfaits</h5>
+                    </div>
                 </div>
-            </div>
-           
-            <div class="col-md-2">
-                <div class="stat-card animate-on-scroll">
-                    <i class="fas fa-award"></i>
-                    <div class="stat-number" data-count="10">10</div>
-                    <h5>Années d'Expérience</h5>
+
+                <div class="col-md-2">
+                    <div class="stat-card animate-on-scroll">
+                        <i class="fas fa-award"></i>
+                        <div class="stat-number" data-count="10">10</div>
+                        <h5>Années d'Expérience</h5>
+                    </div>
                 </div>
-            </div>
-             <div class="col-md-2">
-                <div class="stat-card animate-on-scroll">
-                    <i class="fas fa-comments"></i>
-                    <div class="stat-number" data-count="7000">7000</div>
-                    <h5>Avis des Clients</h5>
+                <div class="col-md-2">
+                    <div class="stat-card animate-on-scroll">
+                        <i class="fas fa-comments"></i>
+                        <div class="stat-number" data-count="7000">7000</div>
+                        <h5>Avis des Clients</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="stat-card animate-on-scroll">
-                    <i class="fas fa-headset"></i>
-                    <div class="stat-number" data-count="24">24</div>
-                    <h5>Heures de Support</h5>
+                <div class="col-md-2">
+                    <div class="stat-card animate-on-scroll">
+                        <i class="fas fa-headset"></i>
+                        <div class="stat-number" data-count="24">24</div>
+                        <h5>Heures de Support</h5>
+                    </div>
                 </div>
-            </div>
-             <div class="col-md-2">
-                <div class="stat-card animate-on-scroll">
-                    <i class="fas fa-box-open"></i>
-                    <div class="stat-number" data-count="7000">7000</div>
-                    <h5>Produits Vendus</h5>
+                <div class="col-md-2">
+                    <div class="stat-card animate-on-scroll">
+                        <i class="fas fa-box-open"></i>
+                        <div class="stat-number" data-count="7000">7000</div>
+                        <h5>Produits Vendus</h5>
+                    </div>
                 </div>
+
             </div>
-           
         </div>
-    </div>
-</section>
+    </section>
 
 
     <!-- Newsletter -->
     <section class="newsletter-section">
         <div class="container">
-            <div data-aos="fade" data-aos-duration="300" data-aos-delay="500"  class="text-center mb-4">
+            <div data-aos="fade" data-aos-duration="300" data-aos-delay="500" class="text-center mb-4">
                 <h2>Restez informé de nos nouveautés</h2>
                 <p class="text-muted">Inscrivez-vous à notre newsletter pour recevoir nos dernières offres</p>
             </div>
-        <form action="{{ route('newsletter.store') }}" method="POST" class="newsletter-form" data-aos="fade" data-aos-duration="300" data-aos-delay="500">
-    @csrf
-    <div class="input-group">
-        <input type="email" name="email" class="form-control" placeholder="Votre adresse email" required>
-        <button style="{{ base_color() }}" type="submit" class="btn">S'inscrire</button>
-    </div>
-</form>
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+            <form action="{{ route('newsletter.store') }}" method="POST" class="newsletter-form" data-aos="fade"
+                data-aos-duration="300" data-aos-delay="500">
+                @csrf
+                <div class="input-group">
+                    <input type="email" name="email" class="form-control" placeholder="Votre adresse email"
+                        required>
+                    <button style="{{ base_color() }}" type="submit" class="btn">S'inscrire</button>
+                </div>
+            </form>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        Veuillez corriger les erreurs ci-dessous :
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    Veuillez corriger les erreurs ci-dessous :
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
 
         </div>
@@ -392,7 +401,6 @@
 
 @section('styles')
     <style>
-
         .product-card {
             background: white;
             border-radius: 15px;
@@ -412,25 +420,29 @@
             overflow: hidden;
             height: 250px;
         }
-.stats-section .row {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-.stat-card {
-    text-align: center;
-    padding: 20px;
-    border-radius: 8px;
-}
-.stat-card i {
-    font-size: 40px;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-.stat-number {
-    font-size: 24px;
-    font-weight: bold;
-}
+
+        .stats-section .row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .stat-card i {
+            font-size: 40px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
 
         .product-image-container img {
             width: 100%;
