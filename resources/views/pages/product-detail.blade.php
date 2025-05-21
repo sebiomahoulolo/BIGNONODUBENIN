@@ -202,7 +202,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                         <div class="card h-100 border-0 shadow-md product-card">
                             <div class="position-relative">
-                                <img src="{{ asset($product->images && count($product->images) > 0 ? 'storage/' . $product->images[0] : 'images/no-image.jpg') }}"
+                                <img src="{{ asset($product->images[0] ? $product->images[0] : 'images/no-image.jpg') }}"
                                     class="card-img-top rounded-top" alt="{{ $product->name }}">
 
                                 <div class="product-overlay position-absolute top-0 end-0 m-2">

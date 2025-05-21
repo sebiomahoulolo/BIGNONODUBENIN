@@ -309,7 +309,7 @@ $(document).ready(function () {
         $shareDiv.toggleClass('d-none');
     });
 
-    
+
 
     // --- INITIALISATION ---
     loadCartFromLocalStorage(); // Charge les produits et met à jour implicitement les boutons via addProductToCart
@@ -358,7 +358,9 @@ $(document).ready(function () {
             // Si tout est valide, soumettre le formulaire
             if (isValid) {
                 $('#product-form').submit();
+                localStorage.removeItem('cartData');
             }
+
         });
 
         // Supprimer le style d'erreur en cas de saisie
