@@ -170,6 +170,7 @@ class PageController extends Controller
 
         return view('pages.product-detail', compact('product', 'relatedProducts'));
     }
+    
     public function products()
     {
         // Récupérer toutes les catégories actives

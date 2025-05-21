@@ -292,7 +292,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Annuler</button>
-                                    <button type="button" class="btn btn-primary"
+                                    <button type="button" class="btn btn-primary border-0" style="{{ base_color() }}"
                                         id="button-send">Soumettre</button>
                                 </div>
                             </div>

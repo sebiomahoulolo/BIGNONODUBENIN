@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class=" py-5" style="{{ base_color() }}">
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500" class=" py-5" style="{{ base_color() }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
@@ -14,7 +14,7 @@
     </section>
 
     <!-- Filters -->
-    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="py-4 bg-white border-bottom">
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500" class="py-4 bg-white border-bottom">
         <div class="container">
             <div class="row g-3">
                 <div class="col-md-3">
@@ -45,8 +45,10 @@
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <input type="text" class="form-control border-2 fw-bold" id="search-input" placeholder="Rechercher...">
-                        <button class="btn btn-primary" id="search-button border-0 border-danger" style="{{ base_color() }}">
+                        <input type="text" class="form-control border-2 fw-bold" id="search-input"
+                            placeholder="Rechercher...">
+                        <button class="btn btn-primary" id="search-button border-0 border-danger"
+                            style="{{ base_color() }}">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
@@ -56,13 +58,14 @@
     </section>
 
     <!-- Products Grid -->
-    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500"  class="py-5">
+    <section data-aos="fade" data-aos-duration="1500" data-aos-delay="500" class="py-5">
         <div class="container">
             @foreach ($categories as $category)
                 <div class="category-section mb-5">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="h3 mb-0" >{{ $category->name }}</h2>
-                        <a href="{{ route('pages.category.show', $category->slug) }}" class="btn btn-outline-primary button-hover" style="{{ border_color() }}">
+                        <h2 class="h3 mb-0">{{ $category->name }}</h2>
+                        <a href="{{ route('pages.category.show', $category->slug) }}"
+                            class="btn btn-outline-primary button-hover" style="{{ border_color() }}">
                             Voir tous <i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     </div>
@@ -72,61 +75,63 @@
                                 data-price="{{ $product->price }}">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="product-image-container">
-                                        @if ($product->images && count($product->images) > 0)
-                                            <img src="{{ asset('storage/' . $product->images[0]) }}" class="card-img-top"
+                                        <img src="{{ asset($product->images[0] ? $product->images[0] : 'images/no-image.jpg') }}">
+                                            {{--
+                                        @if ($images && count($images) > 0)
+                                            <img src="{{ asset($images[0]) }}" class="card-img-top"
                                                 alt="{{ $product->nombre_places }}">
                                         @else
                                             <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top"
                                                 alt="{{ $product->nombre_places }}">
+                                        @endif --}} <div class="product-overlay">
+                                        <a href="{{ route('pages.product.detail', $product->id) }}"
+                                            class="btn btn-light btn-sm">
+                                            <i class="bi bi-eye"></i> Voir plus
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="badge" style="{{ base_color() }}">{{ $category->name }}</span>
+                                    </div>
+                                    <div class="price-wrapper mb-3">
+                                        @if (isset($product->sale_price) && $product->sale_price)
+                                            <span class="sale-price"
+                                                style="color:#198754 ">{{ number_format($product->sale_price, 0, ',', ' ') }}
+                                                FCFA</span>
+                                        @else
+                                            <span
+                                                class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }}
+                                                FCFA</span>
                                         @endif
-                                        <div class="product-overlay">
-                                            <a href="{{ route('pages.product.detail', $product->id) }}"
-                                                class="btn btn-light btn-sm">
-                                                <i class="bi bi-eye"></i> Voir plus
-                                            </a>
-                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="badge" style="{{ base_color() }}">{{ $category->name }}</span>
-                                        </div>
-                                        <div class="price-wrapper mb-3">
-                                            @if (isset($product->sale_price) && $product->sale_price)
-                                                <span class="sale-price"
-                                                    style="color:#198754 ">{{ number_format($product->sale_price, 0, ',', ' ') }}
-                                                    FCFA</span>
-                                            @else
-                                                <span
-                                                    class="text-primary fw-bold">{{ number_format($product->price, 0, ',', ' ') }}
-                                                    FCFA</span>
-                                            @endif
-                                        </div>
-                                        <p class="card-text text-muted mb-3">
-                                            {{ isset($product->description) ? Str::limit($product->description, 100) : $product->nombre_places }}
-                                        </p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <a href="{{ route('pages.product.detail', $product->id) }}"
-                                                class="btn btn-outline-primary btn-sm button-hover" style="{{ border_color() }}" >
-                                                <i class="bi bi-eye"></i> Détails
-                                            </a>
-                                            <a href="{{ route('pages.product.detail', $product->id) }}"
-                                                class="btn btn-primary border-0" style="{{ base_color() }}">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </a>
-                                        </div>
+                                    <p class="card-text text-muted mb-3">
+                                        {{ isset($product->description) ? Str::limit($product->description, 100) : $product->nombre_places }}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="{{ route('pages.product.detail', $product->id) }}"
+                                            class="btn btn-outline-primary btn-sm button-hover"
+                                            style="{{ border_color() }}">
+                                            <i class="bi bi-eye"></i> Détails
+                                        </a>
+                                        <a href="{{ route('pages.product.detail', $product->id) }}"
+                                            class="btn btn-primary border-0" style="{{ base_color() }}">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        @empty
-                            <div class="col-12">
-                                <div class="alert alert-info">
-                                    Aucun produit disponible dans cette catégorie.
-                                </div>
-                            </div>
-                        @endforelse
                     </div>
-                </div>
-            @endforeach
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            Aucun produit disponible dans cette catégorie.
+                        </div>
+                    </div>
+            @endforelse
+        </div>
+        </div>
+        @endforeach
         </div>
     </section>
 
@@ -237,7 +242,8 @@
                 const searchInput = document.getElementById('search-input');
                 const searchButton = document.getElementById('search-button');
                 const productsContainer = document.getElementById(
-                'products-container'); // Assurez-vous que cet ID est unique si vous avez plusieurs sections de produits, ou ciblez plus spécifiquement.
+                    'products-container'
+                ); // Assurez-vous que cet ID est unique si vous avez plusieurs sections de produits, ou ciblez plus spécifiquement.
                 const productCards = document.querySelectorAll('.product-card');
 
                 function filterProducts() {
@@ -354,10 +360,12 @@
                         nouveautés.</p>
                     <form class="row g-3 justify-content-center">
                         <div class="col-md-8">
-                            <input type="email" class="form-control form-control-lg border-2" placeholder="Votre adresse email">
+                            <input type="email" class="form-control form-control-lg border-2"
+                                placeholder="Votre adresse email">
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn btn-primary btn-lg w-100 border-0" style="{{ base_color() }}">S'inscrire</button>
+                            <button type="submit" class="btn btn-primary btn-lg w-100 border-0"
+                                style="{{ base_color() }}">S'inscrire</button>
                         </div>
                     </form>
                 </div>
