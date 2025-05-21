@@ -170,14 +170,14 @@ class PageController extends Controller
 
         return view('pages.product-detail', compact('product', 'relatedProducts'));
     }
-    
+
     public function products()
     {
         // Récupérer toutes les catégories actives
         $categories = \App\Models\Category::where('is_active', true)->get();
 
         // Récupérer les produits actifs avec pagination
-        $products = \App\Models\Product::where('is_active', true)->paginate(12);
+        $products = \App\Models\Product::where('is_active', true)->orderBy('id', 'desc')->paginate(12);
 
         return view('pages.products', compact('categories', 'products'));
     }
