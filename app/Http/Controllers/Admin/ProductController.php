@@ -112,7 +112,7 @@ class ProductController extends Controller
         $images = [];
         foreach ($request->file('images') as $image) {
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('storages/products/');
+            $destinationPath = public_path('products/');
 
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);
@@ -121,7 +121,7 @@ class ProductController extends Controller
             $image->move($destinationPath, $filename);
 
             // On stocke le chemin relatif à public (pas besoin de 'storage/')
-            $images[] = 'storages/products/' . $filename;
+            $images[] = 'products/' . $filename;
         }
 
         // Affecter le tableau directement (pas de json_encode)

@@ -37,7 +37,7 @@ class CategoryController extends Controller
     // Tri
     $sort = $request->get('sort', 'name');
     $direction = $request->get('direction', 'asc');
-    
+
     switch ($sort) {
         case 'products':
             $query->orderBy('products_count', $direction);
@@ -78,7 +78,8 @@ public function store(Request $request)
             'parent_id' => 'nullable|exists:categories,id',
             'order' => 'nullable|integer',
             'is_active' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'images' => 'nullable|array|max:8',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -86,12 +87,28 @@ public function store(Request $request)
         // Générer le slug
         $validated['slug'] = Str::slug($validated['name']);
 
-        // Gestion de l'image
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-            $validated['image'] = $imagePath;
+        // Enregistrement des images dans public/categories/
+        $images = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('categories/');
+
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+
+                $image->move($destinationPath, $filename);
+
+                // Stocke le chemin relatif
+                $images[] = 'categories/' . $filename;
+            }
+
+            // Encode les chemins en JSON
+            $validated['image'] = json_encode($images);
         }
 
+        // Création de la catégorie
         $category = Category::create($validated);
 
         DB::commit();
@@ -114,10 +131,11 @@ public function store(Request $request)
     }
 }
 
+
     public function show(Category $category)
     {
         $category->loadCount('products');
-        
+
         // Charger les produits avec pagination
         $products = $category->products()
             ->withCount('orderItems')
