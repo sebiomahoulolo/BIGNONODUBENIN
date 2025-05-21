@@ -45,7 +45,7 @@
                             @endphp
                             @foreach ($orderItem as $item)
                                 <tr>
-                                    <td><img src="{{ $item->image_path }}" alt=""></td>
+                                  <td><img src="{{ $item->image_path }}" alt="" style="max-width: 80px; max-height: 80px;"></td>
                                     <td>{{ $item->category_name }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ number_format($item->price, 0, ',', ' ') }} FCFA</td>
