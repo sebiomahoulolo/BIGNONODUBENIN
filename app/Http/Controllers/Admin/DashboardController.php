@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -14,12 +13,24 @@ class DashboardController extends Controller
     
     public function index()
     {
+        // Compter les demandes de devis si la table existe
+        $totalDevis = 0;
+        try {
+            if (DB::getSchemaBuilder()->hasTable('demande_devis')) {
+                $totalDevis = DB::table('demande_devis')->count();
+            }
+        } catch (\Exception $e) {
+            // Table n'existe pas, on garde 0
+        }
+
         $stats = [
             'total_orders' => Order::count(),
-            'total_revenue' => Order::where('payment_status', 'paid')->sum('total'),
-            'total_customers' => User::count(),
+            'total_revenue' => Order::sum('total_amount_promo') ?: Order::sum('total_amount'),
+            'total_customers' => Customer::count(),
+            'total_clients' => Customer::count(), // Alias pour la vue
             'total_products' => Product::count(),
-            'recent_orders' => Order::with(['user', 'items.product'])
+            'total_devis' => $totalDevis,
+            'recent_orders' => Order::with(['customer', 'items.product'])
                 ->latest()
                 ->take(5)
                 ->get(),
@@ -33,11 +44,10 @@ class DashboardController extends Controller
 
     private function getMonthlySales()
     {
-        return Order::where('payment_status', 'paid')
-            ->whereYear('created_at', now()->year)
+        return Order::whereYear('created_at', now()->year)
             ->select(
                 DB::raw('MONTH(created_at) as month'),
-                DB::raw('SUM(total) as total')
+                DB::raw('SUM(COALESCE(total_amount_promo, total_amount)) as total')
             )
             ->groupBy('month')
             ->orderBy('month')

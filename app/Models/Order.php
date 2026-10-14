@@ -10,30 +10,27 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number',
-        'user_id',
-        'subtotal',
-        'shipping_cost',
-        'total',
+        'customer_id',
+        'total_amount',
+        'total_amount_promo',
+        'status_code_promo',
         'status',
-        'payment_status',
-        'payment_method',
-        'shipping_method',
-        'shipping_address',
-        'billing_address',
-        'notes'
     ];
 
     protected $casts = [
-        'subtotal' => 'decimal:2',
-        'shipping_cost' => 'decimal:2',
-        'total' => 'decimal:2',
-        'shipping_address' => 'array',
-        'billing_address' => 'array'
+        'total_amount' => 'decimal:2',
+        'total_amount_promo' => 'decimal:2',
+        'status_code_promo' => 'boolean',
     ];
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function items(): HasMany

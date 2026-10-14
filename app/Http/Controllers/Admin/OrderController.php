@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\PaymentMethod;
+use App\Models\Customer;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,17 +24,14 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $query = Order::with(['user', 'items.product'])
+        $query = Order::with(['customer', 'items.product'])
             ->when($request->status, function($q) use ($request) {
                 return $q->where('status', $request->status);
-            })
-            ->when($request->payment_status, function($q) use ($request) {
-                return $q->where('payment_status', $request->payment_status);
             })
             ->when($request->search, function($q) use ($request) {
                 return $q->where(function($query) use ($request) {
                     $query->where('order_number', 'like', "%{$request->search}%")
-                        ->orWhereHas('user', function($q) use ($request) {
+                        ->orWhereHas('customer', function($q) use ($request) {
                             $q->where('name', 'like', "%{$request->search}%")
                                 ->orWhere('email', 'like', "%{$request->search}%");
                         });
@@ -47,37 +45,31 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['user', 'items.product', 'shippingAddress', 'billingAddress']);
+        $order->load(['customer', 'items.product']);
         return view('admin.orders.show', compact('order'));
     }
 
     public function edit(Order $order)
     {
-        $order->load(['user', 'items.product']);
+        $order->load(['customer', 'items.product']);
         return view('admin.orders.edit', compact('order'));
     }
 
     public function update(Request $request, Order $order)
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,processing,completed,cancelled',
-            'payment_status' => 'required|in:pending,paid,failed',
-            'notes' => 'nullable|string'
+            'status' => 'required|string',
         ]);
 
         $oldStatus = $order->status;
-        $oldPaymentStatus = $order->payment_status;
 
         $order->update($validated);
 
         // Notifier le changement de statut
         if ($oldStatus !== $order->status) {
-            $this->notificationService->notifyOrderStatusChange($order);
-        }
-
-        // Notifier le changement de statut de paiement
-        if ($oldPaymentStatus !== $order->payment_status) {
-            $this->notificationService->notifyPaymentStatusChange($order);
+            if ($this->notificationService && $order->customer_id) {
+                $this->notificationService->notifyOrderStatusChange($order);
+            }
         }
 
         return redirect()->route('admin.orders.show', $order)
@@ -110,15 +102,15 @@ class OrderController extends Controller
             });
 
         // Statistiques générales
-        $totalRevenue = $query->sum('total');
+        $totalRevenue = $query->sum('total_amount_promo');
         $totalOrders = $query->count();
         $averageOrderValue = $totalOrders > 0 ? $totalRevenue / $totalOrders : 0;
-        $conversionRate = $totalOrders > 0 ? ($query->where('status', 'completed')->count() / $totalOrders) * 100 : 0;
+        $conversionRate = $totalOrders > 0 ? ($query->where('status', 'Livré')->count() / $totalOrders) * 100 : 0;
 
         // Données pour le graphique des ventes
         $salesData = $query->select(
             DB::raw('DATE(created_at) as date'),
-            DB::raw('SUM(total) as total')
+            DB::raw('SUM(total_amount_promo) as total')
         )
         ->groupBy('date')
         ->orderBy('date')
@@ -126,10 +118,10 @@ class OrderController extends Controller
 
         // Données pour le graphique des statuts
         $statusData = [
-            $query->where('status', 'pending')->count(),
-            $query->where('status', 'completed')->count(),
-            $query->where('status', 'processing')->count(),
-            $query->where('status', 'cancelled')->count()
+            $query->where('status', 'En Cours')->count(),
+            $query->where('status', 'Livré')->count(),
+            $query->where('status', 'Annulé')->count(),
+            0 // Pas de statut "processing" dans cette structure
         ];
 
         // Meilleures ventes
@@ -178,43 +170,114 @@ class OrderController extends Controller
 
     public function returns()
     {
-        $returns = Order::where('status', 'returned')
-            ->with(['user', 'items.product'])
+        $returns = Order::where('status', 'Annulé')
+            ->with(['customer', 'items.product'])
             ->latest()
             ->paginate(10);
 
-        $pendingReturns = Order::where('status', 'returned')->where('return_status', 'pending')->count();
-        $acceptedReturns = Order::where('status', 'returned')->where('return_status', 'accepted')->count();
-        $rejectedReturns = Order::where('status', 'returned')->where('return_status', 'rejected')->count();
-        $returnRate = Order::count() > 0 ? (Order::where('status', 'returned')->count() / Order::count()) * 100 : 0;
+        $returnRate = Order::count() > 0 ? (Order::where('status', 'Annulé')->count() / Order::count()) * 100 : 0;
 
         return view('admin.orders.returns', compact(
             'returns',
-            'pendingReturns',
-            'acceptedReturns',
-            'rejectedReturns',
             'returnRate'
         ));
     }
 
-    public function processReturn(Request $request, Order $order)
+    public function storePanier(Request $request)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:accepted,rejected',
-            'notes' => 'nullable|string'
-        ]);
+        try {
+            $validated = $request->validate([
+                'produits' => 'required|array',
+                'produits.*.id' => 'required|exists:products,id',
+                'produits.*.quantite' => 'required|integer|min:1',
+                'produits.*.prix' => 'required|numeric|min:0',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone' => 'required|string|max:20',
+                'indicatif' => 'nullable|string|max:10',
+                'total_amount' => 'nullable|string',
+                'code_promo' => 'nullable|string',
+                'total_promo' => 'nullable|string',
+            ]);
 
-        $order->update([
-            'return_status' => $validated['status'],
-            'return_notes' => $validated['notes']
-        ]);
+            DB::beginTransaction();
 
-        if ($validated['status'] === 'accepted') {
-            // Logique de remboursement ici
-            // TODO: Implémenter la logique de remboursement
+            // Calculer le total
+            $total = 0;
+            foreach ($validated['produits'] as $produit) {
+                $total += floatval($produit['prix']) * intval($produit['quantite']);
+            }
+
+            // Appliquer le code promo si fourni
+            $finalTotal = $total;
+            if (!empty($validated['code_promo']) && !empty($validated['total_promo'])) {
+                // Extraire le montant du total_promo (format: "712 500 FCFA")
+                $totalPromo = preg_replace('/[^0-9]/', '', $validated['total_promo']);
+                $finalTotal = floatval($totalPromo);
+            }
+
+            // Générer un numéro de commande unique
+            $orderNumber = 'CMD-' . strtoupper(uniqid());
+
+            // Créer ou récupérer le client
+            $customer = Customer::firstOrCreate(
+                ['email' => $validated['email']],
+                [
+                    'name' => $validated['name'],
+                    'phone' => ($validated['indicatif'] ?? '') . $validated['phone'],
+                    'is_active' => true,
+                ]
+            );
+
+            // Créer la commande
+            $order = Order::create([
+                'customer_id' => $customer->id,
+                'order_number' => $orderNumber,
+                'total_amount' => $total,
+                'total_amount_promo' => $finalTotal,
+                'status_code_promo' => !empty($validated['code_promo']) ? 1 : 0,
+                'status' => 'En Cours',
+            ]);
+
+            // Créer les items de commande
+            foreach ($validated['produits'] as $produit) {
+                $product = Product::findOrFail($produit['id']);
+                
+                // Récupérer la première image du produit
+                $imagePath = null;
+                if ($product->images && is_array($product->images) && count($product->images) > 0) {
+                    $imagePath = $product->images[0];
+                }
+                
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'image_path' => $imagePath,
+                    'quantity' => intval($produit['quantite']),
+                    'price' => floatval($produit['prix']),
+                    'total' => floatval($produit['prix']) * intval($produit['quantite']),
+                ]);
+            }
+
+            // Notifier la nouvelle commande
+            if ($this->notificationService && $order->customer_id) {
+                $this->notificationService->notifyNewOrder($order);
+            }
+
+            DB::commit();
+
+            // Vider le panier de la session
+            session()->forget('cart');
+
+            return redirect()->route('pages.app')
+                ->with('success', 'Votre commande a été enregistrée avec succès! Numéro de commande: ' . $orderNumber);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Une erreur est survenue lors de la création de la commande: ' . $e->getMessage());
         }
-
-        return redirect()->route('admin.orders.returns')
-            ->with('success', 'Retour traité avec succès.');
     }
 } 

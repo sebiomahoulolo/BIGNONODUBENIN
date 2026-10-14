@@ -28,7 +28,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     @if($details['image'])
-                                        <img src="{{ asset('storage/' . $details['image']) }}" alt="{{ $details['name'] }}" class="img-thumbnail me-3" style="width: 100px;">
+                                        <img src="{{ asset('storages/' . $details['image']) }}" alt="{{ $details['name'] }}" class="img-thumbnail me-3" style="width: 100px;">
                                     @endif
                                     <div>
                                         <h5 class="mb-0">{{ $details['name'] }}</h5>

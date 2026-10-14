@@ -84,7 +84,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Informations de la commande</h6>
                 </div>
                 <div class="card-body">
-                    <p><strong>Client :</strong> {{ $order->user->name }}</p>
+                   
                     <p><strong>Date :</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
                     <p><strong>Total :</strong> {{ number_format($order->total, 0, ',', ' ') }} FCFA</p>
                     <p><strong>Méthode de paiement :</strong> {{ $order->payment_method }}</p>

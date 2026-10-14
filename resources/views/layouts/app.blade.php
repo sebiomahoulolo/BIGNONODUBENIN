@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bignon du Benin</title>
+    <title>BIGNON DU BENIN | Boutique de meubles</title>
+
+    <!-- Ajout de l'icône -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_bignon.png') }}">
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -21,12 +27,22 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+
     @yield('styles')
 </head>
+
 <body>
     @include('composes.navbar')
 
-    <main>
+    <main class="position-top">
         @yield('content')
     </main>
 
@@ -39,10 +55,60 @@
 
     <!-- jQuery  -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
-     <!-- fichier JS externe -->
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+    <!-- fichier JS externe -->
     <script src="{{ asset('assets/js/cart.js') }}"></script>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
     @yield('scripts')
+
+
+    <!-- Script Laravel Session Toast -->
+    <script>
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        @if (session('warning'))
+            toastr.warning("{{ session('warning') }}");
+        @endif
+
+        @if (session('info'))
+            toastr.info("{{ session('info') }}");
+        @endif
+    </script>
+
 </body>
+
 </html>
+
+<style>
+    .position-top {
+        top: 150px;
+        position: relative;
+    }
+
+    .justify-text {
+        text-align: justify;
+    }
+
+    .button-hover:hover {
+        background-color: #e7f1fb;
+        color: #366ba2;
+        cursor: pointer;
+    }
+</style>
